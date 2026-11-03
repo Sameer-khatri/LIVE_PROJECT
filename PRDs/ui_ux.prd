@@ -1,0 +1,132 @@
+# UI/UX Product Requirements Document: AuthSentry ITDR
+## Security Operations Center (SOC) Interface & Experience Specification
+
+---
+
+### 1. Vision & Design Philosophy
+Traditional SIEM dashboards (e.g., Splunk, IBM QRadar) suffer from severe cognitive overload: dense tables of raw regex dumps, confusing gray-on-gray menus, and thousands of non-actionable rows that cause immediate alert fatigue.
+
+**AuthSentry ITDR** is designed with the philosophy of **"Glanceable Threat Intelligence"**:
+1. **Immediate Situational Awareness:** An IT generalist can glance at the screen for 3 seconds and know whether the organization is currently under attack.
+2. **Definitive Color Semantics:** Color is strictly functional. Red exclusively denotes active malicious attack indicators; green denotes verified baseline activity; cyan denotes system telemetry; amber indicates elevated anomaly.
+3. **High-Contrast Dark Theme:** Optimized for prolonged monitoring in both bright office environments and dimly lit server rooms.
+4. **Interactive Demonstration Ergonomics:** Built-in attack simulators allowing non-security stakeholders (and executive reviewers) to trigger attacks and watch autonomous mitigations live without needing a secondary terminal.
+
+---
+
+### 2. Design System & Style Tokens
+
+#### 2.1 Color Palette
+* **Deep Space Background:** `#060a12` (Primary canvas for reduced eye strain)
+* **Surface / Container Panel:** `#0d1424` with 1px border `#1b2a47` (Glassmorphism subtle blur: `backdrop-blur-md bg-opacity-80`)
+* **Primary Cyber Cyan:** `#00f0ff` (Telemetry streams, active connection status, primary CTAs)
+* **Malicious Critical Neon Red:** `#ff2d55` (`rgba(255, 45, 85, 0.2)` glow for $90-100$ risk)
+* **High Risk Amber / Orange:** `#ffaa00` (`rgba(255, 170, 0, 0.2)` glow for $70-89$ risk)
+* **Suspicious Medium Yellow:** `#ffd600` for $40-69$ risk
+* **Verified Safe Emerald:** `#00ff66` for $0-39$ normal authorized traffic
+* **Text Hierarchy:**
+  * Primary Text: `#f8fafc` (Slate 50)
+  * Secondary Text: `#94a3b8` (Slate 400)
+  * Muted / Code Text: `#64748b` (Slate 500)
+
+#### 2.2 Typography
+* **Primary UI Font:** `Inter`, `-apple-system`, `sans-serif` (Weights: 400, 500, 600, 700)
+* **Forensic / Telemetry Font:** `JetBrains Mono`, `Fira Code`, `monospace` (Weights: 400, 500, 700)
+  * Used exclusively for: IP addresses, Lat/Long coordinates, ASNs, OCSF JSON keys, timestamps, and velocity calculations.
+
+#### 2.3 Visual Accents & Micro-Interactions
+* **Pulsing Live Radar Dot:** Neon green/cyan ping animation indicating active telemetry streaming.
+* **Risk Score Gauge Badge:** Dynamic gradient pill with real-time border glow reflecting severity.
+* **Flash On Ingestion:** Newly arrived threat events trigger a brief 300ms highlight animation before settling into the feed.
+
+---
+
+### 3. Layout & Information Architecture
+
+The interface is structured in a cohesive single-pane-of-glass hierarchy:
+
+```
+┌───────────────────────────────────────────────────────────────────────────────┐
+│ 1. GLOBAL COMMAND HEADER                                                      │
+│    - Brand Identity & Version Badge          - Live Telemetry Stream Indicator │
+│    - Active Threat Status Pill (DEFCON mode) - Quick Actions (Export, Policy, │
+│                                                Custom Ingest)                 │
+├───────────────────────────────────────────────────────────────────────────────┤
+│ 2. EXECUTIVE METRIC KPI CARDS                                                 │
+│    [Total Ingested]  [Active Threats]  [Avg Risk Index]  [Sessions Revoked]   │
+├───────────────────────────────────────────────────────────────────────────────┤
+│ 3. LIVE ATTACK SIMULATOR BAR (Interactive reviewer controls)                  │
+│    [⚡ Brute Force]  [✈️ Impossible Travel]  [💣 MFA Bombing]  [🧅 Tor Reset] │
+│    [🛡️ Benign User] [▶ Continuous Stream Mode]                                │
+├────────────────────────────────────────┬──────────────────────────────────────┤
+│ 4. LIVE INCIDENT & TELEMETRY STREAM   │ 5. RISK RADAR & MITIGATION CENTER    │
+│    - Filterable by Risk & Event Type   │    - Risk Index Gauge & Distribution │
+│    - Real-time event cards with:       │    - Active Quarantined Identities   │
+│      * Risk badge (0-100)              │    - Autonomous Action Execution Log │
+│      * Identity & Department           │    - 1-Click Instant Revoke Button   │
+│      * Geo badge (Flags + City + IP)   │                                      │
+│      * Triggered Factors               │                                      │
+│      * Click to open forensic drawer   │                                      │
+└────────────────────────────────────────┴──────────────────────────────────────┘
+```
+
+---
+
+### 4. Component-by-Component Specifications
+
+#### 4.1 Global Command Header
+* **Status Pill:**
+  * When Critical threat active: Pulsing Red border with label `THREAT MITIGATION ACTIVE (DEFCON 1)`.
+  * When Normal: Soft Cyan border with label `IDENTITY PIPELINE SECURED`.
+* **Actions:**
+  * `[+ Ingest Custom Event]`: Opens modal to submit custom JSON or copy-paste curl command.
+  * `[⚙️ Detection Policies]`: Opens slider panel to adjust risk factor weights.
+  * `[📄 Executive Report]`: Generates a downloadable, print-ready compliance audit report.
+
+#### 4.2 Executive KPI Cards
+* 4 responsive metric tiles displaying:
+  1. **Total Auth Events Ingested** (with events/sec counter).
+  2. **Active Threats Detected** (highlighted in red with warning icon).
+  3. **Mean Risk Index (0-100)** (color-coded circular progress gauge).
+  4. **Autonomous Mitigations Taken** (sessions terminated / MFA challenges issued).
+
+#### 4.3 Interactive Attack Simulation Bar
+Specially designed for **Live Reviews & Demos**:
+* Distinct styled scenario buttons with emoji icons and tooltips explaining the cyber attack vector.
+* When clicked, the button illuminates, dispatches the attack payload sequence to the ingestion pipeline, and immediately scrolls the live feed to the triggered detection.
+
+#### 4.4 Live Incident & Telemetry Stream
+* **Search & Filter Controls:**
+  * Quick filter chips: `All Events`, `Critical (90+)`, `High (70-89)`, `Failed Logins`, `Password Resets`.
+  * Search input by user email, IP, or city.
+* **Event Card Layout:**
+  * Left: Event Type icon + Monospace timestamp.
+  * Center: User name, email, department badge + Location (Flag, City, IP, ASN).
+  * Right: Risk Score pill (e.g. `95 CRITICAL`) + Action badge (`SESSION REVOKED`).
+  * Click Interaction: Expands detailed forensic inspector displaying:
+    * Mathematical risk decomposition.
+    * Exact violation reason (e.g., *"Velocity 8,820 km/h exceeds human threshold"*).
+    * Raw OCSF JSON payload viewer.
+
+#### 4.5 User Entity Behavior (UEBA) Profile Modal
+* Triggered by clicking on any user avatar/name.
+* Displays:
+  * Baseline Profile: Home city, usual login hours, registered corporate devices.
+  * Risk Score Timeline: 7-day risk trend.
+  * Active Session Status: `ACTIVE` or `REVOKED BY AUTHSENTRY`.
+  * Emergency button: `Manual Session Kill`.
+
+#### 4.6 Autonomous Mitigation Drawer
+* Lists active automated containment actions:
+  * Target Identity.
+  * Triggering reason.
+  * Timestamp.
+  * Revert / Override button for IT admins in case of false positives.
+
+---
+
+### 5. Accessibility & Responsiveness
+* Full responsiveness: Scales gracefully from large 4K SOC displays down to laptop screens (1366x768).
+* Keyboard accessibility: ESC closes all inspection modals; Tab navigates through simulator buttons.
+* High Contrast Compliance: Contrast ratio for all text elements exceeds WCAG AA standards (4.5:1).
+

@@ -1,0 +1,132 @@
+# System Architecture Document: AuthSentry ITDR
+
+---
+
+### 1. High-Level Architecture Diagram
+
+```
+                 ┌─────────────────────────────────────────────────────────┐
+                 │                EXTERNAL AUTH SOURCES                    │
+                 │   Google Workspace / Microsoft 365 / Auth0 / Custom App │
+                 └───────────────────────────┬─────────────────────────────┘
+                                             │ HTTP POST / Webhook
+                                             ▼
+                 ┌─────────────────────────────────────────────────────────┐
+                 │               AUTH SENTRY INGESTION GATEWAY             │
+                 │   - Input Validation & Rate Limiting                    │
+                 │   - OCSF Normalization Layer                            │
+                 └───────────────────────────┬─────────────────────────────┘
+                                             │ Normalized IdentityEvent
+                                             ▼
+                 ┌─────────────────────────────────────────────────────────┐
+                 │               DETECTION & RISK ENGINE                   │
+                 │  ┌────────────────────┐     ┌────────────────────────┐  │
+                 │  │ 1. Heuristic Layer │     │ 2. Threat Intel Engine │  │
+                 │  │    - Brute Force   │     │    - Tor / Proxy IPs   │  │
+                 │  │    - Spray Attacks │     │    - Datacenter ASN    │  │
+                 │  │    - Reset Spikes  │     │    - Headless Browser  │  │
+                 │  └─────────┬──────────┘     └───────────┬────────────┘  │
+                 │            │                            │               │
+                 │            └──────────────┬─────────────┘               │
+                 │                           │                             │
+                 │              ┌────────────▼────────────┐                │
+                 │              │ 3. UEBA Engine          │                │
+                 │              │    - Impossible Travel  │                │
+                 │              │    - Device Fingerprint │                │
+                 │              │    - Out-of-Hours Check │                │
+                 │              └────────────┬────────────┘                │
+                 │                           │                             │
+                 │              ┌────────────▼────────────┐                │
+                 │              │ 4. Composite Scorer     │                │
+                 │              │    Risk Index (0 - 100) │                │
+                 │              └────────────┬────────────┘                │
+                 └───────────────────────────┼─────────────────────────────┘
+                                             │ Evaluated Event
+                         ┌───────────────────┴───────────────────┐
+                         ▼                                       ▼
+        ┌──────────────────────────────────┐   ┌──────────────────────────────────┐
+        │   AUTONOMOUS RESPONDER           │   │   REAL-TIME DISPATCH & STORAGE   │
+        │   - Kill Active Session Token    │   │   - In-Memory Circular Buffer    │
+        │   - Force Step-Up MFA Challenge  │   │   - SSE Event Stream to UI       │
+        │   - Temporary IP / User Lock     │   │   - Historical Analytics Store   │
+        │   - Webhook Alert (Slack/Teams)  │   │   - Exportable Compliance Log    │
+        └──────────────────────────────────┘   └──────────────────────────────────┘
+```
+
+---
+
+### 2. Deep Dive: The Multi-Layer Detection Pipeline
+
+#### Layer 1: Heuristic Rules Engine
+* **Sliding Window Token Bucket:** Tracks failed authentications per user and per IP within a 60-second window.
+  * Threshold $> 4$ failures $\implies$ Brute Force flag (+35 Risk).
+* **Distributed Spray Detector:** Tracks distinct usernames targeted from the same `/24` subnet within 5 minutes.
+  * Threshold $> 3$ users $\implies$ Password Spray flag (+40 Risk).
+* **Rapid Credential Manipulation:** Detects a `PASSWORD_RESET_REQUEST` preceded by $\ge 2$ failed logins within 180 seconds (+30 Risk).
+
+#### Layer 2: Threat Intelligence & Client Integrity
+* **IP Classification:**
+  * Tor Exit Node: $+45$ Risk.
+  * Cloud Datacenter (AWS, DigitalOcean, Linode, Hetzner): $+25$ Risk.
+  * Commercial VPN / Open Proxy: $+20$ Risk.
+* **Client Integrity:**
+  * Suspicious User Agent (e.g., Python `requests`, Go-http-client, Headless Chrome, or curl): $+35$ Risk.
+
+#### Layer 3: User & Entity Behavior Analytics (UEBA)
+* **Impossible Travel Engine (Haversine Velocity Calculation):**
+  Calculates the great-circle geographic distance between consecutive logins:
+  $$d = 2R \arcsin\left(\sqrt{\sin^2\left(\frac{\Delta \phi}{2}\right) + \cos(\phi_1)\cos(\phi_2)\sin^2\left(\frac{\Delta \lambda}{2}\right)}\right)$$
+  $$\text{Velocity} = \frac{d}{\Delta t}$$
+  If $\text{Velocity} > 800\text{ km/h}$ between two consecutive events for the same identity:
+  * **Impossible Travel Confirmed:** $+50$ Risk.
+* **Device Novelty:**
+  * Compares client device fingerprint against the user's historical 30-day device registry.
+  * Unseen Device + Unseen ASN: $+20$ Risk.
+
+---
+
+### 3. Composite Risk Scoring Formula
+The final Risk Score $R \in [0, 100]$ is computed via weighted sum clamped at 100:
+
+$$R = \min\left(100, \sum_{i} w_i \cdot I_i + B_{\text{baseline}}\right)$$
+
+Where $I_i$ are binary indicator flags, $w_i$ are policy weights, and $B_{\text{baseline}}$ is the user's rolling historical risk baseline.
+
+#### Risk Classification Thresholds:
+* **$0 \le R \le 39$:** **AUTHORIZED (Low Risk)** $\implies$ Normal access granted.
+* **$40 \le R \le 69$:** **SUSPICIOUS (Medium Risk)** $\implies$ Logged, silent verification.
+* **$70 \le R \le 89$:** **HIGH RISK** $\implies$ Step-Up MFA Challenge required, IT Admin alerted.
+* **$90 \le R \le 100$:** **CRITICAL ATTACK** $\implies$ Autonomous Session Kill, User Quarantine, Emergency Alert.
+
+---
+
+### 4. Autonomous Response Architecture
+
+When an event triggers a **Critical** or **High** threshold, the Autonomous Responder executes deterministic playbooks:
+
+1. **Session Invalidation:**
+   * Sends token revocation signal to the target IdP (or internal session store).
+   * Marks user state as `SESSION_TERMINATED`.
+2. **Access Quarantine:**
+   * Adds the suspicious IP / device fingerprint to the temporary deny-list for 30 minutes.
+3. **Forensic Audit Entry:**
+   * Writes a sealed incident snapshot containing:
+     * Triggering event chain.
+     * Calculated risk factors.
+     * Geolocation delta.
+     * Remediation execution timestamp.
+
+---
+
+### 5. Data Flow & Latency Budget
+
+| Pipeline Step | Target Latency | Implementation Mechanism |
+| :--- | :--- | :--- |
+| **Ingestion & Validation** | $< 2$ ms | Express body-parser with schema check |
+| **Enrichment (Geo & ASN)** | $< 1$ ms | In-memory geo lookup table |
+| **Heuristics & UEBA** | $< 4$ ms | In-memory sliding window cache |
+| **Risk Scoring** | $< 1$ ms | Synchronous composite evaluator |
+| **Autonomous Action Dispatch** | $< 5$ ms | Async event emitter / token revocation |
+| **UI Delivery** | $< 15$ ms | Server-Sent Events (SSE) / WebSocket |
+| **Total Roundtrip** | **$< 30$ ms** | Sub-perceptual latency for live defense |
+

@@ -1,0 +1,126 @@
+# Technical Stack Requirements Document: AuthSentry ITDR
+
+---
+
+### 1. Architectural Philosophy
+To deliver enterprise-grade performance for SMB budgets, the technology stack is designed around three principles:
+1. **Low Memory & CPU Footprint:** Can run on ultra-low-cost commodity VMs, serverless containers, or lightweight on-prem instances.
+2. **Sub-Millisecond Event Pipeline:** Immediate stream evaluation of identity events without queue bloat.
+3. **High-Impact, Real-Time Interactive UI:** Modern dark-mode SOC dashboard with zero latency updates.
+
+---
+
+### 2. Core Technology Stack Matrix
+
+| Layer | Technology | Selection Rationale |
+| :--- | :--- | :--- |
+| **Frontend Framework** | **React 18 / Vite + TypeScript** | Ultra-fast HMR, lightweight bundle size, type-safe security payload contracts. |
+| **Styling & Design System** | **Tailwind CSS + Lucide Icons** | High-polish dark-mode cybersecurity aesthetics, responsive layouts, consistent iconography. |
+| **Data Visualization** | **Recharts & Custom SVG Indicators** | High-performance canvas/SVG charts for risk score distributions, event velocity, and geolocation markers. |
+| **Backend & Ingestion Engine** | **Node.js (Express / TypeScript)** | Non-blocking I/O ideal for streaming webhooks, high-throughput JSON processing, and concurrent SSE/WebSocket connections. |
+| **State & In-Memory Store** | **In-Memory Store / Redis-Compatible Layer** | Sliding window rate-limiting (e.g., token bucket for failed logins), user session states, and active quarantine lists. |
+| **Persistence / Log Store** | **Embedded High-Speed SQLite / Columnar JSON Engine** | Zero configuration needed for demo/MVP, blazingly fast range queries for audit trails and UEBA baselines. |
+| **Threat Intelligence Feeds** | **Local MaxMind GeoLite2 + Tor/Proxy IP Lists + AbuseIPDB Mocks/Integrations** | Offline high-speed IP lookup (< 1ms per event) without blocking external network roundtrips. |
+
+---
+
+### 3. Frontend Architecture
+
+```
+frontend/
+├── src/
+│   ├── components/
+│   │   ├── Header.tsx              // Global status, active threat alert pill, clock
+│   │   ├── MetricCards.tsx         // Ingested events, active threats, avg risk score, mitigations
+│   │   ├── LiveEventFeed.tsx       // Real-time streaming log feed with risk badges & payload inspector
+│   │   ├── AttackSimulator.tsx     // 1-Click attack generators (Brute-Force, Impossible Travel, MFA Bombing)
+│   │   ├── RiskScoreDetailModal.tsx// Explanatory breakdown of why risk score was calculated
+│   │   ├── UserEntityModal.tsx     // UEBA inspector: User baseline, travel history, active sessions
+│   │   ├── AutonomousPolicyBar.tsx // Policy toggles (Auto-Revoke, Auto-Quarantine, Slack Webhook)
+│   │   ├── AnalyticsCharts.tsx     // Risk score trends, event breakdown by type
+│   │   └── AuditExportModal.tsx    // Export forensic incident report
+│   ├── types/
+│   │   └── security.ts             // OCSF-compatible TypeScript interfaces
+│   ├── services/
+│   │   ├── api.ts                  // REST client & SSE connection
+│   │   └── rulesEngine.ts          // Client-side heuristics preview
+│   └── App.tsx                     // Root dashboard layout
+```
+
+---
+
+### 4. Backend & Detection Engine Pipeline
+
+```
+backend/
+├── src/
+│   ├── server.ts                   // Express app, CORS, routes, Server-Sent Events (SSE)
+│   ├── engine/
+│   │   ├── normalizer.ts           // OCSF Schema normalization
+│   │   ├── rulesEngine.ts          // Heuristics: Brute force, spray, rapid reset
+│   │   ├── threatIntel.ts          // IP reputation, Tor/datacenter ASN detection
+│   │   ├── uebaEngine.ts           // Haversine impossible travel, device baseline
+│   │   └── compositeScorer.ts      // 0-100 Multi-factor risk calculator
+│   ├── mitigation/
+│   │   └── autonomousResponder.ts  // Session revocation, quarantine, webhook dispatch
+│   ├── store/
+│   │   └── inMemoryStore.ts        // Ring buffer of events, active sessions, risk history
+│   └── routes/
+│       ├── events.ts               // POST /api/events/ingest, GET /api/events/stream
+│       ├── simulate.ts             // POST /api/simulate/:scenario
+│       ├── users.ts                // GET /api/users/:userId/profile
+│       └── policy.ts               // GET/POST /api/policy
+```
+
+---
+
+### 5. API Contracts & Event Schema
+
+All events conform to an OCSF-aligned JSON envelope:
+
+```typescript
+export interface IdentityEvent {
+  id: string;
+  timestamp: string;
+  eventType: 
+    | 'LOGIN_SUCCESS' 
+    | 'LOGIN_FAILED' 
+    | 'MFA_REQUEST' 
+    | 'MFA_DENIED' 
+    | 'PASSWORD_RESET_REQUEST' 
+    | 'PASSWORD_RESET_SUCCESS' 
+    | 'SESSION_REVOKED';
+  user: {
+    id: string;
+    email: string;
+    role: string;
+    department: string;
+  };
+  client: {
+    ip: string;
+    ipType: 'RESIDENTIAL' | 'DATACENTER' | 'TOR_EXIT' | 'VPN_PROXY';
+    city: string;
+    country: string;
+    latitude: number;
+    longitude: number;
+    userAgent: string;
+    deviceFingerprint: string;
+  };
+  evaluation?: {
+    riskScore: number; // 0 - 100
+    riskTier: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    factors: string[];
+    threatIndicators: string[];
+    autonomousActionTaken?: string;
+  };
+}
+```
+
+---
+
+### 6. Performance Benchmarks
+* **Cold Startup Time:** < 3 seconds.
+* **Event Ingestion Latency:** < 15ms.
+* **Risk Engine Execution:** < 5ms per event.
+* **Dashboard Refresh Rate:** Real-time via Server-Sent Events (SSE) with fallback to reactive client simulation.
+

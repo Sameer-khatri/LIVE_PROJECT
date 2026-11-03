@@ -1,0 +1,232 @@
+# Dashboard Product Requirements Document (PRD): AuthSentry ITDR
+## Master UI/UX Specification for the Living Identity Threat SOC Interface
+
+---
+
+### 1. Product Vision & Aesthetic Direction
+This dashboard is the executive and operational command center for **AuthSentry ITDR** (Lightweight Identity Threat Detection & Response for SMBs). 
+
+Rather than standard flat administrative tables or generic AI mockups, the dashboard adopts an **ultra-refined, living cyber-telemetry design** inspired by executive health and biometric telemetry platforms (dark glassmorphism, concentric orbital gauges, multi-axis radar charts, and vibrant data-density).
+
+#### Core Design Mandates:
+1. **Feeling of "Alive" (Living Telemetry):**
+   * The central semicircular radar/arc gauge must feature continuous micro-animations: rotating orbital tick rings, breathing neon glows, floating satellite threat nodes with pulsing status pips, and subtle live numerical updates.
+   * Data is never frozen; live packet velocity, risk percentiles, and threat indicators pulsate with sub-second heartbeat rhythms.
+2. **Glassmorphic Precision:**
+   * Outer canvas: Deep cosmic backdrop with subtle atmospheric lighting.
+   * Dashboard container: Single rounded glass monolith (`#0e1420` to `#141d2e` at 85% opacity, `backdrop-blur-2xl`, with a razor-thin 1px `#23324a` border and 28px outer border radius).
+3. **Data Hierarchy & Glanceable Verdicts:**
+   * Executive stakeholders can look at the central arc for 2 seconds and know: **Organization Attack Risk Percentile (74th)**, primary attack vector, and autonomous defense status.
+
+---
+
+### 2. Dashboard Layout Wireframe & Architecture
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ [🛡️ AUTHSENTRY]  │  [=== DEFCON 1] Risk Index: 74/100 | Baseline: 18/100 | Attack Velocity 4.2x above norm │ 🌙  🔔 5  👤 │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                HERO SECTION (TOP 55%)                                                  │
+│ ┌───────────────────────────┐ ┌──────────────────────────────────────────────────────────┐ ┌───────────────────────────┐ │
+│ │ < Threat Report [CRITICAL]│ │                  CONCENTRIC ORBITAL GAUGE                │ │ 5.2 hrs [● Medium]        │ │
+│ │                           │ │            (Live Concentric Tick Rings & Arc)            │ │ Session Token Age         │ │
+│ │ Account Takeover Posture  │ │                                                          │ │ Active OAuth lifetime     │ │
+│ │ Identity risk across IdPs │ │              🔥 38.4% Credential Stuffing                │ │ exceeds policy by 3.4 hrs │ │
+│ │                           │ │          ✈️ 24.1% Travel Velocity (>8000km/h)             │ │                           │ │
+│ │   [ 6-Axis Radar Chart ]  │ │            💣 18.6% MFA Fatigue  🧅 12.3% Tor            │ │   [ Real-Time 24h Line    │ │
+│ │   - Credential Velocity   │ │                     ╭─────────────╮                      │ │     Trend Graph with      │ │
+│ │   - Geo-Velocity          │ │                    (     74th      )                     │ │     Plotted Points ]      │ │
+│ │   - MFA Integrity         │ │                     ╰─────────────╯                      │ │                           │ │
+│ │   - Device Trust          │ │                     Percentile Risk                      │ │   [View full stream >]    │ │
+│ │   - Network Hygiene       │ │              ATO Attack Probability                      │ │                           │ │
+│ │   - Privilege Flow        │ │                                                          │ │                           │ │
+│ └───────────────────────────┘ └──────────────────────────────────────────────────────────┘ └───────────────────────────┘ │
+├────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                ANALYTICS GRID (BOTTOM 45%)                                             │
+│ ┌──────────────────────────────────────┐ ┌──────────────────────────────────────┐ ┌───────────────────────────────────┐ │
+│ │ CARD 1: Identity Risk Score          │ │ CARD 2: Identity Hygiene & Baseline │ │ CARD 3: Threat Surface & Velocity │ │
+│ │ 0.76 (76/100) vs 0.15 Baseline       │ │ Legitimate % Logins: 60-80% [62%]    │ │ Velocity: 8,820 km/h | 94th Perc. │ │
+│ │ [ Low ─── Medium ───●── High ]       │ │                                      │ │ [ ═══ Low ── Med ── High ──● Crit]│ │
+│ │                                      │ │ • Known Corporate Hardware: 74% [OK] │ │ "Identity anomalies higher than  │ │
+│ │ Identity Anomaly Signatures:         │ │ • Residential ISP Origin:   48% [Sub]│ │  94% of enterprise baselines."    │ │
+│ │ ▸ Rapid Failures (7 in 30s)          │ │ • Work Hours Alignment:     42% [Anom│ │ Change: +42.8% ↑ last hour        │ │
+│ │ ▸ Tor Exit Node 185.220.101.5        │ │ • MFA Acceptance Rate:      55% [Crit│ │ ▸ Impossible Travel Confirmed     │ │
+│ │ ▸ Datacenter ASN (Hetzner Cloud)     │ │ ──────────────────────────────────── │ │ ▸ 5 failed logins before reset    │ │
+│ │ ▸ Headless Browser User-Agent        │ │ 1 Device Trust: Suboptimal 1.4       │ │ ▸ Active session vulnerable       │ │
+│ │                                      │ │ 2 Velocity Ratio: Elevated 4.2x      │ │ [✨ Instant Session Kill-Switch]  │ │
+│ └──────────────────────────────────────┘ └──────────────────────────────────────┘ └───────────────────────────────────┘ │
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 3. Detailed Component Specifications
+
+#### 3.1 Top Navigation & Status Bar
+* **Brand Logo:** AuthSentry identity icon featuring an iridescent circular multi-layer gradient with an embedded cybersecurity crest, followed by `AuthSentry` in geometric clean typography.
+* **Central Executive Telemetry Pill (Crucial Element from Reference):**
+  * Dark pill background (`#0b1019`) with a 1px border.
+  * Left Indicator: Blue/red segmented bar icon with `+4.2x` tag.
+  * Segment 1: `Active Risk Index: 74 / 100` (Bold white font).
+  * Divider: Thin vertical separator.
+  * Segment 2: `Baseline Risk: 18 / 100` (Muted cyan font).
+  * Segment 3: `Identity attack velocity is 4.2x above corporate baseline` (Highlighted red/amber warning text).
+* **Right Controls:**
+  * Live Telemetry Stream toggle (Day/Night or Stream On/Off pill).
+  * Notification Bell with live red badge (`5` active incidents).
+  * Forensic Export icon (`🗂️` / Audit logs).
+  * User profile avatar with verified badge.
+
+---
+
+#### 3.2 Hero Left Widget: Identity Attack Surface & 6-Axis Radar Chart
+* **Header:**
+  * Breadcrumb link: `< Threat Report` with red badge `[CRITICAL ATTACK / SUBOPTIMAL]`.
+  * Title: `Identity Attack Surface & Posture`.
+  * Subtitle: `Measures organization identity vulnerability, credential stuffing velocity, and session hijacking risk across all connected IdPs.`
+* **6-Axis Interactive Hexagonal Radar Chart:**
+  * Dark concentric grid lines with numeric scales (0, 20, 40, 60, 80, 100).
+  * Neon Cyan polygon filled with translucent glow (`rgba(0, 240, 255, 0.2)`):
+    1. **Credential Velocity:** `85%` (Brute-force frequency)
+    2. **Geo Velocity:** `78%` (Impossible travel delta)
+    3. **MFA Integrity:** `70%` (Push-bombing fatigue)
+    4. **Device Trust:** `65%` (Hardware fingerprint novelty)
+    5. **Network Hygiene:** `80%` (Tor exit / Cloud Datacenter ASN)
+    6. **Privilege Flow:** `60%` (Password reset post-failure)
+
+---
+
+#### 3.3 Hero Centerpiece: The Living Celestial Radial Threat Arc (The Central Bar)
+The definitive visual anchor of the dashboard. Must look **alive and pulsating**:
+* **Concentric Orbital Track Rings:**
+  * 3 layered concentric arcs with tick-mark graduations (SVG path with dash-arrays).
+  * Rings rotate slowly (subtle CSS orbital rotation: 60s per turn).
+* **Main Semicircular Threat Gauge Arc:**
+  * Thick glowing arc spanning $-180^\circ$ to $0^\circ$ (semicircle).
+  * Filled gradient: Electric Cyan $\rightarrow$ Amber $\rightarrow$ Radiant Crimson.
+  * Animated needle/cap with a glowing cyan dot at the **74% mark**.
+* **Center Metric Typography:**
+  * Massive bold typography: **`74`** with superscript **`th`** in Slate 400.
+  * Sub-label: `Percentile`.
+  * Description underneath: `Organizational Attack Risk Probability`.
+* **5 Floating Satellite Threat Nodes (Positioned along outer concentric arcs):**
+  Each satellite node features a glowing category icon, percentage value, and attack vector label:
+  1. `4.94%` • `Rapid Token Exfiltration` (Top-left arc)
+  2. `14.45%` • `Tor / Datacenter Proxy Routing` (Mid-left arc)
+  3. `17.54%` • `MFA Push Fatigue / Bombing` (Top center arc)
+  4. `17.32%` • `Impossible Travel (>8,000 km/h)` (Mid-right arc)
+  5. `34.21%` • `Distributed Credential Stuffing` (Far-right arc)
+* **Living Telemetry Dynamics:**
+  * Dotted satellite pins pulse subtly (`animate-ping` micro-elements).
+  * Hovering any satellite node illuminates its specific arc segment and highlights related events in the lower cards.
+
+---
+
+#### 3.4 Hero Right Widget: Session Token Entropy & 24h Risk Line Chart
+* **Top Metric Card:**
+  * Value: `5.2 hrs` with status pill `[● Medium]`.
+  * Title: `Session Token Lifetime & Entropy`.
+  * Description: `Active OAuth refresh token lifetime exceeds zero-trust policy by 3.4 hours.`
+* **Real-Time 24-Hour Line Chart:**
+  * High-resolution SVG / Canvas line chart with dark grid lines.
+  * Cyan line with subtle drop shadow and plotted data circles at 10, 20, 30, 40, 50-hour mark.
+  * Y-axis: Risk Index / Velocity; X-axis: Time (hours).
+  * Sharp drop-off or elevation spike showing the attack anomaly window.
+* **Footer Button:** `[View full incident report >]` with right arrow.
+
+---
+
+#### 3.5 Bottom Card 1: Identity Risk Score & Epigenetic Anomaly Signatures
+* **Upper Section:**
+  * Title: `Identity Risk Score` with `[View report >]` button.
+  * Explanation: `An identity risk score of 0.76 (76/100) indicates an active Account Takeover (ATO) pattern requiring containment.`
+  * Metrics: **`0.76`** `(Equal to 76)` | **`0.15`** `Corporate Baseline` | Status `[● High / Critical]`.
+  * **Gradient Barometer Scale:**
+    * Smooth horizontal bar: Low (Emerald) $\rightarrow$ Medium (Yellow) $\rightarrow$ High (Crimson).
+    * White rounded slider indicator positioned at 76%.
+* **Lower Section (Nested Dark Card): Identity Anomaly Signatures:**
+  * Category Header: `● Primary Attack Indicators`
+  * 2-Column List with disclosure chevrons:
+    * `▸ Rapid Failures (7 in 30s)` | `▸ Tor Exit Node 185.220.101.5`
+    * `▸ Distributed Subnet Spray`  | `▸ Datacenter ASN (Hetzner Cloud)`
+    * `▸ MFA Push Fatigue (4 triggers)` | `▸ Headless Python User-Agent`
+
+---
+
+#### 3.6 Bottom Card 2: Identity Hygiene & Behavioral Telemetry (The Table)
+* **Header:**
+  * Title: `Identity Hygiene & Behavioral Baseline`.
+  * Main Ratio: `Legitimate vs Anomalous Logins: 60-80% [Current: 62%]`.
+* **Telemetry Telemetry Rows:**
+  Each row contains the metric name, standard acceptable range, measured value, and an info tooltip `(?)`:
+  1. `Known Corporate Hardware`: Range `60-80%` | Current `74%` `[NORMAL]`
+  2. `Residential ISP Origin`: Range `80-95%` | Current `48%` `[SUBOPTIMAL]`
+  3. `Working Hours Alignment`: Range `85-95%` | Current `42%` `[ANOMALOUS]`
+  4. `MFA Challenge Success`: Range `90-100%` | Current `55%` `[FATIGUE RISK]`
+* **Bottom Summary Indices (Numbered Pills):**
+  * `1 Device Trust Index: Suboptimal 1.4` `(?)`
+  * `2 Identity Velocity Ratio: Elevated 4.2x` `(?)`
+
+---
+
+#### 3.7 Bottom Card 3: Threat Surface, Spectrum Gauge & Autonomous Response
+* **Header:**
+  * Title: `Threat Surface & Account Takeover Velocity`.
+  * Subtitle: `ITDR Threat Intensity (Credential Velocity & Risk)`.
+* **Top Metric & Horizontal Rainbow Spectrum Bar:**
+  * Metric: **`Velocity: 8,820 km/h`** | **`Percentile: 94th`**.
+  * **Rainbow Spectrum Bar:** Continuous gradient: Deep Blue $\rightarrow$ Emerald $\rightarrow$ Yellow $\rightarrow$ Orange $\rightarrow$ Neon Red.
+  * White pin marker locked at the **94th percentile**.
+* **Diagnostic Assessment Box:**
+  * Text: *"This means identity anomalies are higher than 94% of reference enterprise baselines, indicating an active, distributed credential compromise."*
+* **Change Over Time:** `+42.8% ↑ last hour`.
+* **Forensic Bullet Findings:**
+  * `▸ Indicates an ongoing Impossible Travel event (San Francisco to Frankfurt in 8 min).`
+  * `▸ 5 failed login attempts preceded immediate password reset request.`
+  * `▸ Active session tokens vulnerable to exfiltration.`
+* **Autonomous Mitigation Control:**
+  * Glowing action pill / button: **`[✨ Instant Session Kill-Switch / Mitigate]`** with an iridescent glowing crest.
+
+---
+
+### 4. Technical & Animation Architecture
+
+#### 4.1 "Living" Animation Rules
+* **Orbital Gauge Micro-Rotation:** Continuous 45s smooth CSS rotation on the outer concentric dotted ring:
+  ```css
+  @keyframes orbitRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  ```
+* **Radar Chart Breathing Effect:** Sub-pixel scale oscillation (1.00 to 1.02) over a 4-second sinusoidal easing curve.
+* **Telemetry Data Tick:** Every 3 seconds, sub-metrics (e.g. Velocity: 8,820 $\leftrightarrow$ 8,824 km/h) adjust slightly with smooth number transitions to convey continuous active sensor polling.
+* **DEFCON Pulse:** Outer border of the central top pill pulses with `rgba(244, 63, 94, 0.35)` when in DEFCON 1 state.
+
+#### 4.2 Color Palette Tokens
+| Token | Hex Code | Purpose |
+| :--- | :--- | :--- |
+| `cyber-canvas` | `#080c14` | Atmospheric outer canvas |
+| `cyber-surface` | `#0e1420` | Glassmorphic panel base |
+| `cyber-border` | `#23324a` | 1px precision card borders |
+| `cyber-cyan` | `#00f0ff` | Primary telemetry, safe baseline |
+| `cyber-amber` | `#f59e0b` | Elevated anomaly, warning indicators |
+| `cyber-crimson` | `#f43f5e` | Critical attacks, ATO probability |
+| `cyber-violet` | `#a855f7` | Behavioral UEBA, AI insights |
+
+---
+
+### 5. Implementation Roadmap for Agent
+1. **Scaffolding:** Create clean Vite + React + Tailwind + Lucide project in `tool/`.
+2. **Components:**
+   - `HeaderBar.tsx`: Logo, DEFCON telemetry pill, live stream toggle.
+   - `HeroSection.tsx`:
+     - `RadarWidget.tsx`: 6-axis SVG radar chart.
+     - `CelestialArcGauge.tsx`: Concentric orbital rings, semicircular gauge, satellite threat nodes.
+     - `SessionTrendWidget.tsx`: Token entropy card and 24h line graph.
+   - `AnalyticsGrid.tsx`:
+     - `RiskScoreCard.tsx`: Methylation-style composite risk bar & anomaly markers.
+     - `IdentityHygieneTable.tsx`: Immunity-style baseline table with acceptable ranges.
+     - `ThreatVelocityCard.tsx`: Spectrum bar, findings list, and glowing Kill-Switch button.
+3. **Verification:** Ensure zero build errors, fluid 60fps animations, and responsive layout scaling.
+

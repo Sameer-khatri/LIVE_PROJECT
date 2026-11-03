@@ -1,0 +1,86 @@
+# Product Requirements Document (PRD): AuthSentry ITDR
+## Lightweight Identity Threat Detection & Response for SMBs
+
+---
+
+### 1. Executive Summary
+Small and medium-sized businesses (SMBs) are increasingly targeted by credential stuffing, account takeover (ATO), and identity-based cyberattacks. Enterprise Security Information and Event Management (SIEM) solutions like Splunk, Microsoft Sentinel, and IBM QRadar are prohibitively expensive ($30k - $150k+/year), ingest massive amounts of noisy network logs, and require dedicated Security Operations Center (SOC) personnel to configure and monitor.
+
+**AuthSentry ITDR** is a purpose-built, automated Identity Threat Detection and Response platform tailored for SMBs. It focuses exclusively on high-signal authentication telemetry (logins, failed attempts, password resets, MFA events, session renewals), correlates these events through a real-time risk-scoring engine, and autonomously mitigates threats without requiring a dedicated SOC team.
+
+---
+
+### 2. Problem Statement & Market Opportunity
+* **High Barrier to Entry:** Traditional SIEMs charge by data ingestion volume (GB/day), making them cost-prohibitive for SMBs.
+* **Alert Fatigue:** Generic SIEMs generate thousands of low-fidelity alerts, which overwhelm generalist IT administrators.
+* **80%+ of Breaches Involve Credentials:** According to the Verizon DBIR, credential compromise and stolen logins represent the vast majority of web app attacks.
+* **Lack of Remediation:** SIEMs are typically read-only aggregators. When an attack happens at 2:00 AM, traditional tools only generate a log entry; they do not terminate the compromised session.
+
+---
+
+### 3. Target Audience & Personas
+1. **The Solo IT Administrator / Office Tech Lead:** Manages IT and security for 20-250 employees; needs automated protection and zero false-alarm noise.
+2. **Managed Service Providers (MSPs):** IT service companies delivering IT and security to multiple small business clients simultaneously.
+3. **SaaS Startup Founders / Engineering Leads:** Fast-growing teams needing immediate SOC 2 compliance readiness and identity monitoring without a dedicated security hire.
+
+---
+
+### 4. Key Goals & Success Metrics
+* **Time-to-Value:** Under 5 minutes from connection to first threat detection.
+* **Zero Noise:** Minimum 90% reduction in false-positive alerts compared to generic SIEMs.
+* **Detection Latency:** Real-time risk classification within < 200 milliseconds of event ingestion.
+* **Autonomous Containment:** Automatic session revocation or step-up MFA challenge triggered within < 2 seconds of a Critical threat detection.
+
+---
+
+### 5. Core Feature Specifications
+
+#### 5.1 Telemetry Ingestion Engine
+* Ingestion of standard identity events:
+  * `LOGIN_SUCCESS`, `LOGIN_FAILED`, `MFA_REQUEST`, `MFA_DENIED`, `PASSWORD_RESET_REQUEST`, `PASSWORD_RESET_SUCCESS`, `SESSION_REVOKED`.
+* Normalization to Open Cybersecurity Schema Framework (OCSF) identity structure.
+* Support for Webhook ingestion (REST API `/api/events/ingest`), IdP log forwarding, and local agent telemetry.
+
+#### 5.2 Multi-Layer Risk Engine
+1. **Heuristic Detection:**
+   * Rapid Brute-Force (e.g., > 5 failures in 60s).
+   * Distributed Password Spraying (multiple user targets from single ASN/subnet).
+   * MFA Push Bombing / Fatigue (repeated triggers in < 30 seconds).
+   * Anomalous Password Reset (reset initiated immediately following brute-force failures).
+2. **Threat Intelligence Enrichment:**
+   * IP reputation check (Tor Exit Nodes, Public Datacenter/VPNs, AbuseIPDB rating).
+   * User-Agent and client device profiling (e.g., automated tools like python-requests or headless browsers).
+3. **Behavioral Baselines (UEBA):**
+   * Impossible Travel detection (geographic distance over elapsed time exceeds 800 km/h).
+   * First-time device fingerprint or unexpected country/ASN for a specific user.
+
+#### 5.3 Composite Risk Scoring (0 - 100 Index)
+* **0 - 39 (Low Risk):** Benign routine activity. Ingested quietly into audit log.
+* **40 - 69 (Medium Risk):** Minor anomaly (e.g., known user from new device). Silent verification or user self-confirmation prompt.
+* **70 - 89 (High Risk):** Significant anomaly (e.g., unexpected country, failed MFA). Force Step-Up MFA challenge and notify IT admin.
+* **90 - 100 (Critical Risk):** Confirmed Attack / ATO in progress (e.g., Impossible Travel + Tor IP + Password Reset). Automatically revoke active sessions, quarantine user, and notify emergency channels.
+
+#### 5.4 Autonomous Response System
+* **Session Kill-Switch:** Immediate invalidation of OAuth/JWT session tokens.
+* **Temporary Quarantine:** Block subsequent login requests for a configurable cooldown window.
+* **Emergency Webhook Dispatch:** Instant high-priority dispatch to Slack, Microsoft Teams, and Webhook endpoints with full forensic summary.
+
+#### 5.5 SOC Dashboard & UI
+* **Threat Command Center:** Live real-time event feed with risk badges, real-time threat counter, and event velocity graph.
+* **Interactive Attack Simulator:** One-click simulations for Brute Force, Impossible Travel, MFA Push Bombing, and Tor-based Credential Reset for live demos and reviews.
+* **User Entity Inspector:** Deep-dive view of any employee's identity history, risk timeline, and known devices.
+* **Policy & Rules Editor:** Granular control over risk threshold sliders and automated remediation toggles.
+* **Forensic Audit Exporter:** One-click exportable compliance and incident report.
+
+---
+
+### 6. Scope for MVP / Live Review Release
+* **Included in Today's Release:**
+  * Complete, high-polish dark-mode SOC Dashboard.
+  * Live Event Ingestion REST API + WebSocket/Event Stream.
+  * Multi-scenario Attack Simulator with live telemetry playback.
+  * Real-time 0-100 Risk Engine with detailed factor decomposition.
+  * Autonomous Mitigation Engine with instant session revocation and incident audit log.
+  * User Entity Behavior (UEBA) profiles with risk timeline.
+  * Exportable Incident & Audit Report (JSON & printable formatted report).
+

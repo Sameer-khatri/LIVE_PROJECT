@@ -1,0 +1,155 @@
+# Product Requirements Document (PRD): ANALYZER
+## SentinelLite AI — Stored Intelligence & Historical Data Graph (OSINT Investigation Tab)
+
+---
+
+### 1. Executive Summary & Vision
+**SentinelLite AI Analyzer** is a dedicated, forensic-grade **Stored Intelligence & Historical Investigation Graph** integrated into the AuthSentry / SentinelLite platform. 
+
+Unlike conventional SIEMs that dump historical tables into paginated tabular grids, the Analyzer implements an **OSINT-style, horizontally expanding multi-generation graph** modeled directly after intelligence investigation systems.
+
+#### Core Structural Philosophy:
+* **True Left-to-Right Horizontal Graph Topology:**
+  * **Far Left:** Single prominent root node (`STORED SECURITY INTELLIGENCE`) representing the entire historical database.
+  * **Generation 1:** Ten core category branches (`USER RECORDS`, `LOGIN HISTORY`, `SECURITY EVENTS`, `PASSWORD HISTORY`, `DEVICE HISTORY`, `IP HISTORY`, `ALERT ARCHIVE`, `SESSION HISTORY`, `DETECTION EVIDENCE`, `AUDIT HISTORY`).
+  * **Generation 2:** Selecting any category dynamically fans out smooth curved bezier fibers into individual historical entity nodes.
+  * **Generation 3+:** Selecting an entity (e.g. `User 001`) sprouts subsequent contextual branches (`Account Profile`, `Login Timeline`, `Associated Devices`, `Historical IPs`, `Triggered Alerts`).
+* **Non-Blocking Selective Branching:**
+  * The graph expands and collapses on demand with lazy loading; only active investigation paths are fanned out, keeping graph traversal clean and legible.
+* **Right-Side Dynamic Stored Intelligence Inspector (~30% workspace):**
+  * Displays complete forensic provenance, risk rate sparkline histograms, 2x2 telemetry metric grid, AI investigation synthesis, and interactive natural-language query bar.
+
+---
+
+### 2. Visual Architecture & Layout Specification (Exact Reference Mapping)
+
+```
+┌────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ [TOP BAR] [🛡️ SentinelLite AI]  │  [Graph View] [Tree View] [+] [-] [Filters (1)] [Sort (2)] [Fit]  │ [🔍 Search] 👤 │
+├──────────────────────────────────────────────────────────────────────────────────────────┬─────────────────────────────┤
+│                                                                                          │ RIGHT INSPECTOR (30% WIDTH) │
+│  LEFT CANVAS: HORIZONTALLY EXPANDING OSINT GRAPH (70% WIDTH)                             │                             │
+│                                                                                          │ 🛡️ User Profile             │
+│   ┌──────────────────┐                                                                   │                             │
+│   │   ROOT ORB       │                                                                   │ Sarah Chen                  │
+│   │                  │                                                                   │ Lead Cloud Architect        │
+│   │ STORED SECURITY  │─────── (Bezier Curve) ───────► ┌────────────────────────┐         │ [ACTIVE] Listed 01 Oct 2026 │
+│   │   INTELLIGENCE   │                                │ 👥 USER RECORDS (18)   │         │                             │
+│   │                  │─────── (Bezier Curve) ───────► │ 🔑 LOGIN HISTORY (842) │         │ [ Explore details > ]       │
+│   │  [1,428 Records] │                                │ 🚨 SECURITY EVENTS     │         │                             │
+│   └──────────────────┘                                │ 🔐 PASSWORD HISTORY    │────┐    ├─────────────────────────────┤
+│            │                                          │ 💻 DEVICE HISTORY      │    │    │ Risk Contribution Rate      │
+│            ▼                                          │ 🌐 IP HISTORY          │    │    │ 45%  [-4% last month]       │
+│     Pulsing Planetary                                 │ ⚠️ ALERT ARCHIVE       │    │    │                             │
+│       Iris Aura                                       │ ⏱️ SESSION HISTORY     │    │    │ ılılıııııılııııııılııııı    │
+│                                                       │ 🔍 DETECTION EVIDENCE  │    │    │ (Vertical Bar Histogram)    │
+│                                                       │ 📋 AUDIT HISTORY       │    │    ├─────────────────────────────┤
+│                                                       └────────────────────────┘    │    │ [✓ 12 Alerts] [📄 2 Devices]│
+│                                                                                     │    │ [🌐 18 IPs]   [✓ 12 Session]│
+│                                                                                     ▼    ├─────────────────────────────┤
+│                                                    ┌───────────────────────────────────┐ │ 🤖 AI Forensic Copilot      │
+│                                                    │ RADIAL BEZIER FAN-OUT NODES       │ │ "Multiple abnormal logins   │
+│                                                    │  • Sarah Chen     [HIGH RISK 88]  │ │  outside 30-day baseline."  │
+│                                                    │  • Marcus Vance   [CRITICAL  94]  ├─────────────────────────────┤
+│                                                    │  • Elena Rostova  [NOMINAL   14]  │ [Ask a question...       ➔] │
+│                                                    │  • David Kim      [ELEVATED  68]  │ [+ My agent] [⏱️ +3] [AI]   │
+│                                                    └───────────────────────────────────┘ └─────────────────────────────┘
+└────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### 3. Graph Node Hierarchy & Branching Taxonomy
+
+#### 3.1 Main Root Node: `STORED SECURITY INTELLIGENCE`
+* **Visual Presentation:** Positioned on the far left ($X \approx 80\text{px}$). Features a dark planetary aura with a radiant glowing core orb surrounded by particle iris rings (`animate-pulse-glow`).
+* **Root Telemetry Badges:**
+  * `Total Stored Records: 1,428`
+  * `Monitored Accounts: 18`
+  * `Observed IPs: 24`
+  * `Archived Incidents: 16`
+  * `Last Database Archive: 3 mins ago`
+
+#### 3.2 Generation 1: Primary Category Nodes
+All ten branches connect to the root via smooth, cubic SVG Bezier curves (`M x1 y1 C cx1 y1, cx2 y2, x2 y2`):
+1. **`👥 USER RECORDS`** (18 Historical Accounts)
+2. **`🔑 LOGIN HISTORY`** (842 Authentication Records)
+3. **`🚨 SECURITY EVENTS`** (1,240 Normalized Security Events)
+4. **`🔐 PASSWORD & ACCOUNT HISTORY`** (32 Credential Changes)
+5. **`💻 DEVICE HISTORY`** (14 Known Hardware Assets)
+6. **`🌐 IP ADDRESS HISTORY`** (24 Observed IP Subnets)
+7. **`⚠️ ALERT & INCIDENT ARCHIVE`** (16 Triaged Incidents)
+8. **`⏱️ SESSION HISTORY`** (128 OAuth & JWT Sessions)
+9. **`🔍 DETECTION EVIDENCE`** (9 Correlation Cases)
+10. **`📋 AUDIT HISTORY`** (48 Admin Operation Logs)
+
+#### 3.3 Generation 2: Category to Record Expansion
+When a user clicks any category node, it receives an illuminated active border (`ring-1 ring-amber-400` or `ring-cyan-400`), and sprouts an elegant **radial fan-out array of child nodes** to the right:
+* **When `USER RECORDS` is active:** Fans out 6–10 monitored user nodes (`Sarah Chen`, `Marcus Vance`, `Elena Rostova`, `David Kim`, etc.), each tagged with role and risk badges (`HIGH RISK 88`, `CRITICAL 94`).
+* **When `SECURITY EVENTS` is active:** Fans out normalized event categories (`Login Failure`, `Impossible Travel`, `MFA Bombing`, `Tor Reset`, `Password Changed`).
+* **When `ALERT & INCIDENT ARCHIVE` is active:** Fans out categorized severity groups (`Critical Alerts`, `High-Risk Alerts`, `Investigated Incidents`, `Resolved Incidents`).
+
+#### 3.4 Generation 3: Record to Evidence & Contextual Entity Expansion
+Selecting an individual entity node expands the next generation of child nodes:
+* Expanding `User 001 (Sarah Chen)` produces:
+  * `[Profile]` $\rightarrow$ Email, Role, Department, MFA Status.
+  * `[Login Events]` $\rightarrow$ Date groups (October 2026, September 2026) $\rightarrow$ Specific Event IDs.
+  * `[Observed Devices]` $\rightarrow$ `MacBookPro-M3-Corp (Chrome)`, `iPhone-15-Corp`.
+  * `[Associated IPs]` $\rightarrow$ `198.51.100.44 (US)`, `185.220.101.5 (Tor Exit)`.
+  * `[Incident History]` $\rightarrow$ `INC-8821 Impossible Travel Violation`.
+
+---
+
+### 4. Right-Side Stored Intelligence Inspector (~30% Width)
+
+The inspector is a floating glass card that reacts dynamically to node selection:
+
+#### 4.1 Header & Overview
+* Entity category icon (Shield, User, Laptop, Globe, or Alert).
+* Entity title & role (e.g. `Sarah Chen — Lead Cloud Architect`).
+* Status pill: `[ACTIVE]` with timestamp: `The last update was archived on 01 Oct 2026`.
+* Primary action button: `[ Explore details > ]` (White or dark rounded pill).
+
+#### 4.2 Risk Contribution Rate & Sparkline Histogram
+* Big percentage: **`45%`** (Risk Contribution Rate) with change indicator **`-4% last month`**.
+* **Mini Vertical Bar Histogram Sparkline:** 24 animated vertical bars displaying density/velocity over time, with the anomalous peak highlighted in gold/amber.
+
+#### 4.3 2x2 Telemetry Metric Grid
+* `[✓ 12 Correlated Alerts & Findings]`
+* `[📄 2 Associated Devices]`
+* `[🌐 18 Observed IP Addresses]`
+* `[✓ 12 Active / Historical Sessions]`
+
+#### 4.4 AI Forensic Copilot Analysis Card
+* Icon: `RI Analysis / AI Forensic Copilot`.
+* Title: `Historical Anomaly Assessment`.
+* Synthesis text: *"User exhibit 4.2x velocity spike between consecutive logins. 7 failed login attempts preceded immediate password reset request from Tor Exit Node 185.220.101.5."*
+
+#### 4.5 Interactive Copilot Prompt & Quick Filters
+* Rounded input field: `"Ask a question about this historical node..."` with arrow button.
+* Filter tags beneath input: `[+ My agent]`, `[⏱️ +3]`, `[AI Synthesis]`.
+
+---
+
+### 5. Interaction & Animation Requirements
+1. **Smooth Bezier Drawing:** Lines are rendered using `<path d="M... C...">` with dynamic curvature based on distance.
+2. **Animated Traveling Packets:** Small glowing SVG circles traverse along active paths (`animateMotion`) to visualize data linkage.
+3. **Branch Collapse & Expansion:** Expanding a branch smoothly slides child nodes in with opacity and translate transitions.
+4. **Canvas Controls:** Pan, zoom (`+` / `-`), auto-fit view, and reset canvas.
+
+---
+
+### 6. Technical Implementation Blueprint
+* **Component Structure:**
+  * `src/components/analyzer/AnalyzerCanvas.tsx`: Interactive SVG + HTML node canvas.
+  * `src/components/analyzer/RootNode.tsx`: Planetary aura root node.
+  * `src/components/analyzer/CategoryNode.tsx`: First-generation category pills.
+  * `src/components/analyzer/FanOutNode.tsx`: Second-generation child entity pills.
+  * `src/components/analyzer/SubBranchNode.tsx`: Third-generation evidence nodes.
+  * `src/components/analyzer/InspectorPanel.tsx`: Fixed 30% right-side inspection drawer with histogram.
+  * `src/components/analyzer/AnalyzerTopBar.tsx`: Graph tools (zoom, pan, search, filter).
+* **Navigation Integration:**
+  * Top navigation tab switcher:
+    * **`📊 Living Dashboard`** (Our executive SOC interface).
+    * **`🕸️ Stored Intelligence Graph (Analyzer)`** (This new OSINT graph investigation tab).
+

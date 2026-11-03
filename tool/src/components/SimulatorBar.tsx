@@ -1,0 +1,104 @@
+import React from 'react';
+import { Plane, Zap, Bomb, Globe, ShieldCheck, Sparkles } from 'lucide-react';
+
+export type ScenarioType = 'IMPOSSIBLE_TRAVEL' | 'BRUTE_FORCE' | 'MFA_BOMBING' | 'TOR_RESET' | 'NORMAL';
+
+interface SimulatorBarProps {
+  currentScenario: ScenarioType;
+  onSelectScenario: (scenario: ScenarioType) => void;
+}
+
+export const SimulatorBar: React.FC<SimulatorBarProps> = ({
+  currentScenario,
+  onSelectScenario
+}) => {
+  const scenarios: Array<{
+    id: ScenarioType;
+    label: string;
+    sublabel: string;
+    icon: React.ReactNode;
+    severity: 'CRITICAL' | 'HIGH' | 'NORMAL';
+  }> = [
+    {
+      id: 'IMPOSSIBLE_TRAVEL',
+      label: 'Impossible Travel',
+      sublabel: 'SF → Frankfurt (8,820 km/h)',
+      icon: <Plane className="w-3.5 h-3.5" />,
+      severity: 'CRITICAL'
+    },
+    {
+      id: 'BRUTE_FORCE',
+      label: 'Credential Stuffing',
+      sublabel: '7 Fails/30s (ASN 44050)',
+      icon: <Zap className="w-3.5 h-3.5" />,
+      severity: 'CRITICAL'
+    },
+    {
+      id: 'MFA_BOMBING',
+      label: 'MFA Push Bombing',
+      sublabel: '4 Prompts/18s Fatigue',
+      icon: <Bomb className="w-3.5 h-3.5" />,
+      severity: 'HIGH'
+    },
+    {
+      id: 'TOR_RESET',
+      label: 'Tor Exit Reset',
+      sublabel: 'Anonymizer Hijack',
+      icon: <Globe className="w-3.5 h-3.5" />,
+      severity: 'CRITICAL'
+    },
+    {
+      id: 'NORMAL',
+      label: 'Legitimate Baseline',
+      sublabel: 'Normal Employee (Safe)',
+      icon: <ShieldCheck className="w-3.5 h-3.5" />,
+      severity: 'NORMAL'
+    }
+  ];
+
+  return (
+    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-3 p-2.5 rounded-2xl bg-dark-inset/80 border border-dark-borderSubtle mb-5 select-none backdrop-blur-md">
+      
+      {/* Label */}
+      <div className="flex items-center gap-2 pl-1 flex-shrink-0">
+        <div className="w-7 h-7 rounded-lg bg-dark-card border border-dark-border flex items-center justify-center text-slate-300">
+          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+        </div>
+        <div>
+          <div className="flex items-center gap-2 text-xs font-semibold text-white">
+            <span>Threat Simulation</span>
+            <span className="text-[10px] font-normal px-1.5 py-0.2 rounded bg-dark-card text-slate-400 border border-dark-border">
+              Select Vector
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex items-center gap-2 overflow-x-auto max-w-full py-0.5">
+        {scenarios.map((s) => {
+          const isActive = currentScenario === s.id;
+          return (
+            <button
+              key={s.id}
+              onClick={() => onSelectScenario(s.id)}
+              className={`flex flex-col items-start px-3 py-1.5 rounded-xl border text-left transition-all duration-200 flex-shrink-0 ${
+                isActive
+                  ? 'bg-dark-card border-sky-500/70 text-white shadow-sm ring-1 ring-sky-500/30'
+                  : 'bg-dark-card/60 border-dark-border text-slate-300 hover:border-slate-600 hover:text-white'
+              }`}
+            >
+              <div className="flex items-center gap-1.5 text-xs font-semibold">
+                <span className={isActive ? 'text-sky-400' : 'text-slate-400'}>{s.icon}</span>
+                <span>{s.label}</span>
+              </div>
+              <span className="text-[10px] text-slate-400 mt-0.5 font-normal">
+                {s.sublabel}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
