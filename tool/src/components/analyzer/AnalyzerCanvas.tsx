@@ -3,7 +3,7 @@ import {
   Users, Key, ShieldAlert, Lock, Laptop, Globe, 
   AlertTriangle, Clock, Search, ClipboardList, Database,
   Plus, Minus, Filter, ArrowUpDown, Sparkles,
-  Compass, Zap, ChevronRight, CheckCircle2
+  Compass, Zap, ChevronRight, CheckCircle2, Fingerprint, FileCheck
 } from 'lucide-react';
 import { 
   AnalyzerCategory, 
@@ -51,6 +51,8 @@ export const AnalyzerCanvas: React.FC<AnalyzerCanvasProps> = ({
       case 'AlertTriangle': return <AlertTriangle className="w-3.5 h-3.5" />;
       case 'Clock': return <Clock className="w-3.5 h-3.5" />;
       case 'Search': return <Search className="w-3.5 h-3.5" />;
+      case 'Fingerprint': return <Fingerprint className="w-3.5 h-3.5" />;
+      case 'FileCheck': return <FileCheck className="w-3.5 h-3.5" />;
       default: return <ClipboardList className="w-3.5 h-3.5" />;
     }
   };

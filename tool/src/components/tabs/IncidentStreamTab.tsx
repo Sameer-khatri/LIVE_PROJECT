@@ -1,223 +1,426 @@
 import React, { useState } from 'react';
-import { ShieldAlert, Search, Filter, Terminal, Lock, ChevronDown, ChevronRight, FileCode, Clock, Globe } from 'lucide-react';
+import { 
+  ShieldAlert, Search, Filter, Terminal, Lock, ChevronDown, 
+  ChevronRight, FileCode, Clock, Globe, Zap, CheckCircle2, 
+  AlertTriangle, RefreshCw, PlusCircle, ShieldCheck
+} from 'lucide-react';
 
-interface EventRecord {
+export interface EventRecord {
   id: string;
   timestamp: string;
   eventType: string;
   user: { name: string; email: string; role: string };
   client: { ip: string; city: string; country: string; asn: string; ipType: string };
-  evaluation: { riskScore: number; riskTier: string; verdict: string; factors: string[]; autonomousActionTaken?: string };
+  evaluation: { 
+    riskScore: number; 
+    riskTier: 'HIGH_DANGER' | 'WARNING' | 'SAFE'; 
+    verdict: string; 
+    factors: string[]; 
+    autonomousActionTaken?: string 
+  };
 }
+
+const INITIAL_EVENTS: EventRecord[] = [
+  {
+    id: 'EVT-8824',
+    timestamp: new Date(Date.now() - 1000 * 45).toISOString(),
+    eventType: 'Impossible Fast Travel',
+    user: { name: 'Sarah Chen', email: 'sarah.chen@innovatech.io', role: 'Lead Cloud Architect' },
+    client: { ip: '185.220.101.5', city: 'Frankfurt', country: 'Germany', asn: 'Cloud Hosting Server', ipType: 'HIDDEN_NETWORK' },
+    evaluation: { 
+      riskScore: 96, 
+      riskTier: 'HIGH_DANGER', 
+      verdict: 'SUSPICIOUS_LOGIN', 
+      factors: [
+        'Logged in from Germany only 8 minutes after San Francisco',
+        'Connected through an anonymous hidden network (Tor)',
+        'Calculated velocity: 8,820 km/h (exceeds commercial flight limit)'
+      ], 
+      autonomousActionTaken: 'USER_AUTOMATICALLY_LOGGED_OUT' 
+    }
+  },
+  {
+    id: 'EVT-8822',
+    timestamp: new Date(Date.now() - 1000 * 60 * 4).toISOString(),
+    eventType: 'Password Guessing Spree',
+    user: { name: 'Marcus Vance', email: 'marcus.vance@innovatech.io', role: 'Chief Financial Officer' },
+    client: { ip: '45.142.214.18', city: 'Saint Petersburg', country: 'Russia', asn: 'Foreign Hosting Network', ipType: 'FOREIGN_SERVER' },
+    evaluation: { 
+      riskScore: 92, 
+      riskTier: 'HIGH_DANGER', 
+      verdict: 'CREDENTIAL_STUFFING', 
+      factors: [
+        '7 incorrect passwords entered in 30 seconds',
+        'Automated script signature identified',
+        'Targeted executive financial account'
+      ],
+      autonomousActionTaken: 'ACCOUNT_TEMPORARILY_LOCKED'
+    }
+  },
+  {
+    id: 'EVT-8818',
+    timestamp: new Date(Date.now() - 1000 * 60 * 12).toISOString(),
+    eventType: 'Suspicious Password Reset',
+    user: { name: 'David Kim', email: 'david.kim@innovatech.io', role: 'Product Operations' },
+    client: { ip: '185.220.101.5', city: 'Frankfurt', country: 'Germany', asn: 'Tor Exit Network', ipType: 'HIDDEN_NETWORK' },
+    evaluation: { 
+      riskScore: 88, 
+      riskTier: 'HIGH_DANGER', 
+      verdict: 'RESET_HIJACK_ATTEMPT', 
+      factors: [
+        'Password reset requested from a hidden anonymous network',
+        'Reset attempted immediately after a wrong password attempt'
+      ],
+      autonomousActionTaken: 'RESET_TOKEN_WITHHELD'
+    }
+  },
+  {
+    id: 'EVT-8814',
+    timestamp: new Date(Date.now() - 1000 * 60 * 22).toISOString(),
+    eventType: 'Phone Approval Spam (Fatigue)',
+    user: { name: 'Elena Rostova', email: 'elena.rostova@innovatech.io', role: 'Senior DevOps Engineer' },
+    client: { ip: '104.244.42.1', city: 'Amsterdam', country: 'Netherlands', asn: 'Commercial VPN Proxy', ipType: 'VPN_PROXY' },
+    evaluation: { 
+      riskScore: 74, 
+      riskTier: 'WARNING', 
+      verdict: 'MFA_FATIGUE_ATTACK', 
+      factors: [
+        '4 phone confirmation requests sent in 18 seconds',
+        'Attacker attempted to overwhelm user into approving prompt'
+      ],
+      autonomousActionTaken: 'PUSH_NOTIFICATIONS_THROTTLED'
+    }
+  },
+  {
+    id: 'EVT-8809',
+    timestamp: new Date(Date.now() - 1000 * 60 * 38).toISOString(),
+    eventType: 'Stolen API Token Replay',
+    user: { name: 'Alex Mercer', email: 'alex.mercer@innovatech.io', role: 'VP of Engineering' },
+    client: { ip: '177.54.120.3', city: 'São Paulo', country: 'Brazil', asn: 'Residential Proxy Network', ipType: 'RESIDENTIAL_PROXY' },
+    evaluation: {
+      riskScore: 82,
+      riskTier: 'HIGH_DANGER',
+      verdict: 'TOKEN_EXFILTRATION',
+      factors: [
+        'Personal access token used from unrecognized geographic subnet',
+        'User-Agent matches automated curl script rather than CI runner'
+      ],
+      autonomousActionTaken: 'API_TOKEN_REVOKED'
+    }
+  },
+  {
+    id: 'EVT-8801',
+    timestamp: new Date(Date.now() - 1000 * 60 * 55).toISOString(),
+    eventType: 'Off-Hours Database Access',
+    user: { name: 'Elena Rostova', email: 'elena.rostova@innovatech.io', role: 'Senior DevOps Engineer' },
+    client: { ip: '198.51.100.44', city: 'San Francisco', country: 'United States', asn: 'Comcast Residential', ipType: 'NORMAL' },
+    evaluation: {
+      riskScore: 58,
+      riskTier: 'WARNING',
+      verdict: 'OFF_HOURS_ANOMALY',
+      factors: [
+        'Production PostgreSQL database accessed at 03:14 AM local time',
+        'Exceeds normal daytime engineering window'
+      ]
+    }
+  },
+  {
+    id: 'EVT-8794',
+    timestamp: new Date(Date.now() - 1000 * 60 * 75).toISOString(),
+    eventType: 'Normal Safe WebAuthn Login',
+    user: { name: 'Priya Patel', email: 'priya.patel@innovatech.io', role: 'SecOps Threat Analyst' },
+    client: { ip: '203.0.113.12', city: 'London', country: 'United Kingdom', asn: 'BT Broadband UK', ipType: 'NORMAL' },
+    evaluation: {
+      riskScore: 8,
+      riskTier: 'SAFE',
+      verdict: 'NORMAL_USER',
+      factors: [
+        'Biometric physical key verified (FIDO2 / WebAuthn)',
+        'Recognized corporate laptop with trusted certificate',
+        'Normal daytime shift hours'
+      ]
+    }
+  },
+  {
+    id: 'EVT-8788',
+    timestamp: new Date(Date.now() - 1000 * 60 * 95).toISOString(),
+    eventType: 'Normal Safe Login',
+    user: { name: 'Emma Watson', email: 'emma.watson@innovatech.io', role: 'HR & People Manager' },
+    client: { ip: '198.51.100.99', city: 'Austin', country: 'United States', asn: 'AT&T Fiber', ipType: 'NORMAL' },
+    evaluation: {
+      riskScore: 12,
+      riskTier: 'SAFE',
+      verdict: 'NORMAL_USER',
+      factors: [
+        'Standard single sign-on from registered company laptop',
+        'Home internet IP matches historical 90-day baseline'
+      ]
+    }
+  }
+];
 
 interface IncidentStreamTabProps {
   onRevokeSession?: (email: string) => void;
 }
 
 export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSession }) => {
+  const [events, setEvents] = useState<EventRecord[]>(INITIAL_EVENTS);
   const [filterTier, setFilterTier] = useState<string>('ALL');
   const [search, setSearch] = useState<string>('');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [actionNotice, setActionNotice] = useState<string | null>(null);
 
-  const events: EventRecord[] = [
-    {
-      id: 'EVT-8821',
-      timestamp: new Date(Date.now() - 1000 * 60 * 6).toISOString(),
-      eventType: 'Impossible Fast Travel',
-      user: { name: 'Sarah Chen', email: 'sarah.chen@innovatech.io', role: 'Lead Cloud Architect' },
-      client: { ip: '185.220.101.5', city: 'Frankfurt', country: 'Germany', asn: 'Cloud Hosting Server', ipType: 'HIDDEN_NETWORK' },
-      evaluation: { riskScore: 95, riskTier: 'HIGH_DANGER', verdict: 'SUSPICIOUS_LOGIN', factors: ['Logged in from Germany only 8 minutes after San Francisco', 'Connected through an anonymous hidden network', 'Used a foreign cloud server instead of normal home internet'], autonomousActionTaken: 'USER_AUTOMATICALLY_LOGGED_OUT' }
-    },
-    {
-      id: 'EVT-8819',
-      timestamp: new Date(Date.now() - 1000 * 60 * 14).toISOString(),
-      eventType: 'Password Guessing',
-      user: { name: 'Marcus Vance', email: 'marcus.vance@innovatech.io', role: 'Chief Financial Officer' },
-      client: { ip: '45.142.214.18', city: 'Saint Petersburg', country: 'Russia', asn: 'Foreign Hosting Network', ipType: 'FOREIGN_SERVER' },
-      evaluation: { riskScore: 88, riskTier: 'HIGH_DANGER', verdict: 'SUSPICIOUS_LOGIN', factors: ['7 incorrect passwords entered in 30 seconds', 'Used an automated hacker script instead of a web browser', 'Came from an overseas internet address'] }
-    },
-    {
-      id: 'EVT-8814',
-      timestamp: new Date(Date.now() - 1000 * 60 * 25).toISOString(),
-      eventType: 'Suspicious Password Reset',
-      user: { name: 'David Kim', email: 'david.kim@innovatech.io', role: 'Product Operations' },
-      client: { ip: '185.220.101.5', city: 'Frankfurt', country: 'Germany', asn: 'Tor Exit Network', ipType: 'HIDDEN_NETWORK' },
-      evaluation: { riskScore: 92, riskTier: 'HIGH_DANGER', verdict: 'SUSPICIOUS_LOGIN', factors: ['Password reset requested from a hidden anonymous network', 'Reset attempted immediately after a wrong password'] }
-    },
-    {
-      id: 'EVT-8790',
-      timestamp: new Date(Date.now() - 1000 * 60 * 48).toISOString(),
-      eventType: 'Phone Approval Spam',
-      user: { name: 'Elena Rostova', email: 'elena.rostova@innovatech.io', role: 'Senior DevOps Engineer' },
-      client: { ip: '104.244.42.1', city: 'Amsterdam', country: 'Netherlands', asn: 'Commercial VPN Proxy', ipType: 'VPN_PROXY' },
-      evaluation: { riskScore: 72, riskTier: 'WARNING', verdict: 'SUSPICIOUS_LOGIN', factors: ['4 phone confirmation requests sent in 18 seconds', 'Someone tried to overwhelm the user into tapping Accept'] }
-    },
-    {
-      id: 'EVT-8765',
-      timestamp: new Date(Date.now() - 1000 * 60 * 85).toISOString(),
-      eventType: 'Normal Safe Login',
-      user: { name: 'Sarah Chen', email: 'sarah.chen@innovatech.io', role: 'Lead Cloud Architect' },
-      client: { ip: '198.51.100.44', city: 'San Francisco', country: 'United States', asn: 'Comcast Home Internet', ipType: 'NORMAL' },
-      evaluation: { riskScore: 12, riskTier: 'SAFE', verdict: 'NORMAL_USER', factors: ['Standard login from recognized company laptop', 'Normal daytime working hours', 'Home WiFi provider matches previous logins'] }
+  // Ingest a brand-new live simulated incident
+  const handleIngestLiveEvent = () => {
+    const randomUsers = [
+      { name: 'Sarah Chen', email: 'sarah.chen@innovatech.io', role: 'Lead Cloud Architect' },
+      { name: 'Marcus Vance', email: 'marcus.vance@innovatech.io', role: 'Chief Financial Officer' },
+      { name: 'David Kim', email: 'david.kim@innovatech.io', role: 'Product Operations' }
+    ];
+    const user = randomUsers[Math.floor(Math.random() * randomUsers.length)];
+    const newId = `EVT-${Math.floor(8830 + Math.random() * 50)}`;
+
+    const newEvent: EventRecord = {
+      id: newId,
+      timestamp: new Date().toISOString(),
+      eventType: 'Rapid Token Exfiltration Attempt',
+      user,
+      client: {
+        ip: '194.26.29.112',
+        city: 'Bucharest',
+        country: 'Romania',
+        asn: 'Autonomous Hosting Network',
+        ipType: 'DATA_CENTER'
+      },
+      evaluation: {
+        riskScore: 94,
+        riskTier: 'HIGH_DANGER',
+        verdict: 'TOKEN_HIJACK',
+        factors: [
+          'High-velocity API requests with forged bearer token',
+          'IP flagged on global threat intelligence feeds',
+          'Autonomous mitigation triggered in 38ms'
+        ],
+        autonomousActionTaken: 'TOKEN_INVALIDATED_IMMEDIATELY'
+      }
+    };
+
+    setEvents((prev) => [newEvent, ...prev]);
+    setActionNotice(`Live alert ${newId} ingested & autonomous containment executed!`);
+    setTimeout(() => setActionNotice(null), 3500);
+  };
+
+  const handleRemediate = (eventId: string, userEmail: string) => {
+    if (onRevokeSession) {
+      onRevokeSession(userEmail);
     }
-  ];
+    setActionNotice(`Active session terminated for ${userEmail} (Incident ${eventId})`);
+    setTimeout(() => setActionNotice(null), 3000);
+  };
 
-  const filteredEvents = events.filter(e => {
+  const filteredEvents = events.filter((e) => {
     const matchesTier = filterTier === 'ALL' || e.evaluation.riskTier === filterTier;
-    const matchesSearch = e.user.name.toLowerCase().includes(search.toLowerCase()) ||
-                          e.user.email.toLowerCase().includes(search.toLowerCase()) ||
-                          e.client.city.toLowerCase().includes(search.toLowerCase()) ||
-                          e.eventType.toLowerCase().includes(search.toLowerCase());
+    const matchesSearch =
+      e.user.name.toLowerCase().includes(search.toLowerCase()) ||
+      e.user.email.toLowerCase().includes(search.toLowerCase()) ||
+      e.client.city.toLowerCase().includes(search.toLowerCase()) ||
+      e.eventType.toLowerCase().includes(search.toLowerCase()) ||
+      e.id.toLowerCase().includes(search.toLowerCase());
     return matchesTier && matchesSearch;
   });
 
   return (
-    <div className="flex flex-col gap-4 select-none animate-fadeIn">
+    <div className="flex flex-col gap-4 select-none animate-fadeIn text-slate-100 font-sans">
       
       {/* Top Header Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-3xl bg-dark-card/90 border border-dark-border">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-3xl bg-[#121722]/95 border border-[#273244] shadow-xl">
         <div>
-          <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
-            <span>Recent Suspicious Activity</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
+              <span>Incident Stream & Forensic Triage</span>
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            </h3>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-sky-500/15 text-sky-300 border border-sky-500/30">
+              {filteredEvents.length} Records
+            </span>
+          </div>
           <p className="text-xs text-slate-400 mt-0.5">
-            Live feed of logins, password resets, and suspicious attempts with plain English explanations.
+            Real-time feed of authentication events, suspicious logins, and autonomous defense triggers.
           </p>
         </div>
 
-        {/* Filter Pills */}
-        <div className="flex items-center gap-2">
-          {['ALL', 'HIGH_DANGER', 'WARNING', 'SAFE'].map(tier => (
-            <button
-              key={tier}
-              onClick={() => setFilterTier(tier)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-                filterTier === tier
-                  ? 'bg-white text-slate-900 shadow-sm'
-                  : 'bg-dark-inset text-slate-400 border border-dark-border hover:text-white'
-              }`}
-            >
-              {tier === 'ALL' ? 'All Activity' : tier === 'HIGH_DANGER' ? 'High Danger' : tier === 'WARNING' ? 'Warnings' : 'Normal Logins'}
-            </button>
-          ))}
+        {/* Action Controls & Ingest Simulation */}
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+          
+          {/* Quick Filter Segmented Pills */}
+          <div className="flex items-center p-1 rounded-2xl bg-[#0b0e14] border border-[#273244]">
+            {['ALL', 'HIGH_DANGER', 'WARNING', 'SAFE'].map((tier) => (
+              <button
+                key={tier}
+                onClick={() => setFilterTier(tier)}
+                className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
+                  filterTier === tier
+                    ? 'bg-white text-slate-900 shadow-sm'
+                    : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                {tier === 'HIGH_DANGER' ? 'Critical' : tier === 'WARNING' ? 'Warning' : tier === 'SAFE' ? 'Safe' : 'All'}
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleIngestLiveEvent}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md shadow-sky-900/30 transition-all active:scale-95"
+            title="Inject a live real-time simulated attack incident"
+          >
+            <PlusCircle className="w-3.5 h-3.5" />
+            <span>Simulate Live Event</span>
+          </button>
+
         </div>
       </div>
 
-      {/* Search Input */}
+      {/* Confirmation feedback banner */}
+      {actionNotice && (
+        <div className="p-3 rounded-2xl bg-emerald-950/90 border border-emerald-500/60 text-emerald-200 text-xs font-semibold flex items-center gap-2 animate-fadeIn shadow-lg">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+          <span>{actionNotice}</span>
+        </div>
+      )}
+
+      {/* Search Input Bar */}
       <div className="relative">
-        <Search className="w-4 h-4 text-slate-500 absolute left-4 top-1/2 -translate-y-1/2" />
+        <Search className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
         <input
           type="text"
+          placeholder="Search by employee name, email, IP address, city, or event type..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Filter by person name, email, city, or login type..."
-          className="w-full bg-dark-card/80 border border-dark-border rounded-2xl pl-11 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400 transition-colors"
+          className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#0f1420] border border-[#242f42] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
         />
       </div>
 
-      {/* Events List */}
+      {/* Incident Records Feed */}
       <div className="space-y-3">
-        {filteredEvents.map(event => {
-          const isSelected = selectedEventId === event.id;
-          const isDanger = event.evaluation.riskTier === 'HIGH_DANGER';
-          const isWarning = event.evaluation.riskTier === 'WARNING';
+        {filteredEvents.map((evt) => {
+          const isSelected = selectedEventId === evt.id;
+          const isCritical = evt.evaluation.riskTier === 'HIGH_DANGER';
+          const isWarning = evt.evaluation.riskTier === 'WARNING';
 
           return (
             <div
-              key={event.id}
-              className={`p-4 rounded-2xl border transition-all ${
-                isSelected
-                  ? 'bg-dark-card border-sky-500/80 shadow-lg ring-1 ring-sky-500/30'
-                  : 'bg-dark-card/60 border-dark-border hover:border-slate-600'
+              key={evt.id}
+              className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                isCritical
+                  ? 'bg-[#15121a]/95 border-rose-500/40 hover:border-rose-500/70 shadow-sm'
+                  : isWarning
+                  ? 'bg-[#181512]/95 border-amber-500/40 hover:border-amber-500/70 shadow-sm'
+                  : 'bg-[#101520]/95 border-[#212b3c] hover:border-slate-700'
               }`}
             >
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                
-                {/* Event Basic Info */}
+              {/* Row Header */}
+              <div 
+                onClick={() => setSelectedEventId(isSelected ? null : evt.id)}
+                className="p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 cursor-pointer select-none"
+              >
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xs ${
-                    isDanger ? 'bg-rose-950/80 border border-rose-800 text-rose-300' :
-                    isWarning ? 'bg-amber-950/80 border border-amber-800 text-amber-300' :
-                    'bg-emerald-950/80 border border-emerald-800 text-emerald-300'
+                  <div className={`p-2 rounded-xl ${
+                    isCritical ? 'bg-rose-500/20 text-rose-400' : isWarning ? 'bg-amber-500/20 text-amber-400' : 'bg-emerald-500/20 text-emerald-400'
                   }`}>
-                    {event.evaluation.riskScore}
+                    {isCritical ? <AlertTriangle className="w-4 h-4" /> : isWarning ? <Clock className="w-4 h-4" /> : <ShieldCheck className="w-4 h-4" />}
                   </div>
 
                   <div>
                     <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-white">{event.user.name}</span>
-                      <span className="text-xs text-slate-400">({event.user.role})</span>
-                      <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                        isDanger ? 'bg-rose-950 text-rose-400 border border-rose-800' :
-                        isWarning ? 'bg-amber-950 text-amber-400 border border-amber-800' :
-                        'bg-emerald-950 text-emerald-400 border border-emerald-800'
+                      <span className="font-mono text-xs font-bold text-slate-300">{evt.id}</span>
+                      <span className="text-slate-500">•</span>
+                      <span className="text-xs font-bold text-white tracking-tight">{evt.eventType}</span>
+                      <span className={`px-2 py-0.2 rounded text-[10px] font-mono font-bold ${
+                        isCritical ? 'bg-rose-500/20 text-rose-300' : isWarning ? 'bg-amber-500/20 text-amber-300' : 'bg-emerald-500/20 text-emerald-300'
                       }`}>
-                        {event.eventType}
+                        RISK {evt.evaluation.riskScore}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-3 text-xs text-slate-400 mt-1">
-                      <span className="flex items-center gap-1">
-                        <Globe className="w-3 h-3 text-sky-400" />
-                        <span>{event.client.city}, {event.client.country}</span>
-                      </span>
+                    <div className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+                      <strong className="text-slate-200">{evt.user.name}</strong>
+                      <span>({evt.user.email})</span>
                       <span>•</span>
-                      <span className="font-mono text-[11px]">{event.client.ip}</span>
-                      <span>•</span>
-                      <span>{new Date(event.timestamp).toLocaleTimeString()}</span>
+                      <span>{evt.user.role}</span>
                     </div>
                   </div>
                 </div>
 
-                {/* Quick Action Button & Details Toggle */}
-                <div className="flex items-center gap-2 self-end md:self-auto">
-                  {event.evaluation.autonomousActionTaken && (
-                    <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-emerald-950 border border-emerald-800 text-emerald-300">
-                      User Automatically Logged Out
-                    </span>
-                  )}
+                {/* Right Metadata */}
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="text-right hidden sm:block">
+                    <div className="text-slate-300 font-medium flex items-center gap-1 justify-end">
+                      <Globe className="w-3.5 h-3.5 text-slate-400" />
+                      <span>{evt.client.city}, {evt.client.country}</span>
+                    </div>
+                    <div className="font-mono text-[11px] text-slate-500 mt-0.5">
+                      {evt.client.ip} ({evt.client.asn})
+                    </div>
+                  </div>
 
-                  {isDanger && onRevokeSession && (
-                    <button
-                      onClick={() => onRevokeSession(event.user.email)}
-                      className="px-3 py-1.5 rounded-full bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs transition-all active:scale-95 shadow-sm"
-                    >
-                      Log Out User Now
-                    </button>
+                  {isSelected ? (
+                    <ChevronDown className="w-4 h-4 text-slate-400" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4 text-slate-400" />
                   )}
-
-                  <button
-                    onClick={() => setSelectedEventId(isSelected ? null : event.id)}
-                    className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-dark-inset border border-dark-border text-xs text-slate-300 hover:text-white transition-all"
-                  >
-                    <span>{isSelected ? 'Hide Details' : 'View Reasons'}</span>
-                    {isSelected ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-                  </button>
                 </div>
-
               </div>
 
-              {/* Expanded Reasons Box */}
+              {/* Collapsible Forensic Details Drawer */}
               {isSelected && (
-                <div className="mt-3 pt-3 border-t border-slate-800/80 animate-fadeIn">
-                  <div className="text-xs font-bold text-white mb-2">Why was this flagged?</div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {event.evaluation.factors.map((f, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs text-slate-300 p-2 rounded-xl bg-dark-inset/80 border border-dark-border">
-                        <span className="text-rose-400 font-bold">•</span>
-                        <span>{f}</span>
-                      </div>
-                    ))}
+                <div className="px-5 py-4 bg-[#0a0d14]/90 border-t border-[#1e2636] space-y-3.5 animate-fadeIn">
+                  
+                  {/* Forensic Reasoning Factors */}
+                  <div>
+                    <div className="text-[11px] font-mono font-bold text-slate-400 uppercase tracking-wider">
+                      Threat Analysis & Evidence
+                    </div>
+                    <ul className="mt-1.5 space-y-1">
+                      {evt.evaluation.factors.map((factor, idx) => (
+                        <li key={idx} className="text-xs text-slate-300 flex items-start gap-2">
+                          <span className="text-rose-400 mt-0.5">•</span>
+                          <span>{factor}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
 
-                  <div className="mt-3 p-3 rounded-xl bg-[#090d15] border border-slate-800 text-[11px] font-mono text-slate-400 overflow-x-auto">
-                    <span className="text-sky-400 font-bold block mb-1">Technical Record (JSON):</span>
-                    {JSON.stringify(event, null, 2)}
+                  {/* Autonomous Action Badge */}
+                  {evt.evaluation.autonomousActionTaken && (
+                    <div className="p-3 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-emerald-200 text-xs font-semibold flex items-center justify-between">
+                      <span className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                        <span>Autonomous Protection: {evt.evaluation.autonomousActionTaken}</span>
+                      </span>
+                      <span className="font-mono text-[10px] text-emerald-400">Response &lt; 60ms</span>
+                    </div>
+                  )}
+
+                  {/* Remediation & Audit Controls */}
+                  <div className="flex items-center justify-between pt-2 border-t border-slate-800">
+                    <div className="text-[11px] font-mono text-slate-500">
+                      Logged: {new Date(evt.timestamp).toLocaleString()}
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => handleRemediate(evt.id, evt.user.email)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/40 text-rose-300 text-xs font-semibold transition-all active:scale-95"
+                      >
+                        <Zap className="w-3 h-3" />
+                        <span>Force Invalidate Session</span>
+                      </button>
+                    </div>
                   </div>
+
                 </div>
               )}
-
             </div>
           );
         })}

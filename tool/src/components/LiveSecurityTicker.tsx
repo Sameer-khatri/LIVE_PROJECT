@@ -1,0 +1,162 @@
+import React, { useState, useEffect } from 'react';
+import { Activity, Shield, Zap, Globe, Clock, CheckCircle2, AlertTriangle, Radio } from 'lucide-react';
+
+interface TickerItem {
+  id: string;
+  timeAgo: string;
+  category: 'AUTH' | 'CONTAINMENT' | 'SYNC' | 'ANOMALY';
+  message: string;
+  severity: 'INFO' | 'SUCCESS' | 'WARNING' | 'DANGER';
+}
+
+const DEFAULT_TICKER_ITEMS: TickerItem[] = [
+  {
+    id: 't-1',
+    timeAgo: '2s ago',
+    category: 'AUTH',
+    message: 'WebAuthn biometric login verified for sarah.chen@innovatech.io (Hardware Token)',
+    severity: 'SUCCESS'
+  },
+  {
+    id: 't-2',
+    timeAgo: '7s ago',
+    category: 'CONTAINMENT',
+    message: 'Edge Gateway auto-quarantined Tor exit IP 185.220.101.5 on border firewall',
+    severity: 'DANGER'
+  },
+  {
+    id: 't-3',
+    timeAgo: '14s ago',
+    category: 'SYNC',
+    message: 'Synchronized 142 identity audit records from Okta, Azure AD & Google Workspace',
+    severity: 'INFO'
+  },
+  {
+    id: 't-4',
+    timeAgo: '21s ago',
+    category: 'ANOMALY',
+    message: 'Velocity check triggered: marcus.vance@innovatech.io flagged for rapid password attempts',
+    severity: 'WARNING'
+  },
+  {
+    id: 't-5',
+    timeAgo: '32s ago',
+    category: 'AUTH',
+    message: 'Active OAuth session auto-rotated for priya.patel@innovatech.io (Zero-Trust Policy)',
+    severity: 'SUCCESS'
+  },
+  {
+    id: 't-6',
+    timeAgo: '44s ago',
+    category: 'SYNC',
+    message: 'AWS US-East VPC Gateway verified 18 healthy microservice identity certificates',
+    severity: 'INFO'
+  }
+];
+
+interface LiveSecurityTickerProps {
+  isLiveStream: boolean;
+  onInjectEvent?: () => void;
+}
+
+export const LiveSecurityTicker: React.FC<LiveSecurityTickerProps> = ({ isLiveStream, onInjectEvent }) => {
+  const [items, setItems] = useState<TickerItem[]>(DEFAULT_TICKER_ITEMS);
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [utcTime, setUtcTime] = useState<string>('');
+  const [eventsIngestedCount, setEventsIngestedCount] = useState<number>(14280);
+
+  // Live ticking UTC clock
+  useEffect(() => {
+    const updateClock = () => {
+      const now = new Date();
+      setUtcTime(now.toUTCString().slice(17, 25) + ' UTC');
+    };
+    updateClock();
+    const interval = setInterval(updateClock, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Automatic carousel rotation & counter increment
+  useEffect(() => {
+    if (!isLiveStream) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % items.length);
+      setEventsIngestedCount((prev) => prev + Math.floor(Math.random() * 3 + 1));
+    }, 3800);
+
+    return () => clearInterval(interval);
+  }, [isLiveStream, items.length]);
+
+  const currentItem = items[currentIndex];
+
+  const getBadgeStyle = (severity: TickerItem['severity']) => {
+    switch (severity) {
+      case 'DANGER':
+        return 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+      case 'WARNING':
+        return 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+      case 'SUCCESS':
+        return 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+      default:
+        return 'bg-sky-500/20 text-sky-300 border-sky-500/40';
+    }
+  };
+
+  return (
+    <div className="w-full mb-4 px-3.5 py-2 rounded-2xl bg-[#0f141f]/90 border border-[#222b3b] shadow-inner flex flex-col md:flex-row items-center justify-between gap-3 text-xs select-none">
+      
+      {/* Left: Live Radio Pulsing Indicator */}
+      <div className="flex items-center gap-2.5 flex-shrink-0">
+        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[#161e2c] border border-[#283549]">
+          <span className={`w-2 h-2 rounded-full ${isLiveStream ? 'bg-emerald-400 animate-pulse' : 'bg-slate-600'}`}></span>
+          <span className="font-mono text-[10px] font-bold text-slate-300">
+            {isLiveStream ? 'LIVE STREAM' : 'PAUSED'}
+          </span>
+        </div>
+
+        <span className="text-slate-500 hidden sm:inline">•</span>
+
+        {/* Real-Time UTC Digital Clock */}
+        <div className="flex items-center gap-1 font-mono text-[11px] text-sky-400 font-semibold">
+          <Clock className="w-3.5 h-3.5 text-slate-400" />
+          <span>{utcTime || '22:15:00 UTC'}</span>
+        </div>
+
+        <span className="text-slate-500 hidden sm:inline">•</span>
+
+        {/* Telemetry Counter */}
+        <div className="text-[11px] text-slate-400 hidden lg:inline">
+          Ingested: <span className="font-mono text-white font-bold">{eventsIngestedCount.toLocaleString()}</span> events
+        </div>
+      </div>
+
+      {/* Center: Animated Live Feed Marquee Pill */}
+      <div className="flex-1 w-full md:w-auto flex items-center justify-center overflow-hidden">
+        <div 
+          key={currentItem.id + currentIndex}
+          className="flex items-center gap-2 max-w-full truncate animate-fadeIn"
+        >
+          <span className={`px-2 py-0.5 rounded-md text-[9px] font-mono font-bold border uppercase flex-shrink-0 ${getBadgeStyle(currentItem.severity)}`}>
+            {currentItem.category}
+          </span>
+          <span className="text-slate-300 text-xs truncate">
+            {currentItem.message}
+          </span>
+          <span className="font-mono text-[10px] text-slate-500 flex-shrink-0 hidden sm:inline">
+            ({currentItem.timeAgo})
+          </span>
+        </div>
+      </div>
+
+      {/* Right: Quick Action & Health Indicator */}
+      <div className="flex items-center gap-3 flex-shrink-0">
+        <div className="flex items-center gap-1.5 text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+          <Radio className="w-3 h-3 animate-spin" />
+          <span>EDGE SYNC 100%</span>
+        </div>
+      </div>
+
+    </div>
+  );
+};

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HelpCircle, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
+import { HelpCircle, ChevronDown, ChevronUp, ShieldCheck, UserCheck } from 'lucide-react';
 import { HygieneMetricRow } from '../types/dashboard';
 
 interface IdentityHygieneTableProps {
@@ -7,13 +7,15 @@ interface IdentityHygieneTableProps {
   rows: HygieneMetricRow[];
   deviceTrustIndex: string;
   velocityRatio: string;
+  onInspectDossier?: () => void;
 }
 
 export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
   legitimateRatio,
   rows,
   deviceTrustIndex,
-  velocityRatio
+  velocityRatio,
+  onInspectDossier
 }) => {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -103,6 +105,16 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
             <HelpCircle className="w-3.5 h-3.5 text-slate-500" title="Measures how fast login attempts are arriving" />
           </div>
         </div>
+
+        {onInspectDossier && (
+          <button
+            onClick={onInspectDossier}
+            className="w-full mt-2 py-2 px-3 rounded-xl bg-gradient-to-r from-sky-500/10 to-indigo-500/10 hover:from-sky-500/20 hover:to-indigo-500/20 border border-sky-500/30 text-sky-400 hover:text-sky-300 text-xs font-semibold flex items-center justify-center gap-2 transition-all active:scale-95 shadow-sm"
+          >
+            <UserCheck className="w-3.5 h-3.5" />
+            <span>Open Sarah Chen Forensics Dossier</span>
+          </button>
+        )}
       </div>
 
     </div>

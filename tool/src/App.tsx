@@ -11,6 +11,8 @@ import { IncidentStreamTab } from './components/tabs/IncidentStreamTab';
 import { MitigationCenterTab } from './components/tabs/MitigationCenterTab';
 import { PolicyStudioTab } from './components/tabs/PolicyStudioTab';
 import { AppLoader } from './components/AppLoader';
+import { LiveSecurityTicker } from './components/LiveSecurityTicker';
+import { IdentityDossierModal, IdentityProfile } from './components/IdentityDossierModal';
 import { 
   INITIAL_TELEMETRY, 
   INITIAL_RADAR_METRICS, 
@@ -32,6 +34,63 @@ interface ToastItem {
   type: 'danger' | 'warning' | 'success' | 'info';
 }
 
+const SARAH_CHEN_DOSSIER: IdentityProfile = {
+  id: 'usr-001',
+  name: 'Sarah Chen',
+  email: 'sarah.chen@innovatech.io',
+  role: 'Lead Cloud Architect',
+  department: 'Cloud Infrastructure',
+  riskScore: 88,
+  status: 'FLAGGED',
+  activeDevicesCount: 2,
+  activeSessionsCount: 3,
+  lastLoginCity: 'Frankfurt',
+  lastLoginCountry: 'Germany',
+  ipAddress: '185.220.101.5',
+  mfaMethod: 'FIDO2 YubiKey 5C NFC',
+  recentIncidents: [
+    'Impossible Travel: San Francisco to Frankfurt in 8m (Speed: 8,820 km/h)',
+    'Session Token Replay attempted on /admin/iam from foreign cloud host'
+  ],
+  anomaliesDetected: [
+    'Consecutive logins physically impossible by air transport',
+    'TCP Fingerprint matches Linux server while browser claims macOS Safari',
+    'Active session token age exceeds zero-trust 2.0-hour limit by +1.9 hours'
+  ]
+};
+
+// Pure native Web Audio API high-tech sound synthesizer (zero external dependencies)
+const playCyberChime = (tone: 'danger' | 'success') => {
+  try {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    
+    if (tone === 'danger') {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.06, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+    } else {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15);
+      gain.gain.setValueAtTime(0.05, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+    }
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 0.35);
+  } catch (e) {
+    // Graceful no-op if blocked by browser autoplay policy
+  }
+};
+
 export default function App() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'DASHBOARD' | 'ANALYZER' | 'INCIDENTS' | 'MITIGATIONS' | 'POLICIES'>('DASHBOARD');
@@ -41,6 +100,7 @@ export default function App() {
   const [currentScenario, setCurrentScenario] = useState<ScenarioType>('IMPOSSIBLE_TRAVEL');
   const [isLiveStream, setIsLiveStream] = useState<boolean>(true);
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
+  const [isDossierOpen, setIsDossierOpen] = useState<boolean>(false);
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const addToast = (title: string, message: string, type: 'danger' | 'warning' | 'success' | 'info' = 'info') => {
@@ -78,6 +138,11 @@ export default function App() {
   // Handle scenario selection to test live telemetry reaction
   const handleSelectScenario = (scenario: ScenarioType) => {
     setCurrentScenario(scenario);
+    if (scenario === 'BASELINE') {
+      playCyberChime('success');
+    } else {
+      playCyberChime('danger');
+    }
 
     if (scenario === 'IMPOSSIBLE_TRAVEL') {
       setTelemetry({
@@ -218,6 +283,7 @@ export default function App() {
   };
 
   const handleMitigate = () => {
+    playCyberChime('success');
     setTelemetry((prev) => ({
       ...prev,
       riskPercentile: 24,
@@ -302,6 +368,9 @@ export default function App() {
             onOpenReport={() => setIsReportOpen(true)}
             onReScan={() => setIsLoading(true)}
           />
+
+          {/* Real-Time Living Security Event Ticker Bar */}
+          <LiveSecurityTicker isLiveStream={isLiveStream} />
 
           {/* Master Navigation Tabs Switcher (5 Simple Tabs) */}
           <div className="flex items-center gap-1.5 mb-5 p-1 rounded-2xl bg-dark-inset border border-dark-borderSubtle overflow-x-auto max-w-full select-none">
@@ -406,6 +475,7 @@ export default function App() {
                   rows={INITIAL_HYGIENE_ROWS}
                   deviceTrustIndex="1.4 / 5.0"
                   velocityRatio="3.7"
+                  onInspectDossier={() => setIsDossierOpen(true)}
                 />
 
                 {/* CARD 03: Hacker Speed & Fast Travel */}
@@ -463,6 +533,16 @@ export default function App() {
           isOpen={isReportOpen}
           onClose={() => setIsReportOpen(false)}
           telemetry={telemetry}
+        />
+
+        {/* Interactive Employee Forensic Dossier Modal */}
+        <IdentityDossierModal
+          user={SARAH_CHEN_DOSSIER}
+          isOpen={isDossierOpen}
+          onClose={() => setIsDossierOpen(false)}
+          onRemediateAction={(actionName, email) => {
+            addToast('Security Action Dispatched', `${actionName} applied successfully to ${email}`, 'success');
+          }}
         />
 
       </div>
