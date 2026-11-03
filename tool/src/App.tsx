@@ -7,6 +7,9 @@ import { IdentityHygieneTable } from './components/IdentityHygieneTable';
 import { ThreatVelocityCard } from './components/ThreatVelocityCard';
 import { ReportModal } from './components/ReportModal';
 import { AnalyzerView } from './components/analyzer/AnalyzerView';
+import { IncidentStreamTab } from './components/tabs/IncidentStreamTab';
+import { MitigationCenterTab } from './components/tabs/MitigationCenterTab';
+import { PolicyStudioTab } from './components/tabs/PolicyStudioTab';
 import { 
   INITIAL_TELEMETRY, 
   INITIAL_RADAR_METRICS, 
@@ -16,10 +19,10 @@ import {
   INITIAL_TREND_POINTS 
 } from './data/dashboardData';
 import { TelemetryState, RadarMetric, SatelliteAttackNode } from './types/dashboard';
-import { LayoutDashboard, Network } from 'lucide-react';
+import { LayoutDashboard, Network, Terminal, ShieldAlert, Sliders } from 'lucide-react';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<'DASHBOARD' | 'ANALYZER'>('DASHBOARD');
+  const [activeTab, setActiveTab] = useState<'DASHBOARD' | 'ANALYZER' | 'INCIDENTS' | 'MITIGATIONS' | 'POLICIES'>('DASHBOARD');
   const [telemetry, setTelemetry] = useState<TelemetryState>(INITIAL_TELEMETRY);
   const [radarMetrics, setRadarMetrics] = useState<RadarMetric[]>(INITIAL_RADAR_METRICS);
   const [satelliteNodes, setSatelliteNodes] = useState<SatelliteAttackNode[]>(INITIAL_SATELLITE_NODES);
@@ -178,7 +181,7 @@ export function App() {
   return (
     <div className="min-h-screen bg-[#0b0e14] text-slate-100 flex items-center justify-center p-3 sm:p-6 relative overflow-hidden font-sans">
       
-      {/* Sunset / Dusk Horizon Atmosphere (Reference Match Backdrop) */}
+      {/* Sunset / Dusk Horizon Atmosphere */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#311f2f] via-[#161a26] to-[#0a0d14] pointer-events-none"></div>
       <div className="absolute top-0 left-0 right-0 h-44 bg-gradient-to-b from-rose-500/15 via-purple-500/10 to-transparent blur-3xl pointer-events-none"></div>
       
@@ -193,11 +196,11 @@ export function App() {
           onOpenReport={() => setIsReportOpen(true)}
         />
 
-        {/* Master Navigation Tabs Switcher */}
-        <div className="flex items-center gap-2 mb-5 p-1 rounded-2xl bg-dark-inset border border-dark-borderSubtle w-fit select-none">
+        {/* Master Navigation Tabs Switcher (All 5 Modules) */}
+        <div className="flex items-center gap-1.5 mb-5 p-1 rounded-2xl bg-dark-inset border border-dark-borderSubtle overflow-x-auto max-w-full select-none">
           <button
             onClick={() => setActiveTab('DASHBOARD')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex-shrink-0 ${
               activeTab === 'DASHBOARD'
                 ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60'
                 : 'text-slate-400 hover:text-slate-200'
@@ -209,7 +212,7 @@ export function App() {
 
           <button
             onClick={() => setActiveTab('ANALYZER')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex-shrink-0 ${
               activeTab === 'ANALYZER'
                 ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-sky-500/30'
                 : 'text-slate-400 hover:text-slate-200'
@@ -218,18 +221,52 @@ export function App() {
             <Network className="w-3.5 h-3.5 text-amber-400" />
             <span>Stored Intelligence (Analyzer Graph)</span>
           </button>
+
+          <button
+            onClick={() => setActiveTab('INCIDENTS')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex-shrink-0 ${
+              activeTab === 'INCIDENTS'
+                ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Terminal className="w-3.5 h-3.5 text-rose-400" />
+            <span>Incident Stream & Triage</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('MITIGATIONS')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex-shrink-0 ${
+              activeTab === 'MITIGATIONS'
+                ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Autonomous Responses</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('POLICIES')}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex-shrink-0 ${
+              activeTab === 'POLICIES'
+                ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <Sliders className="w-3.5 h-3.5 text-purple-400" />
+            <span>Policy Studio</span>
+          </button>
         </div>
 
         {/* TAB 1: EXECUTIVE LIVING DASHBOARD */}
         {activeTab === 'DASHBOARD' && (
           <>
-            {/* Live Attack Simulator Bar */}
             <SimulatorBar
               currentScenario={currentScenario}
               onSelectScenario={handleSelectScenario}
             />
 
-            {/* Hero Section: Radar + Celestial Arc + Trend Line */}
             <HeroSection
               percentile={telemetry.riskPercentile}
               radarMetrics={radarMetrics}
@@ -241,7 +278,6 @@ export function App() {
               onSelectNode={(node) => console.log('Selected node:', node)}
             />
 
-            {/* Bottom Analytics Grid: 3 Metric Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               <RiskScoreCard
                 scoreNormalized={telemetry.riskScoreNormalized}
@@ -267,9 +303,24 @@ export function App() {
           </>
         )}
 
-        {/* TAB 2: SENTINELLITE AI — STORED INTELLIGENCE & HISTORICAL GRAPH (ANALYZER) */}
+        {/* TAB 2: STORED INTELLIGENCE (ANALYZER GRAPH) */}
         {activeTab === 'ANALYZER' && (
           <AnalyzerView />
+        )}
+
+        {/* TAB 3: REAL-TIME INCIDENT STREAM & TRIAGE */}
+        {activeTab === 'INCIDENTS' && (
+          <IncidentStreamTab onRevokeSession={handleMitigate} />
+        )}
+
+        {/* TAB 4: AUTONOMOUS MITIGATION CENTER */}
+        {activeTab === 'MITIGATIONS' && (
+          <MitigationCenterTab onKillAllSessions={handleMitigate} />
+        )}
+
+        {/* TAB 5: POLICY & RULE STUDIO */}
+        {activeTab === 'POLICIES' && (
+          <PolicyStudioTab />
         )}
 
       </div>

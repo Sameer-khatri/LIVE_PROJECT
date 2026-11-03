@@ -1,0 +1,114 @@
+{
+  "events": [
+    {
+      "id": "evt_001",
+      "timestamp": "2026-11-03T16:25:37.632Z",
+      "eventType": "LOGIN_SUCCESS",
+      "user": {
+        "id": "usr_001",
+        "name": "Sarah Chen",
+        "email": "sarah.chen@innovatech.io",
+        "role": "Lead Cloud Architect",
+        "department": "Engineering"
+      },
+      "client": {
+        "ip": "198.51.100.44",
+        "ipType": "RESIDENTIAL",
+        "asn": "AS7922 Comcast Cable",
+        "city": "San Francisco",
+        "country": "United States",
+        "latitude": 37.7749,
+        "longitude": -122.4194,
+        "userAgent": "Chrome/120.0 (macOS)",
+        "deviceFingerprint": "MacBookPro-M3-Corp"
+      },
+      "evaluation": {
+        "riskScore": 12,
+        "riskTier": "LOW",
+        "verdict": "AUTHORIZED",
+        "factors": [
+          "Known corporate device",
+          "Residential home ISP"
+        ]
+      }
+    },
+    {
+      "id": "evt_002",
+      "timestamp": "2026-11-03T16:35:37.635Z",
+      "eventType": "LOGIN_FAILED",
+      "user": {
+        "id": "usr_002",
+        "name": "Marcus Vance",
+        "email": "marcus.vance@innovatech.io",
+        "role": "Chief Financial Officer",
+        "department": "Finance"
+      },
+      "client": {
+        "ip": "45.142.214.18",
+        "ipType": "DATACENTER",
+        "asn": "AS44050 Petersburg Internet",
+        "city": "Saint Petersburg",
+        "country": "Russia",
+        "latitude": 59.9343,
+        "longitude": 30.3351,
+        "userAgent": "Headless Chromium",
+        "deviceFingerprint": "Unknown-Attacker-Rig"
+      },
+      "evaluation": {
+        "riskScore": 88,
+        "riskTier": "CRITICAL",
+        "verdict": "ATTACK_DETECTED",
+        "factors": [
+          "Rapid credential stuffing",
+          "Datacenter hosting ASN",
+          "Headless client agent"
+        ]
+      }
+    },
+    {
+      "id": "evt_003",
+      "timestamp": "2026-11-03T16:41:37.635Z",
+      "eventType": "PASSWORD_RESET_REQUEST",
+      "user": {
+        "id": "usr_004",
+        "name": "David Kim",
+        "email": "david.kim@innovatech.io",
+        "role": "Product Operations",
+        "department": "Product"
+      },
+      "client": {
+        "ip": "185.220.101.5",
+        "ipType": "TOR_EXIT",
+        "asn": "AS208294 Tor Exit Network",
+        "city": "Frankfurt am Main",
+        "country": "Germany",
+        "latitude": 50.1109,
+        "longitude": 8.6821,
+        "userAgent": "TorBrowser/115.0",
+        "deviceFingerprint": "Tor-Masked-Client"
+      },
+      "evaluation": {
+        "riskScore": 92,
+        "riskTier": "CRITICAL",
+        "verdict": "ATTACK_DETECTED",
+        "factors": [
+          "Verified Tor exit node",
+          "Rapid reset post-failure"
+        ]
+      }
+    }
+  ],
+  "mitigations": [],
+  "policy": {
+    "autoRevokeOnCritical": true,
+    "autoQuarantineIp": true,
+    "stepUpMfaOnHigh": true,
+    "impossibleTravelSpeedKmH": 800,
+    "bruteForceThreshold": 5,
+    "mfaBombingWindowSec": 30,
+    "weightHeuristics": 35,
+    "weightThreatIntel": 35,
+    "weightUeba": 30
+  },
+  "updatedAt": "2026-11-03T16:43:37.636Z"
+}
