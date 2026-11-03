@@ -18,38 +18,38 @@ export const INITIAL_TELEMETRY: TelemetryState = {
 };
 
 export const INITIAL_RADAR_METRICS: RadarMetric[] = [
-  { axis: 'Passwords', value: 85, label: 'Password guessing & repeated attempts' },
-  { axis: 'Locations', value: 78, label: 'Logins from unexpected cities or countries' },
-  { axis: 'Phone Verify', value: 70, label: 'Repeated phone confirmation requests' },
+  { axis: 'Passwords', value: 85, label: 'Repeated wrong password attempts' },
+  { axis: 'Locations', value: 78, label: 'Logins from unexpected foreign cities' },
+  { axis: 'Phone Alert', value: 70, label: 'Spam phone approval popups' },
   { axis: 'New Devices', value: 65, label: 'Unrecognized computers or smartphones' },
-  { axis: 'Hidden Networks', value: 80, label: 'Connections hiding identity or location' },
-  { axis: 'Password Resets', value: 60, label: 'Immediate password resets after failed attempts' },
+  { axis: 'Hidden Net', value: 80, label: 'Connections hiding identity or location' },
+  { axis: 'Password Reset', value: 60, label: 'Immediate password resets after failed attempts' },
 ];
 
 export const INITIAL_SATELLITE_NODES: SatelliteAttackNode[] = [
   {
     id: 'node-exfil',
-    name: 'Stolen Login Session',
+    name: 'Stolen Session Key',
     percent: 4.94,
-    category: 'Login Hijack',
+    category: 'Stolen Cookie',
     angleDeg: -155,
     icon: 'Zap',
     color: '#00f0ff',
-    description: 'Someone tried to use an already-logged-in session from a different browser.'
+    description: 'Someone copied an active login session and tried to use it from a new browser.'
   },
   {
     id: 'node-tor',
     name: 'Hidden Hacker Network',
     percent: 14.45,
-    category: 'Hidden Location',
+    category: 'Masked Location',
     angleDeg: -125,
     icon: 'Globe',
     color: '#a855f7',
-    description: 'Login traffic routed through an anonymous network commonly used by hackers.'
+    description: 'Login traffic came through an anonymous network commonly used to hide hacker locations.'
   },
   {
     id: 'node-mfa',
-    name: 'Spam Phone Approvals',
+    name: 'Phone Code Spam',
     percent: 17.54,
     category: 'Phone Trick',
     angleDeg: -90,
@@ -59,9 +59,9 @@ export const INITIAL_SATELLITE_NODES: SatelliteAttackNode[] = [
   },
   {
     id: 'node-travel',
-    name: 'Impossible Fast Travel',
+    name: 'Two Cities at Once',
     percent: 17.32,
-    category: 'Location Anomaly',
+    category: 'Impossible Distance',
     angleDeg: -55,
     icon: 'Plane',
     color: '#f43f5e',
@@ -69,38 +69,38 @@ export const INITIAL_SATELLITE_NODES: SatelliteAttackNode[] = [
   },
   {
     id: 'node-stuffing',
-    name: 'Rapid Password Guessing',
+    name: 'Password Guessing Spree',
     percent: 34.21,
-    category: 'Password Spray',
+    category: 'Stolen Passwords',
     angleDeg: -25,
     icon: 'Flame',
     color: '#f43f5e',
-    description: 'Automated attempts trying stolen passwords across multiple team accounts.'
+    description: 'Automated software rapidly trying common stolen passwords on team accounts.'
   }
 ];
 
 export const INITIAL_HYGIENE_ROWS: HygieneMetricRow[] = [
   {
     id: 'hyg-hardware',
-    name: 'Known Company Devices',
+    name: 'Recognized Work Computers',
     targetRange: '60-80%',
     currentValue: '74%',
     status: 'NORMAL',
     statusColor: 'text-emerald-400',
-    tooltip: 'Percentage of logins coming from recognized work laptops and phones.'
+    tooltip: 'Percentage of logins coming from recognized company laptops and work phones.'
   },
   {
     id: 'hyg-isp',
-    name: 'Normal Home & Office Internet',
+    name: 'Normal Home & Office WiFi',
     targetRange: '80-95%',
     currentValue: '48%',
     status: 'SUBOPTIMAL',
     statusColor: 'text-amber-400',
-    tooltip: 'Logins from normal home or office WiFi vs suspicious foreign data servers.'
+    tooltip: 'Logins from regular home or office internet vs suspicious foreign servers.'
   },
   {
     id: 'hyg-hours',
-    name: 'Normal Working Hours',
+    name: 'Regular Daytime Work Hours',
     targetRange: '85-95%',
     currentValue: '42%',
     status: 'ANOMALOUS',
@@ -114,7 +114,7 @@ export const INITIAL_HYGIENE_ROWS: HygieneMetricRow[] = [
     currentValue: '55%',
     status: 'CRITICAL',
     statusColor: 'text-rose-400',
-    tooltip: 'Percentage of phone approval requests that were legitimately confirmed.'
+    tooltip: 'Percentage of phone approval requests that were legitimately confirmed by the real employee.'
   }
 ];
 
@@ -128,14 +128,14 @@ export const INITIAL_ANOMALIES: AnomalySignature[] = [
   },
   {
     id: 'anom-2',
-    title: 'Hidden Anonymous Network (Tor)',
+    title: 'Login from Anonymous Network (Tor)',
     category: 'SUSPICIOUS_IP',
     detail: 'The person logging in is using a network known for concealing hacker locations.',
     severity: 'CRITICAL'
   },
   {
     id: 'anom-3',
-    title: 'Login from Cloud Hosting Server',
+    title: 'Login from Foreign Cloud Server',
     category: 'DATA_CENTER',
     detail: 'Login came from an automated cloud server rather than a person using a computer.',
     severity: 'HIGH'

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Shield, Bell, Moon, Sun, ShoppingBag, User, Activity, FileText } from 'lucide-react';
+import { Shield, Bell, Moon, Sun, ShoppingBag, User, Activity, FileText, RotateCw } from 'lucide-react';
 import { TelemetryState } from '../types/dashboard';
 
 interface HeaderBarProps {
@@ -7,13 +7,15 @@ interface HeaderBarProps {
   isLiveStream: boolean;
   onToggleStream: () => void;
   onOpenReport: () => void;
+  onReScan?: () => void;
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({
   telemetry,
   isLiveStream,
   onToggleStream,
-  onOpenReport
+  onOpenReport,
+  onReScan
 }) => {
   return (
     <header className="w-full flex flex-col md:flex-row items-center justify-between gap-4 py-2 px-1 border-b border-dark-borderSubtle mb-5">
@@ -86,6 +88,18 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
       {/* Right Controls */}
       <div className="flex items-center gap-2.5">
         
+        {/* Re-Scan Accounts Button (Triggers Scanner Animation) */}
+        {onReScan && (
+          <button
+            onClick={onReScan}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-card border border-dark-border hover:border-sky-500/60 text-xs font-semibold text-slate-200 transition-all hover:text-white group"
+            title="Re-run security scan across all accounts"
+          >
+            <RotateCw className="w-3.5 h-3.5 text-sky-400 group-hover:rotate-180 transition-transform duration-500" />
+            <span>Re-Scan</span>
+          </button>
+        )}
+
         {/* Stream Toggle Switch */}
         <button
           onClick={onToggleStream}

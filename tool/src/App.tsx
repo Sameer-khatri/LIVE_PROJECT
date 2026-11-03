@@ -10,6 +10,7 @@ import { AnalyzerView } from './components/analyzer/AnalyzerView';
 import { IncidentStreamTab } from './components/tabs/IncidentStreamTab';
 import { MitigationCenterTab } from './components/tabs/MitigationCenterTab';
 import { PolicyStudioTab } from './components/tabs/PolicyStudioTab';
+import { AppLoader } from './components/AppLoader';
 import { 
   INITIAL_TELEMETRY, 
   INITIAL_RADAR_METRICS, 
@@ -32,6 +33,7 @@ interface ToastItem {
 }
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'DASHBOARD' | 'ANALYZER' | 'INCIDENTS' | 'MITIGATIONS' | 'POLICIES'>('DASHBOARD');
   const [telemetry, setTelemetry] = useState<TelemetryState>(INITIAL_TELEMETRY);
   const [radarMetrics, setRadarMetrics] = useState<RadarMetric[]>(INITIAL_RADAR_METRICS);
@@ -92,12 +94,12 @@ export default function App() {
         activeIncidentsCount: 5
       });
       setRadarMetrics([
-        { axis: 'Credential', value: 85, label: 'Brute force & spray rate' },
-        { axis: 'Geo', value: 95, label: 'Impossible travel delta' },
-        { axis: 'MFA', value: 70, label: 'Push-bombing fatigue' },
-        { axis: 'Device', value: 75, label: 'Novel hardware fingerprint' },
-        { axis: 'Network', value: 80, label: 'Tor exit / Cloud ASN' },
-        { axis: 'Privilege', value: 60, label: 'Rapid reset post-failure' },
+        { axis: 'Passwords', value: 85, label: 'Repeated wrong password attempts' },
+        { axis: 'Locations', value: 95, label: 'Logins from two cities at once' },
+        { axis: 'Phone Alert', value: 70, label: 'Spam phone approval popups' },
+        { axis: 'New Devices', value: 75, label: 'Unrecognized computers or smartphones' },
+        { axis: 'Hidden Net', value: 80, label: 'Connections hiding identity or location' },
+        { axis: 'Password Reset', value: 60, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
         'Fast Impossible Travel Detected',
@@ -121,10 +123,10 @@ export default function App() {
       setRadarMetrics([
         { axis: 'Passwords', value: 98, label: 'Password guessing & repeated attempts' },
         { axis: 'Locations', value: 45, label: 'Logins from unexpected cities or countries' },
-        { axis: 'Phone Verify', value: 82, label: 'Repeated phone confirmation requests' },
+        { axis: 'Phone Alert', value: 82, label: 'Repeated phone confirmation requests' },
         { axis: 'New Devices', value: 88, label: 'Unrecognized computers or smartphones' },
-        { axis: 'Hidden Networks', value: 92, label: 'Connections hiding identity or location' },
-        { axis: 'Password Resets', value: 74, label: 'Immediate password resets after failed attempts' },
+        { axis: 'Hidden Net', value: 92, label: 'Connections hiding identity or location' },
+        { axis: 'Password Reset', value: 74, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
         'Rapid Password Guessing Detected',
@@ -148,10 +150,10 @@ export default function App() {
       setRadarMetrics([
         { axis: 'Passwords', value: 40, label: 'Password guessing & repeated attempts' },
         { axis: 'Locations', value: 30, label: 'Logins from unexpected cities or countries' },
-        { axis: 'Phone Verify', value: 96, label: 'Repeated phone confirmation requests' },
+        { axis: 'Phone Alert', value: 96, label: 'Repeated phone confirmation requests' },
         { axis: 'New Devices', value: 70, label: 'Unrecognized computers or smartphones' },
-        { axis: 'Hidden Networks', value: 65, label: 'Connections hiding identity or location' },
-        { axis: 'Password Resets', value: 45, label: 'Immediate password resets after failed attempts' },
+        { axis: 'Hidden Net', value: 65, label: 'Connections hiding identity or location' },
+        { axis: 'Password Reset', value: 45, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
         'Phone Approval Spam Detected',
@@ -175,10 +177,10 @@ export default function App() {
       setRadarMetrics([
         { axis: 'Passwords', value: 65, label: 'Password guessing & repeated attempts' },
         { axis: 'Locations', value: 85, label: 'Logins from unexpected cities or countries' },
-        { axis: 'Phone Verify', value: 55, label: 'Repeated phone confirmation requests' },
+        { axis: 'Phone Alert', value: 55, label: 'Repeated phone confirmation requests' },
         { axis: 'New Devices', value: 90, label: 'Unrecognized computers or smartphones' },
-        { axis: 'Hidden Networks', value: 99, label: 'Connections hiding identity or location' },
-        { axis: 'Password Resets', value: 94, label: 'Immediate password resets after failed attempts' },
+        { axis: 'Hidden Net', value: 99, label: 'Connections hiding identity or location' },
+        { axis: 'Password Reset', value: 94, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
         'Hidden Hacker Network Detected',
@@ -202,10 +204,10 @@ export default function App() {
       setRadarMetrics([
         { axis: 'Passwords', value: 10, label: 'Password guessing & repeated attempts' },
         { axis: 'Locations', value: 8, label: 'Logins from unexpected cities or countries' },
-        { axis: 'Phone Verify', value: 12, label: 'Repeated phone confirmation requests' },
+        { axis: 'Phone Alert', value: 12, label: 'Repeated phone confirmation requests' },
         { axis: 'New Devices', value: 15, label: 'Unrecognized computers or smartphones' },
-        { axis: 'Hidden Networks', value: 10, label: 'Connections hiding identity or location' },
-        { axis: 'Password Resets', value: 5, label: 'Immediate password resets after failed attempts' },
+        { axis: 'Hidden Net', value: 10, label: 'Connections hiding identity or location' },
+        { axis: 'Password Reset', value: 5, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
         'Normal Safe Day Restored',
@@ -242,222 +244,228 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0e14] text-slate-100 flex items-center justify-center p-3 sm:p-6 relative overflow-hidden font-sans">
-      
-      {/* Sunset / Dusk Horizon Atmosphere */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#311f2f] via-[#161a26] to-[#0a0d14] pointer-events-none"></div>
-      <div className="absolute top-0 left-0 right-0 h-44 bg-gradient-to-b from-rose-500/15 via-purple-500/10 to-transparent blur-3xl pointer-events-none"></div>
-      
-      {/* Interactive Toast Notifications Stack */}
-      <div className="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none">
-        {toasts.map((t) => (
-          <div
-            key={t.id}
-            className={`pointer-events-auto p-3 rounded-2xl border shadow-2xl backdrop-blur-xl animate-toast-in flex items-start gap-2.5 ${
-              t.type === 'danger'
-                ? 'bg-[#181119]/95 border-rose-500/60 text-white ring-1 ring-rose-500/30'
-                : t.type === 'warning'
-                ? 'bg-[#191610]/95 border-amber-500/60 text-white ring-1 ring-amber-500/30'
-                : t.type === 'success'
-                ? 'bg-[#0f1915]/95 border-emerald-500/60 text-white ring-1 ring-emerald-500/30'
-                : 'bg-[#121824]/95 border-sky-500/60 text-white ring-1 ring-sky-500/30'
-            }`}
-          >
-            <div className="mt-0.5">
-              {t.type === 'danger' && <AlertTriangle className="w-4 h-4 text-rose-400" />}
-              {t.type === 'warning' && <AlertTriangle className="w-4 h-4 text-amber-400" />}
-              {t.type === 'success' && <ShieldCheck className="w-4 h-4 text-emerald-400" />}
-              {t.type === 'info' && <Info className="w-4 h-4 text-sky-400" />}
-            </div>
+    <>
+      {/* Sleek App Startup Loading Screen */}
+      {isLoading && <AppLoader onComplete={() => setIsLoading(false)} />}
 
-            <div className="flex-1">
-              <div className="text-xs font-bold font-sans">{t.title}</div>
-              <div className="text-[11px] text-slate-300 leading-snug mt-0.5">{t.message}</div>
-            </div>
-
-            <button
-              onClick={() => removeToast(t.id)}
-              className="text-slate-400 hover:text-white p-0.5"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        ))}
-      </div>
-
-      {/* Master Rounded Glass Monolith Container */}
-      <div className="relative z-10 w-full max-w-[1440px] bg-[#121722]/95 border border-[#273244] rounded-[32px] p-5 sm:p-7 backdrop-blur-3xl shadow-panel flex flex-col transition-all duration-300">
+      <div className="min-h-screen bg-[#0b0e14] text-slate-100 flex items-center justify-center p-3 sm:p-6 relative overflow-hidden font-sans">
         
-        {/* Top Header Bar */}
-        <HeaderBar
-          telemetry={telemetry}
-          isLiveStream={isLiveStream}
-          onToggleStream={handleToggleStream}
-          onOpenReport={() => setIsReportOpen(true)}
-        />
+        {/* Sunset / Dusk Horizon Atmosphere */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#311f2f] via-[#161a26] to-[#0a0d14] pointer-events-none"></div>
+        <div className="absolute top-0 left-0 right-0 h-44 bg-gradient-to-b from-rose-500/15 via-purple-500/10 to-transparent blur-3xl pointer-events-none"></div>
+        
+        {/* Interactive Toast Notifications Stack */}
+        <div className="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none">
+          {toasts.map((t) => (
+            <div
+              key={t.id}
+              className={`pointer-events-auto p-3 rounded-2xl border shadow-2xl backdrop-blur-xl animate-toast-in flex items-start gap-2.5 ${
+                t.type === 'danger'
+                  ? 'bg-[#181119]/95 border-rose-500/60 text-white ring-1 ring-rose-500/30'
+                  : t.type === 'warning'
+                  ? 'bg-[#191610]/95 border-amber-500/60 text-white ring-1 ring-amber-500/30'
+                  : t.type === 'success'
+                  ? 'bg-[#0f1915]/95 border-emerald-500/60 text-white ring-1 ring-emerald-500/30'
+                  : 'bg-[#121824]/95 border-sky-500/60 text-white ring-1 ring-sky-500/30'
+              }`}
+            >
+              <div className="mt-0.5">
+                {t.type === 'danger' && <AlertTriangle className="w-4 h-4 text-rose-400" />}
+                {t.type === 'warning' && <AlertTriangle className="w-4 h-4 text-amber-400" />}
+                {t.type === 'success' && <ShieldCheck className="w-4 h-4 text-emerald-400" />}
+                {t.type === 'info' && <Info className="w-4 h-4 text-sky-400" />}
+              </div>
 
-        {/* Master Navigation Tabs Switcher (All 5 Modules) */}
-        <div className="flex items-center gap-1.5 mb-5 p-1 rounded-2xl bg-dark-inset border border-dark-borderSubtle overflow-x-auto max-w-full select-none">
-          <button
-            onClick={() => setActiveTab('DASHBOARD')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-              activeTab === 'DASHBOARD'
-                ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-sky-500/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
-            }`}
-          >
-            <LayoutDashboard className="w-3.5 h-3.5 text-sky-400" />
-            <span>Live Security Overview</span>
-          </button>
+              <div className="flex-1">
+                <div className="text-xs font-bold font-sans">{t.title}</div>
+                <div className="text-[11px] text-slate-300 leading-snug mt-0.5">{t.message}</div>
+              </div>
 
-          <button
-            onClick={() => setActiveTab('ANALYZER')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-              activeTab === 'ANALYZER'
-                ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-amber-500/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
-            }`}
-          >
-            <Network className="w-3.5 h-3.5 text-amber-400" />
-            <span>Saved History Graph</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('INCIDENTS')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-              activeTab === 'INCIDENTS'
-                ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-rose-500/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
-            }`}
-          >
-            <Terminal className="w-3.5 h-3.5 text-rose-400" />
-            <span>Recent Suspicious Activity</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('MITIGATIONS')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-              activeTab === 'MITIGATIONS'
-                ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-emerald-500/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
-            }`}
-          >
-            <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
-            <span>One-Click Security Actions</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('POLICIES')}
-            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-              activeTab === 'POLICIES'
-                ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-purple-500/30'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
-            }`}
-          >
-            <Sliders className="w-3.5 h-3.5 text-purple-400" />
-            <span>Security Settings & Rules</span>
-          </button>
+              <button
+                onClick={() => removeToast(t.id)}
+                className="text-slate-400 hover:text-white p-0.5"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ))}
         </div>
 
-        {/* ============================================================== */}
-        {/* TAB 1: LIVING OPERATIONS SOC DASHBOARD                         */}
-        {/* ============================================================== */}
-        {activeTab === 'DASHBOARD' && (
-          <div className="space-y-4 animate-toast-in">
-            {/* Live Attack Scenario Simulator Bar */}
-            <SimulatorBar
-              currentScenario={currentScenario}
-              onSelectScenario={handleSelectScenario}
-            />
+        {/* Master Rounded Glass Monolith Container */}
+        <div className="relative z-10 w-full max-w-[1440px] bg-[#121722]/95 border border-[#273244] rounded-[32px] p-5 sm:p-7 backdrop-blur-3xl shadow-panel flex flex-col transition-all duration-300">
+          
+          {/* Top Header Bar */}
+          <HeaderBar
+            telemetry={telemetry}
+            isLiveStream={isLiveStream}
+            onToggleStream={handleToggleStream}
+            onOpenReport={() => setIsReportOpen(true)}
+            onReScan={() => setIsLoading(true)}
+          />
 
-            {/* TOP 55%: Concentric Living Arc + Radar + Token Entropy */}
-            <HeroSection
-              telemetry={telemetry}
-              percentile={telemetry.riskPercentile}
-              tokenHours={telemetry.tokenLifetimeHours}
-              excessHours={telemetry.policyExcessHours}
-              radarMetrics={radarMetrics}
-              satelliteNodes={satelliteNodes}
-              trendPoints={INITIAL_TREND_POINTS}
-              onViewReport={() => setIsReportOpen(true)}
-            />
+          {/* Master Navigation Tabs Switcher (5 Simple Tabs) */}
+          <div className="flex items-center gap-1.5 mb-5 p-1 rounded-2xl bg-dark-inset border border-dark-borderSubtle overflow-x-auto max-w-full select-none">
+            <button
+              onClick={() => setActiveTab('DASHBOARD')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                activeTab === 'DASHBOARD'
+                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-sky-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+              }`}
+            >
+              <LayoutDashboard className="w-3.5 h-3.5 text-sky-400" />
+              <span>Security Dashboard</span>
+            </button>
 
-            {/* BOTTOM 45%: 3 Rounded Analytics Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-[300px]">
-              
-              {/* ANALYTICS CARD 01: Composite Risk Score */}
-              <RiskScoreCard
-                scoreNormalized={telemetry.riskScoreNormalized}
-                baselineScore={telemetry.baselineScore}
-                anomalies={INITIAL_ANOMALIES}
+            <button
+              onClick={() => setActiveTab('ANALYZER')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                activeTab === 'ANALYZER'
+                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-amber-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+              }`}
+            >
+              <Network className="w-3.5 h-3.5 text-amber-400" />
+              <span>History Tree</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('INCIDENTS')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                activeTab === 'INCIDENTS'
+                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-rose-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+              }`}
+            >
+              <Terminal className="w-3.5 h-3.5 text-rose-400" />
+              <span>Recent Activity</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('MITIGATIONS')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                activeTab === 'MITIGATIONS'
+                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-emerald-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+              }`}
+            >
+              <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Block & Log Out</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('POLICIES')}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                activeTab === 'POLICIES'
+                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-purple-500/30'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+              }`}
+            >
+              <Sliders className="w-3.5 h-3.5 text-purple-400" />
+              <span>Settings & Rules</span>
+            </button>
+          </div>
+
+          {/* ============================================================== */}
+          {/* TAB 1: SECURITY DASHBOARD                                      */}
+          {/* ============================================================== */}
+          {activeTab === 'DASHBOARD' && (
+            <div className="space-y-4 animate-toast-in">
+              {/* Test Threats Simulator Bar */}
+              <SimulatorBar
+                currentScenario={currentScenario}
+                onSelectScenario={handleSelectScenario}
+              />
+
+              {/* TOP 55%: Concentric Living Arc + Radar + Token Entropy */}
+              <HeroSection
+                telemetry={telemetry}
+                percentile={telemetry.riskPercentile}
+                tokenHours={telemetry.tokenLifetimeHours}
+                excessHours={telemetry.policyExcessHours}
+                radarMetrics={radarMetrics}
+                satelliteNodes={satelliteNodes}
+                trendPoints={INITIAL_TREND_POINTS}
                 onViewReport={() => setIsReportOpen(true)}
               />
 
-              {/* ANALYTICS CARD 02: Identity Hygiene (UEBA) */}
-              <IdentityHygieneTable
-                legitimateRatio={telemetry.legitimateLoginRatio}
-                rows={INITIAL_HYGIENE_ROWS}
-                deviceTrustIndex="Suboptimal 1.4"
-                velocityRatio="Normal 3.7"
-              />
+              {/* BOTTOM 45%: 3 Rounded Analytics Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-[300px]">
+                
+                {/* CARD 01: Account Danger Score */}
+                <RiskScoreCard
+                  scoreNormalized={telemetry.riskScoreNormalized}
+                  baselineScore={telemetry.baselineScore}
+                  anomalies={INITIAL_ANOMALIES}
+                  onViewReport={() => setIsReportOpen(true)}
+                />
 
-              {/* ANALYTICS CARD 03: Threat Velocity & Autonomous Containment */}
-              <ThreatVelocityCard
-                velocityKmH={telemetry.travelVelocityKmH}
-                percentile={telemetry.riskPercentile}
-                changePercent={telemetry.velocityChange1h}
-                onMitigate={handleMitigate}
-              />
+                {/* CARD 02: Login Safety Check */}
+                <IdentityHygieneTable
+                  legitimateRatio={telemetry.legitimateLoginRatio}
+                  rows={INITIAL_HYGIENE_ROWS}
+                  deviceTrustIndex="1.4 / 5.0"
+                  velocityRatio="3.7"
+                />
 
+                {/* CARD 03: Hacker Speed & Fast Travel */}
+                <ThreatVelocityCard
+                  velocityKmH={telemetry.travelVelocityKmH}
+                  percentile={telemetry.riskPercentile}
+                  changePercent={telemetry.velocityChange1h}
+                  onMitigate={handleMitigate}
+                />
+
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* ============================================================== */}
-        {/* TAB 2: STORED INTELLIGENCE OSINT GRAPH ANALYZER                */}
-        {/* ============================================================== */}
-        {activeTab === 'ANALYZER' && (
-          <div className="animate-toast-in">
-            <AnalyzerView />
-          </div>
-        )}
+          {/* ============================================================== */}
+          {/* TAB 2: HISTORY TREE (STORED INTELLIGENCE)                      */}
+          {/* ============================================================== */}
+          {activeTab === 'ANALYZER' && (
+            <div className="animate-toast-in">
+              <AnalyzerView />
+            </div>
+          )}
 
-        {/* ============================================================== */}
-        {/* TAB 3: REAL-TIME INCIDENT STREAM & TRIAGE                       */}
-        {/* ============================================================== */}
-        {activeTab === 'INCIDENTS' && (
-          <div className="animate-toast-in">
-            <IncidentStreamTab />
-          </div>
-        )}
+          {/* ============================================================== */}
+          {/* TAB 3: RECENT ACTIVITY (INCIDENTS)                            */}
+          {/* ============================================================== */}
+          {activeTab === 'INCIDENTS' && (
+            <div className="animate-toast-in">
+              <IncidentStreamTab />
+            </div>
+          )}
 
-        {/* ============================================================== */}
-        {/* TAB 4: AUTONOMOUS MITIGATION CENTER                            */}
-        {/* ============================================================== */}
-        {activeTab === 'MITIGATIONS' && (
-          <div className="animate-toast-in">
-            <MitigationCenterTab />
-          </div>
-        )}
+          {/* ============================================================== */}
+          {/* TAB 4: BLOCK & LOG OUT (MITIGATIONS)                           */}
+          {/* ============================================================== */}
+          {activeTab === 'MITIGATIONS' && (
+            <div className="animate-toast-in">
+              <MitigationCenterTab onKillAllSessions={handleMitigate} />
+            </div>
+          )}
 
-        {/* ============================================================== */}
-        {/* TAB 5: POLICY STUDIO & THRESHOLD CALIBRATION                   */}
-        {/* ============================================================== */}
-        {activeTab === 'POLICIES' && (
-          <div className="animate-toast-in">
-            <PolicyStudioTab />
-          </div>
-        )}
+          {/* ============================================================== */}
+          {/* TAB 5: SETTINGS & RULES (POLICIES)                            */}
+          {/* ============================================================== */}
+          {activeTab === 'POLICIES' && (
+            <div className="animate-toast-in">
+              <PolicyStudioTab />
+            </div>
+          )}
+
+        </div>
+
+        {/* Printable Forensic Audit Report Modal */}
+        <ReportModal
+          isOpen={isReportOpen}
+          onClose={() => setIsReportOpen(false)}
+          telemetry={telemetry}
+        />
 
       </div>
-
-      {/* Printable Forensic Audit Report Modal */}
-      <ReportModal
-        isOpen={isReportOpen}
-        onClose={() => setIsReportOpen(false)}
-        telemetry={telemetry}
-      />
-
-    </div>
+    </>
   );
 }
