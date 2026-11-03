@@ -85,3 +85,4 @@ export const AppLoader: React.FC<AppLoaderProps> = ({ onComplete }) => {
     </div>
   );
 };
+

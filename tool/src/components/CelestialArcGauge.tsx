@@ -8,6 +8,19 @@ interface CelestialArcGaugeProps {
   onSelectNode?: (node: SatelliteAttackNode) => void;
 }
 
+const SIMPLIFIED_NAMES: Record<string, string> = {
+  'Rapid Token Exfil': 'Stolen Login Key',
+  'Tor / Proxy Routing': 'Hidden Hacker IP',
+  'MFA Push Fatigue': 'Phone Code Spam',
+  'Impossible Travel': 'Two Cities at Once',
+  'Credential Stuffing': 'Password Guessing',
+  'node-exfil': 'Stolen Login Key',
+  'node-tor': 'Hidden Hacker IP',
+  'node-mfa': 'Phone Code Spam',
+  'node-travel': 'Two Cities at Once',
+  'node-stuffing': 'Password Guessing'
+};
+
 export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
   percentile,
   satelliteNodes,
@@ -204,6 +217,7 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
         {satelliteNodes.map((node) => {
           const pos = angleToCoords(radius + 50, node.angleDeg);
           const isActive = activeNode?.id === node.id;
+          const simpleName = SIMPLIFIED_NAMES[node.name] || SIMPLIFIED_NAMES[node.id] || node.name;
 
           return (
             <div
@@ -231,11 +245,11 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
                   </span>
                 </div>
 
-                {/* Subtitle label */}
-                <span className={`text-[10px] font-medium whitespace-nowrap transition-colors ${
-                  isActive ? 'text-sky-300 font-semibold' : 'text-slate-400 group-hover:text-white'
+                {/* Subtitle label in Simple English */}
+                <span className={`text-[10px] font-semibold whitespace-nowrap transition-colors ${
+                  isActive ? 'text-sky-300 font-bold' : 'text-slate-300 group-hover:text-white'
                 }`}>
-                  {node.name}
+                  {simpleName}
                 </span>
               </div>
             </div>
@@ -269,7 +283,10 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
       {/* Active Node Flyout Card on Hover */}
       {activeNode && (
         <div className="absolute -bottom-8 z-40 bg-[#171e2c]/95 border border-sky-500/40 rounded-xl px-4 py-2 text-xs text-slate-200 shadow-2xl backdrop-blur-xl animate-toast-in max-w-xs text-center">
-          <span className="font-semibold text-white">{activeNode.name}:</span> {activeNode.description}
+          <span className="font-semibold text-white">
+            {SIMPLIFIED_NAMES[activeNode.name] || SIMPLIFIED_NAMES[activeNode.id] || activeNode.name}:
+          </span>{' '}
+          {activeNode.description}
         </div>
       )}
 
