@@ -241,3 +241,4 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
     </div>
   );
 };
+

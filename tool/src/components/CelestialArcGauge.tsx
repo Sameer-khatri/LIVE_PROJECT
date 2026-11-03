@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Flame, Plane, Bomb, Globe, Zap, Droplet, ShieldAlert } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Flame, Plane, Bomb, Globe, Droplet, ShieldAlert, Sparkles } from 'lucide-react';
 import { SatelliteAttackNode } from '../types/dashboard';
 
 interface CelestialArcGaugeProps {
@@ -14,6 +14,25 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
   onSelectNode
 }) => {
   const [activeNode, setActiveNode] = useState<SatelliteAttackNode | null>(null);
+  const [displayPercentile, setDisplayPercentile] = useState<number>(percentile);
+
+  // Animated smooth count-up when percentile changes
+  useEffect(() => {
+    let current = displayPercentile;
+    const target = percentile;
+    if (current === target) return;
+
+    const step = target > current ? 1 : -1;
+    const timer = setInterval(() => {
+      current += step;
+      setDisplayPercentile(current);
+      if (current === target) {
+        clearInterval(timer);
+      }
+    }, 18);
+
+    return () => clearInterval(timer);
+  }, [percentile]);
 
   // SVG Geometry
   const width = 480;
@@ -31,7 +50,7 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
     };
   };
 
-  const targetAngle = -180 + (percentile / 100) * 180;
+  const targetAngle = -180 + (displayPercentile / 100) * 180;
   const needleCoords = angleToCoords(radius, targetAngle);
 
   const startBg = angleToCoords(radius, -180);
@@ -40,18 +59,8 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
 
   const startProgress = angleToCoords(radius, -180);
   const endProgress = angleToCoords(radius, targetAngle);
-  const largeArcFlag = percentile > 100 ? 1 : 0;
+  const largeArcFlag = displayPercentile > 100 ? 1 : 0;
   const progressArcPath = `M ${startProgress.x} ${startProgress.y} A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endProgress.x} ${endProgress.y}`;
-
-  const getNodeIcon = (iconName: string) => {
-    switch (iconName) {
-      case 'Flame': return <Flame className="w-3.5 h-3.5 text-sky-400" />;
-      case 'Plane': return <Plane className="w-3.5 h-3.5 text-sky-400" />;
-      case 'Bomb': return <Bomb className="w-3.5 h-3.5 text-sky-400" />;
-      case 'Globe': return <Globe className="w-3.5 h-3.5 text-sky-400" />;
-      default: return <Droplet className="w-3.5 h-3.5 text-sky-400" />;
-    }
-  };
 
   return (
     <div className="relative flex flex-col items-center justify-center h-full select-none">
@@ -67,7 +76,7 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
           </linearGradient>
 
           <filter id="arcSoftGlow" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="4" result="glow" />
+            <feGaussianBlur stdDeviation="5" result="glow" />
             <feMerge>
               <feMergeNode in="glow" />
               <feMergeNode in="SourceGraphic" />
@@ -134,7 +143,18 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           filter="url(#arcSoftGlow)"
-          className="transition-all duration-700"
+          className="transition-all duration-300"
+        />
+
+        {/* Flowing radiant pulse overlay */}
+        <path
+          d={progressArcPath}
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeDasharray="4,16"
+          className="animate-flow-dash opacity-60"
         />
 
         {/* Glowing Head Cap (Needle indicator) */}
@@ -147,11 +167,21 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
           strokeWidth="2.5"
           className="shadow-sm"
         />
+        <circle
+          cx={needleCoords.x}
+          cy={needleCoords.y}
+          r="12"
+          fill="none"
+          stroke="#38bdf8"
+          strokeWidth="1.5"
+          className="animate-ping opacity-30"
+        />
 
         {/* Dotted rays connecting to satellite nodes */}
         {satelliteNodes.map((node) => {
           const startPt = angleToCoords(radius + 8, node.angleDeg);
           const endPt = angleToCoords(radius + 34, node.angleDeg);
+          const isActive = activeNode?.id === node.id;
           return (
             <line
               key={node.id}
@@ -159,15 +189,16 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
               y1={startPt.y}
               x2={endPt.x}
               y2={endPt.y}
-              stroke="#263142"
-              strokeWidth="1"
+              stroke={isActive ? '#38bdf8' : '#263142'}
+              strokeWidth={isActive ? 1.5 : 1}
               strokeDasharray="2,2"
+              className="transition-colors duration-200"
             />
           );
         })}
       </svg>
 
-      {/* Floating Satellite Threat Nodes (Positioned along outer concentric arc) */}
+      {/* Floating Satellite Threat Nodes */}
       <div className="absolute inset-0 pointer-events-none">
         {satelliteNodes.map((node) => {
           const pos = angleToCoords(radius + 50, node.angleDeg);
@@ -186,19 +217,23 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
               onClick={() => onSelectNode && onSelectNode(node)}
               className="absolute pointer-events-auto cursor-pointer group"
             >
-              <div className={`flex flex-col items-center gap-0.5 transition-all duration-200 ${
-                isActive ? 'scale-110 z-30' : 'hover:scale-105'
+              <div className={`flex flex-col items-center gap-0.5 transition-all duration-300 ${
+                isActive ? 'scale-115 z-30' : 'hover:scale-110'
               }`}>
-                {/* Node Top: Icon + Percentage (Reference style) */}
+                {/* Node Top: Icon + Percentage */}
                 <div className="flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400"></span>
+                  <span className={`w-1.5 h-1.5 rounded-full ${
+                    isActive ? 'bg-sky-300 ring-2 ring-sky-400 animate-pulse' : 'bg-sky-400'
+                  }`}></span>
                   <span className="text-xs font-bold text-white tracking-tight font-sans">
                     {node.percent}%
                   </span>
                 </div>
 
-                {/* Subtitle label (Reference style: Slate text under percentage) */}
-                <span className="text-[10px] text-slate-400 group-hover:text-white font-medium whitespace-nowrap">
+                {/* Subtitle label */}
+                <span className={`text-[10px] font-medium whitespace-nowrap transition-colors ${
+                  isActive ? 'text-sky-300 font-semibold' : 'text-slate-400 group-hover:text-white'
+                }`}>
                   {node.name}
                 </span>
               </div>
@@ -210,8 +245,8 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
       {/* Central Metric Typography (Inside the Arc - Reference Match) */}
       <div className="absolute bottom-5 flex flex-col items-center text-center">
         <div className="flex items-baseline justify-center">
-          <span className="text-5xl font-extrabold tracking-tight text-white font-sans">
-            {percentile}
+          <span className="text-5xl font-extrabold tracking-tight text-white font-sans transition-all">
+            {displayPercentile}
           </span>
           <span className="text-lg text-slate-400 font-normal ml-1">
             th
@@ -222,14 +257,17 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
           Percentile
         </span>
 
-        <p className="text-xs text-slate-300 font-medium mt-1">
-          Your risk of attack
+        <p className="text-xs text-slate-300 font-medium mt-1 flex items-center gap-1 justify-center">
+          <span>Your risk of attack</span>
+          {displayPercentile >= 70 && (
+            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+          )}
         </p>
       </div>
 
       {/* Active Node Flyout Card on Hover */}
       {activeNode && (
-        <div className="absolute -bottom-8 z-40 bg-[#171e2c]/95 border border-dark-border rounded-xl px-4 py-2 text-xs text-slate-200 shadow-xl backdrop-blur-xl animate-fadeIn max-w-xs text-center">
+        <div className="absolute -bottom-8 z-40 bg-[#171e2c]/95 border border-sky-500/40 rounded-xl px-4 py-2 text-xs text-slate-200 shadow-2xl backdrop-blur-xl animate-toast-in max-w-xs text-center">
           <span className="font-semibold text-white">{activeNode.name}:</span> {activeNode.description}
         </div>
       )}

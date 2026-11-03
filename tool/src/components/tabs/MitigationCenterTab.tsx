@@ -132,3 +132,4 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
     </div>
   );
 };
+

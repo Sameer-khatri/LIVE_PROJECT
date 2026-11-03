@@ -98,3 +98,4 @@ export function evaluateEvent(rawEvent, policy) {
     }
   };
 }
+
