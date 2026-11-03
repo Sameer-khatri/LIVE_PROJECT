@@ -51,13 +51,13 @@ export const SessionTrendWidget: React.FC<SessionTrendWidgetProps> = ({
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-baseline gap-1">
             <span className="text-2xl font-bold text-white tracking-tight font-sans">
-              {safeTokenHours} <span className="text-sm font-normal text-slate-400">hrs</span>
+              {safeTokenHours} <span className="text-sm font-normal text-slate-400">hours</span>
             </span>
           </div>
 
           <span className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-950/60 border border-amber-800/80 text-amber-300 text-[10px] font-semibold">
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping"></span>
-            <span>Policy Exceeded</span>
+            <span>Over Safety Limit</span>
           </span>
         </div>
 
@@ -66,9 +66,9 @@ export const SessionTrendWidget: React.FC<SessionTrendWidgetProps> = ({
           <div className="bg-sky-400 h-full rounded-full w-[65%] transition-all duration-500"></div>
         </div>
 
-        <h4 className="text-xs font-bold text-slate-200 mt-1">Session Token Lifetime</h4>
+        <h4 className="text-xs font-bold text-slate-200 mt-1">Logged In Duration</h4>
         <p className="text-[11px] text-slate-400 leading-relaxed mt-0.5">
-          OAuth refresh token age exceeds zero-trust policy by <span className="text-amber-300 font-semibold font-sans">+{safeExcessHours} hours</span>.
+          User has stayed signed in for <span className="text-white font-semibold">{safeTokenHours} hrs</span>, which exceeds our 2-hour auto-logout rule by <span className="text-amber-300 font-semibold font-sans">+{safeExcessHours} hours</span>.
         </p>
       </div>
 
@@ -77,11 +77,11 @@ export const SessionTrendWidget: React.FC<SessionTrendWidgetProps> = ({
         <div className="flex items-center justify-between text-[10px] text-slate-400 mb-1 font-sans">
           <span className="font-semibold text-slate-300 flex items-center gap-1">
             <Clock className="w-3 h-3 text-sky-400" />
-            <span>24H Risk Curve (Hourly)</span>
+            <span>Danger Level Over 24 Hours</span>
           </span>
           <span className="text-sky-400 flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse"></span>
-            <span>Live Polling</span>
+            <span>Live</span>
           </span>
         </div>
 
@@ -177,7 +177,7 @@ export const SessionTrendWidget: React.FC<SessionTrendWidgetProps> = ({
         onClick={onViewReport}
         className="w-full mt-2 py-2 px-3 rounded-full bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs shadow-md transition-all duration-200 flex items-center justify-center gap-1 group active:scale-95"
       >
-        <span>Inspect Forensic Stream</span>
+        <span>View Full Activity Details</span>
         <ChevronRight className="w-3.5 h-3.5 text-slate-700 group-hover:translate-x-1 transition-transform" />
       </button>
 

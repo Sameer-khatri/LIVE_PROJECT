@@ -18,133 +18,133 @@ export const INITIAL_TELEMETRY: TelemetryState = {
 };
 
 export const INITIAL_RADAR_METRICS: RadarMetric[] = [
-  { axis: 'Credential Velocity', value: 85, label: 'Brute force & spray rate' },
-  { axis: 'Geo Velocity', value: 78, label: 'Impossible travel delta' },
-  { axis: 'MFA Integrity', value: 70, label: 'Push-bombing fatigue' },
-  { axis: 'Device Trust', value: 65, label: 'Novel hardware fingerprint' },
-  { axis: 'Network Hygiene', value: 80, label: 'Tor exit / Cloud ASN' },
-  { axis: 'Privilege Flow', value: 60, label: 'Rapid reset post-failure' },
+  { axis: 'Passwords', value: 85, label: 'Password guessing & repeated attempts' },
+  { axis: 'Locations', value: 78, label: 'Logins from unexpected cities or countries' },
+  { axis: 'Phone Verify', value: 70, label: 'Repeated phone confirmation requests' },
+  { axis: 'New Devices', value: 65, label: 'Unrecognized computers or smartphones' },
+  { axis: 'Hidden Networks', value: 80, label: 'Connections hiding identity or location' },
+  { axis: 'Password Resets', value: 60, label: 'Immediate password resets after failed attempts' },
 ];
 
 export const INITIAL_SATELLITE_NODES: SatelliteAttackNode[] = [
   {
     id: 'node-exfil',
-    name: 'Rapid Token Exfil',
+    name: 'Stolen Login Session',
     percent: 4.94,
-    category: 'Session Abuse',
+    category: 'Login Hijack',
     angleDeg: -155,
     icon: 'Zap',
     color: '#00f0ff',
-    description: 'OAuth refresh token reuse attempt detected from secondary browser profile.'
+    description: 'Someone tried to use an already-logged-in session from a different browser.'
   },
   {
     id: 'node-tor',
-    name: 'Tor / Proxy Routing',
+    name: 'Hidden Hacker Network',
     percent: 14.45,
-    category: 'Network Anonymizer',
+    category: 'Hidden Location',
     angleDeg: -125,
     icon: 'Globe',
     color: '#a855f7',
-    description: 'Inbound authentication packets relayed across verified Tor onion exit node.'
+    description: 'Login traffic routed through an anonymous network commonly used by hackers.'
   },
   {
     id: 'node-mfa',
-    name: 'MFA Push Fatigue',
+    name: 'Spam Phone Approvals',
     percent: 17.54,
-    category: 'MFA Bypass',
+    category: 'Phone Trick',
     angleDeg: -90,
     icon: 'Bomb',
     color: '#f59e0b',
-    description: '4 consecutive push approval requests dispatched in 18 seconds to wear down user.'
+    description: '4 phone verification popups sent in 18 seconds to trick the employee into tapping Accept.'
   },
   {
     id: 'node-travel',
-    name: 'Impossible Travel',
+    name: 'Impossible Fast Travel',
     percent: 17.32,
-    category: 'UEBA Geolocation',
+    category: 'Location Anomaly',
     angleDeg: -55,
     icon: 'Plane',
     color: '#f43f5e',
-    description: 'San Francisco to Frankfurt am Main in 8 minutes (Velocity > 8,000 km/h).'
+    description: 'Logged in from San Francisco and Germany only 8 minutes apart (faster than an airplane).'
   },
   {
     id: 'node-stuffing',
-    name: 'Credential Stuffing',
+    name: 'Rapid Password Guessing',
     percent: 34.21,
-    category: 'Brute Force Spray',
+    category: 'Password Spray',
     angleDeg: -25,
     icon: 'Flame',
     color: '#f43f5e',
-    description: 'Distributed credential enumeration attack originating from adversary ASN 44050.'
+    description: 'Automated attempts trying stolen passwords across multiple team accounts.'
   }
 ];
 
 export const INITIAL_HYGIENE_ROWS: HygieneMetricRow[] = [
   {
     id: 'hyg-hardware',
-    name: 'Known Corporate Hardware',
+    name: 'Known Company Devices',
     targetRange: '60-80%',
     currentValue: '74%',
     status: 'NORMAL',
     statusColor: 'text-emerald-400',
-    tooltip: 'Percentage of authentications originating from MDM-enrolled corporate machines.'
+    tooltip: 'Percentage of logins coming from recognized work laptops and phones.'
   },
   {
     id: 'hyg-isp',
-    name: 'Residential ISP Origin',
+    name: 'Normal Home & Office Internet',
     targetRange: '80-95%',
     currentValue: '48%',
     status: 'SUBOPTIMAL',
     statusColor: 'text-amber-400',
-    tooltip: 'Logins from residential broadband vs public cloud/hosting datacenters (AWS, Hetzner).'
+    tooltip: 'Logins from normal home or office WiFi vs suspicious foreign data servers.'
   },
   {
     id: 'hyg-hours',
-    name: 'Working Hours Alignment',
+    name: 'Normal Working Hours',
     targetRange: '85-95%',
     currentValue: '42%',
     status: 'ANOMALOUS',
     statusColor: 'text-amber-400',
-    tooltip: 'Authentication activity coinciding with employee local standard operating hours.'
+    tooltip: 'Logins during daytime work hours vs strange midnight activity.'
   },
   {
     id: 'hyg-mfa',
-    name: 'MFA Challenge Success',
+    name: 'Phone Verifications Confirmed',
     targetRange: '90-100%',
     currentValue: '55%',
     status: 'CRITICAL',
     statusColor: 'text-rose-400',
-    tooltip: 'Ratio of accepted vs timed-out or denied second-factor mobile verification prompts.'
+    tooltip: 'Percentage of phone approval requests that were legitimately confirmed.'
   }
 ];
 
 export const INITIAL_ANOMALIES: AnomalySignature[] = [
   {
     id: 'anom-1',
-    title: 'Rapid Failures (7 in 30s)',
-    category: 'HEURISTIC',
-    detail: 'Exceeds sliding window threshold for Marcus Vance (CFO).',
+    title: '7 Wrong Passwords in 30 Seconds',
+    category: 'PASSWORD_GUESS',
+    detail: 'Too many incorrect passwords entered quickly for Marcus Vance (Finance).',
     severity: 'CRITICAL'
   },
   {
     id: 'anom-2',
-    title: 'Tor Exit Node 185.220.101.5',
-    category: 'THREAT_INTEL',
-    detail: 'Origin IP verified on public Tor directory with 100% abuse confidence.',
+    title: 'Hidden Anonymous Network (Tor)',
+    category: 'SUSPICIOUS_IP',
+    detail: 'The person logging in is using a network known for concealing hacker locations.',
     severity: 'CRITICAL'
   },
   {
     id: 'anom-3',
-    title: 'Datacenter ASN (Hetzner Cloud)',
-    category: 'THREAT_INTEL',
-    detail: 'AS24940 hosting provider used for automated password spraying.',
+    title: 'Login from Cloud Hosting Server',
+    category: 'DATA_CENTER',
+    detail: 'Login came from an automated cloud server rather than a person using a computer.',
     severity: 'HIGH'
   },
   {
     id: 'anom-4',
-    title: 'Headless Python User-Agent',
-    category: 'UEBA',
-    detail: 'Client identified as python-requests/2.31 rather than legitimate Chrome browser.',
+    title: 'Automated Hacker Script Detected',
+    category: 'BOT_ACTIVITY',
+    detail: 'Activity matches automated hacker tools trying passwords, not a real web browser.',
     severity: 'HIGH'
   }
 ];
@@ -158,4 +158,3 @@ export const INITIAL_TREND_POINTS: TrendPoint[] = [
   { hour: 20, label: '20:00', riskScore: 76, failedCount: 18 },
   { hour: 22, label: '22:00', riskScore: 74, failedCount: 14 },
 ];
-

@@ -20,11 +20,11 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
   return (
     <div className="flex flex-col justify-between h-full bg-dark-card/90 border border-dark-border rounded-3xl p-5 backdrop-blur-xl shadow-lg select-none">
       
-      {/* Table Header: Cyber Security */}
+      {/* Table Header: Simple English */}
       <div>
-        <h3 className="text-sm font-bold text-white tracking-tight mb-0.5">Identity Hygiene</h3>
+        <h3 className="text-sm font-bold text-white tracking-tight mb-0.5">Login Safety Check</h3>
         <div className="text-[11px] text-slate-400 font-normal">
-          Legitimate vs Anomalous Logins (UEBA Baseline)
+          Comparing today's logins to your team's normal habits
         </div>
 
         {/* Big percentage metric header */}
@@ -34,7 +34,7 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
           </div>
           <span className="text-xs text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded-full border border-rose-800/80 font-medium flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"></span>
-            <span>{100 - legitimateRatio}% Anomalous Traffic</span>
+            <span>{100 - legitimateRatio}% Suspicious Traffic</span>
           </span>
         </div>
 
@@ -55,7 +55,7 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
                   </div>
 
                   <div className="flex items-center gap-2">
-                    <span className="text-slate-400 text-xs font-normal">{row.targetRange}</span>
+                    <span className="text-slate-400 text-xs font-normal">Safe: {row.targetRange}</span>
                     <span className={`font-semibold text-xs ${row.statusColor}`}>
                       {row.currentValue}
                     </span>
@@ -83,11 +83,11 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
             <span className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">
               1
             </span>
-            <span className="text-slate-300 font-medium">Device Trust Index</span>
+            <span className="text-slate-300 font-medium">Device Recognition Score</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="text-amber-400 font-semibold">{deviceTrustIndex}</span>
-            <HelpCircle className="w-3.5 h-3.5 text-slate-500" title="Based on enrolled TPM 2.0 and certificate trust" />
+            <HelpCircle className="w-3.5 h-3.5 text-slate-500" title="Checks if computers have company security certificates installed" />
           </div>
         </div>
 
@@ -96,11 +96,11 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
             <span className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">
               2
             </span>
-            <span className="text-slate-300 font-medium">Identity Velocity Ratio</span>
+            <span className="text-slate-300 font-medium">Login Attempt Speed</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <span className="text-rose-400 font-semibold">{velocityRatio}</span>
-            <HelpCircle className="w-3.5 h-3.5 text-slate-500" title="Ratio of authentication velocity versus 30-day baseline" />
+            <span className="text-rose-400 font-semibold">{velocityRatio}x Normal Speed</span>
+            <HelpCircle className="w-3.5 h-3.5 text-slate-500" title="Measures how fast login attempts are arriving" />
           </div>
         </div>
       </div>

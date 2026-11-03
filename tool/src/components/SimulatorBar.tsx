@@ -21,36 +21,36 @@ export const SimulatorBar: React.FC<SimulatorBarProps> = ({
   }> = [
     {
       id: 'IMPOSSIBLE_TRAVEL',
-      label: 'Impossible Travel',
-      sublabel: 'SF → Frankfurt (8,820 km/h)',
+      label: 'Fast Impossible Travel',
+      sublabel: 'US to Germany in 8 mins',
       icon: <Plane className="w-3.5 h-3.5" />,
       severity: 'CRITICAL'
     },
     {
       id: 'BRUTE_FORCE',
-      label: 'Credential Stuffing',
-      sublabel: '7 Fails/30s (ASN 44050)',
+      label: 'Password Guessing',
+      sublabel: '7 wrong passwords in 30s',
       icon: <Zap className="w-3.5 h-3.5" />,
       severity: 'CRITICAL'
     },
     {
       id: 'MFA_BOMBING',
-      label: 'MFA Push Bombing',
-      sublabel: '4 Prompts/18s Fatigue',
+      label: 'Phone Approval Spam',
+      sublabel: '4 popups sent in 18s',
       icon: <Bomb className="w-3.5 h-3.5" />,
       severity: 'HIGH'
     },
     {
       id: 'TOR_RESET',
-      label: 'Tor Exit Reset',
-      sublabel: 'Anonymizer Hijack',
+      label: 'Hidden Hacker Location',
+      sublabel: 'Password reset from anonymous IP',
       icon: <Globe className="w-3.5 h-3.5" />,
       severity: 'CRITICAL'
     },
     {
       id: 'NORMAL',
-      label: 'Legitimate Baseline',
-      sublabel: 'Normal Employee (Safe)',
+      label: 'Normal Safe Day',
+      sublabel: 'Regular team activity (Safe)',
       icon: <ShieldCheck className="w-3.5 h-3.5" />,
       severity: 'NORMAL'
     }
@@ -66,9 +66,9 @@ export const SimulatorBar: React.FC<SimulatorBarProps> = ({
         </div>
         <div>
           <div className="flex items-center gap-2 text-xs font-semibold text-white">
-            <span>Threat Simulation</span>
+            <span>Test Real Threats</span>
             <span className="text-[10px] font-normal px-1.5 py-0.2 rounded bg-dark-card text-slate-400 border border-dark-border">
-              Select Vector
+              Click to simulate
             </span>
           </div>
         </div>
@@ -99,6 +99,7 @@ export const SimulatorBar: React.FC<SimulatorBarProps> = ({
           );
         })}
       </div>
+
     </div>
   );
 };

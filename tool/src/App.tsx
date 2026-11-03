@@ -100,8 +100,8 @@ export default function App() {
         { axis: 'Privilege', value: 60, label: 'Rapid reset post-failure' },
       ]);
       addToast(
-        'Vector Injected: Impossible Travel',
-        'Physical velocity computed at 8,820 km/h between SF and Frankfurt. DEFCON 1 triggered.',
+        'Fast Impossible Travel Detected',
+        'User logged in from Germany only 8 minutes after San Francisco. Someone may be using stolen login tokens.',
         'danger'
       );
     } else if (scenario === 'BRUTE_FORCE') {
@@ -119,16 +119,16 @@ export default function App() {
         activeIncidentsCount: 9
       });
       setRadarMetrics([
-        { axis: 'Credential', value: 98, label: 'Brute force & spray rate' },
-        { axis: 'Geo', value: 45, label: 'Impossible travel delta' },
-        { axis: 'MFA', value: 82, label: 'Push-bombing fatigue' },
-        { axis: 'Device', value: 88, label: 'Novel hardware fingerprint' },
-        { axis: 'Network', value: 92, label: 'Tor exit / Cloud ASN' },
-        { axis: 'Privilege', value: 74, label: 'Rapid reset post-failure' },
+        { axis: 'Passwords', value: 98, label: 'Password guessing & repeated attempts' },
+        { axis: 'Locations', value: 45, label: 'Logins from unexpected cities or countries' },
+        { axis: 'Phone Verify', value: 82, label: 'Repeated phone confirmation requests' },
+        { axis: 'New Devices', value: 88, label: 'Unrecognized computers or smartphones' },
+        { axis: 'Hidden Networks', value: 92, label: 'Connections hiding identity or location' },
+        { axis: 'Password Resets', value: 74, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
-        'Vector Injected: Credential Stuffing',
-        '7 failed authentications within 36s across AS44050 cloud infrastructure. Risk score elevated to 88.',
+        'Rapid Password Guessing Detected',
+        '7 wrong passwords entered in 30 seconds across multiple accounts. Danger level elevated to 88.',
         'danger'
       );
     } else if (scenario === 'MFA_BOMBING') {
@@ -146,16 +146,16 @@ export default function App() {
         activeIncidentsCount: 4
       });
       setRadarMetrics([
-        { axis: 'Credential', value: 40, label: 'Brute force & spray rate' },
-        { axis: 'Geo', value: 30, label: 'Impossible travel delta' },
-        { axis: 'MFA', value: 96, label: 'Push-bombing fatigue' },
-        { axis: 'Device', value: 70, label: 'Novel hardware fingerprint' },
-        { axis: 'Network', value: 65, label: 'Tor exit / Cloud ASN' },
-        { axis: 'Privilege', value: 45, label: 'Rapid reset post-failure' },
+        { axis: 'Passwords', value: 40, label: 'Password guessing & repeated attempts' },
+        { axis: 'Locations', value: 30, label: 'Logins from unexpected cities or countries' },
+        { axis: 'Phone Verify', value: 96, label: 'Repeated phone confirmation requests' },
+        { axis: 'New Devices', value: 70, label: 'Unrecognized computers or smartphones' },
+        { axis: 'Hidden Networks', value: 65, label: 'Connections hiding identity or location' },
+        { axis: 'Password Resets', value: 45, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
-        'Vector Injected: MFA Push Fatigue',
-        '4 push notifications dispatched within 18s. User fatigue exploitation in progress.',
+        'Phone Approval Spam Detected',
+        '4 verification popups sent to phone in 18 seconds to trick the employee into tapping Accept.',
         'warning'
       );
     } else if (scenario === 'TOR_RESET') {
@@ -173,16 +173,16 @@ export default function App() {
         activeIncidentsCount: 6
       });
       setRadarMetrics([
-        { axis: 'Credential', value: 65, label: 'Brute force & spray rate' },
-        { axis: 'Geo', value: 85, label: 'Impossible travel delta' },
-        { axis: 'MFA', value: 55, label: 'Push-bombing fatigue' },
-        { axis: 'Device', value: 90, label: 'Novel hardware fingerprint' },
-        { axis: 'Network', value: 99, label: 'Tor exit / Cloud ASN' },
-        { axis: 'Privilege', value: 94, label: 'Rapid reset post-failure' },
+        { axis: 'Passwords', value: 65, label: 'Password guessing & repeated attempts' },
+        { axis: 'Locations', value: 85, label: 'Logins from unexpected cities or countries' },
+        { axis: 'Phone Verify', value: 55, label: 'Repeated phone confirmation requests' },
+        { axis: 'New Devices', value: 90, label: 'Unrecognized computers or smartphones' },
+        { axis: 'Hidden Networks', value: 99, label: 'Connections hiding identity or location' },
+        { axis: 'Password Resets', value: 94, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
-        'Vector Injected: Tor Anonymizer Hijack',
-        'Password reset request initiated from known Tor exit node (185.220.101.5).',
+        'Hidden Hacker Network Detected',
+        'Password reset request initiated from an anonymous network known to conceal hacker locations.',
         'danger'
       );
     } else if (scenario === 'BASELINE') {
@@ -200,16 +200,16 @@ export default function App() {
         activeIncidentsCount: 0
       });
       setRadarMetrics([
-        { axis: 'Credential', value: 10, label: 'Brute force & spray rate' },
-        { axis: 'Geo', value: 8, label: 'Impossible travel delta' },
-        { axis: 'MFA', value: 12, label: 'Push-bombing fatigue' },
-        { axis: 'Device', value: 15, label: 'Novel hardware fingerprint' },
-        { axis: 'Network', value: 10, label: 'Tor exit / Cloud ASN' },
-        { axis: 'Privilege', value: 5, label: 'Rapid reset post-failure' },
+        { axis: 'Passwords', value: 10, label: 'Password guessing & repeated attempts' },
+        { axis: 'Locations', value: 8, label: 'Logins from unexpected cities or countries' },
+        { axis: 'Phone Verify', value: 12, label: 'Repeated phone confirmation requests' },
+        { axis: 'New Devices', value: 15, label: 'Unrecognized computers or smartphones' },
+        { axis: 'Hidden Networks', value: 10, label: 'Connections hiding identity or location' },
+        { axis: 'Password Resets', value: 5, label: 'Immediate password resets after failed attempts' },
       ]);
       addToast(
-        'Baseline Posture Restored',
-        'Telemetry normalized within zero-trust parameters. All risk metrics safe.',
+        'Normal Safe Day Restored',
+        'All team logins look safe and within regular employee habits.',
         'success'
       );
     }
@@ -225,8 +225,8 @@ export default function App() {
       activeIncidentsCount: 0
     }));
     addToast(
-      'Autonomous Containment Executed',
-      'Stale OAuth session tokens revoked and actor IP quarantined. Threat surface mitigated.',
+      'Hacker Logged Out Successfully',
+      'Suspicious user session has been terminated and the attacker IP address was blocked.',
       'success'
     );
   };
@@ -235,8 +235,8 @@ export default function App() {
     const nextState = !isLiveStream;
     setIsLiveStream(nextState);
     addToast(
-      nextState ? 'Live Stream Resumed' : 'Telemetry Stream Paused',
-      nextState ? 'In-memory engine polling security telemetry.' : 'Telemetry ingestion paused by operator.',
+      nextState ? 'Live Monitoring Active' : 'Live Monitoring Paused',
+      nextState ? 'Real-time protection is watching for attacks.' : 'Monitoring paused by operator.',
       'info'
     );
   };
@@ -307,7 +307,7 @@ export default function App() {
             }`}
           >
             <LayoutDashboard className="w-3.5 h-3.5 text-sky-400" />
-            <span>Living Operations Center</span>
+            <span>Live Security Overview</span>
           </button>
 
           <button
@@ -319,7 +319,7 @@ export default function App() {
             }`}
           >
             <Network className="w-3.5 h-3.5 text-amber-400" />
-            <span>Stored Intelligence (Analyzer Graph)</span>
+            <span>Saved History Graph</span>
           </button>
 
           <button
@@ -331,7 +331,7 @@ export default function App() {
             }`}
           >
             <Terminal className="w-3.5 h-3.5 text-rose-400" />
-            <span>Incident Stream & Triage</span>
+            <span>Recent Suspicious Activity</span>
           </button>
 
           <button
@@ -343,7 +343,7 @@ export default function App() {
             }`}
           >
             <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Autonomous Responses</span>
+            <span>One-Click Security Actions</span>
           </button>
 
           <button
@@ -355,7 +355,7 @@ export default function App() {
             }`}
           >
             <Sliders className="w-3.5 h-3.5 text-purple-400" />
-            <span>Policy Studio</span>
+            <span>Security Settings & Rules</span>
           </button>
         </div>
 

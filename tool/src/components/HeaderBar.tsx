@@ -18,7 +18,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   return (
     <header className="w-full flex flex-col md:flex-row items-center justify-between gap-4 py-2 px-1 border-b border-dark-borderSubtle mb-5">
       
-      {/* Brand Logo with Iridescent Spiral Crest (Reference style) */}
+      {/* Brand Logo with Iridescent Spiral Crest */}
       <div className="flex items-center gap-3">
         <div className="relative flex items-center justify-center">
           {/* Iridescent spiral gradient icon */}
@@ -38,14 +38,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             <h1 className="text-xl font-bold tracking-tight text-white font-sans">
               Auth<span className="font-semibold text-slate-200">Sentry</span>
             </h1>
-            <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-dark-inset text-slate-300 border border-dark-border">
-              ITDR
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-dark-inset text-slate-300 border border-dark-border">
+              Account Protection
             </span>
           </div>
         </div>
       </div>
 
-      {/* Central Living Status Pill (Exact match to reference style) */}
+      {/* Central Living Status Pill (Plain English status) */}
       <div className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-dark-inset/90 border border-dark-border shadow-sm backdrop-blur-xl">
         {/* Left Segmented Icon & Tag */}
         <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-[#18202d] border border-dark-border text-[11px] font-semibold text-slate-300">
@@ -54,45 +54,45 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             <span className="w-1 h-3 bg-sky-400 rounded-sm"></span>
             <span className="w-1 h-3 bg-sky-500 rounded-sm"></span>
           </div>
-          <span>+{telemetry.attackVelocityRatio}x</span>
+          <span>+{telemetry.attackVelocityRatio}x Higher</span>
         </div>
 
         {/* Metric Segment 1: Active Risk */}
         <div className="flex items-baseline gap-1 text-xs">
-          <span className="text-slate-400">Risk score</span>
-          <span className="text-sm font-bold text-white tracking-tight">{telemetry.riskPercentile}</span>
-          <span className="text-[11px] text-slate-400">pts</span>
+          <span className="text-slate-400">Current Danger:</span>
+          <span className="text-sm font-bold text-rose-400 tracking-tight">{telemetry.riskPercentile}</span>
+          <span className="text-[11px] text-slate-400">/ 100</span>
         </div>
 
         <span className="w-px h-3.5 bg-dark-border"></span>
 
         {/* Metric Segment 2: Baseline */}
         <div className="flex items-baseline gap-1 text-xs">
-          <span className="text-slate-400">Baseline</span>
-          <span className="text-sm font-semibold text-slate-200">{(telemetry.baselineScore * 100).toFixed(0)}</span>
-          <span className="text-[11px] text-slate-400">pts</span>
+          <span className="text-slate-400">Normal Safe Level:</span>
+          <span className="text-sm font-semibold text-emerald-400">{(telemetry.baselineScore * 100).toFixed(0)}</span>
+          <span className="text-[11px] text-slate-400">/ 100</span>
         </div>
 
         <span className="hidden lg:inline-block w-px h-3.5 bg-dark-border"></span>
 
-        {/* Metric Segment 3: Assessment Text */}
+        {/* Metric Segment 3: Assessment Text in Simple Words */}
         <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-300 font-normal">
-          <span>Identity attack velocity is</span>
-          <span className="font-bold text-rose-400">{telemetry.attackVelocityRatio}x faster</span>
-          <span>than corporate baseline</span>
+          <span>Suspicious login activity is</span>
+          <span className="font-bold text-rose-400">{telemetry.attackVelocityRatio}x higher</span>
+          <span>than normal safe days</span>
         </div>
       </div>
 
-      {/* Right Controls (Reference style: electric blue toggle, notification bell, audit cart, avatar) */}
+      {/* Right Controls */}
       <div className="flex items-center gap-2.5">
         
-        {/* Electric Blue Toggle Switch (Exact match to reference) */}
+        {/* Stream Toggle Switch */}
         <button
           onClick={onToggleStream}
           className={`flex items-center gap-2 w-14 h-7 p-1 rounded-full transition-all duration-300 ${
             isLiveStream ? 'bg-blue-600 justify-end' : 'bg-[#1b2230] justify-start'
           }`}
-          title="Toggle live telemetry streaming"
+          title="Turn live monitoring on or off"
         >
           <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center text-slate-900 shadow-sm">
             {isLiveStream ? <Moon className="w-3 h-3 text-blue-600" /> : <Sun className="w-3 h-3 text-slate-600" />}
@@ -100,35 +100,36 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </button>
 
         {/* Notification Bell with Badge */}
-        <div 
-          onClick={onOpenReport}
-          className="relative p-2 rounded-xl bg-dark-card border border-dark-border text-slate-300 hover:text-white cursor-pointer transition-colors"
-          title="5 Active Incidents"
-        >
-          <Bell className="w-4 h-4" />
-          {telemetry.activeIncidentsCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white rounded-full text-[10px] font-bold flex items-center justify-center">
-              {telemetry.activeIncidentsCount}
-            </span>
-          )}
+        <div className="relative">
+          <button 
+            className="w-9 h-9 rounded-full bg-dark-card border border-dark-border hover:border-slate-600 flex items-center justify-center text-slate-300 hover:text-white transition-all"
+            title="Active security alerts"
+          >
+            <Bell className="w-4 h-4" />
+          </button>
+          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
+            {telemetry.activeIncidentsCount}
+          </span>
         </div>
 
-        {/* Incidents / Report Icon (Shopping bag / briefcase in reference) */}
+        {/* Incident Summary Button */}
         <button
           onClick={onOpenReport}
-          className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-dark-card border border-dark-border text-slate-300 hover:text-white text-xs font-medium transition-all"
-          title="Incident Audit Logs"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-dark-card border border-dark-border hover:border-slate-500 text-xs font-semibold text-slate-200 transition-all active:scale-95"
+          title="View and download printable security summary"
         >
-          <ShoppingBag className="w-3.5 h-3.5" />
-          <span className="text-xs font-semibold">5</span>
+          <FileText className="w-3.5 h-3.5 text-slate-400" />
+          <span>Security Report</span>
         </button>
 
-        {/* Blue Profile Avatar (Exact match to reference blue circle button) */}
+        {/* User Profile Avatar */}
         <div 
-          className="w-8 h-8 rounded-full bg-sky-400 flex items-center justify-center text-slate-950 font-bold cursor-pointer shadow-sm hover:opacity-90"
-          title="Security Administrator"
+          className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-400 to-blue-600 p-[1.5px] cursor-pointer"
+          title="Signed in as Security Admin"
         >
-          <User className="w-4 h-4 text-slate-900" />
+          <div className="w-full h-full bg-dark-card rounded-full flex items-center justify-center text-white">
+            <User className="w-4 h-4" />
+          </div>
         </div>
 
       </div>

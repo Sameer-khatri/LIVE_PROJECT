@@ -180,7 +180,7 @@ export const AnalyzerCanvas: React.FC<AnalyzerCanvasProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search stored nodes..."
+            placeholder="Search people, devices, or locations..."
             className="w-48 sm:w-64 bg-dark-card border border-dark-border rounded-full pl-8 pr-3 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400 transition-colors"
           />
           {searchQuery && (
@@ -196,7 +196,7 @@ export const AnalyzerCanvas: React.FC<AnalyzerCanvasProps> = ({
         {/* Sub-pill breadcrumb matching reference header */}
         <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-dark-card border border-dark-border text-[11px] text-slate-400">
           <Zap className="w-3 h-3 text-amber-400 animate-pulse" />
-          <span>Active Investigation:</span>
+          <span>Currently Viewing:</span>
           <span className="text-white font-medium">{selectedCategory.title}</span>
         </div>
 
@@ -344,17 +344,17 @@ export const AnalyzerCanvas: React.FC<AnalyzerCanvasProps> = ({
               {/* Title inside planetary circle */}
               <div className="absolute top-6 text-center px-4">
                 <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase block">
-                  ROOT INTELLIGENCE
+                  SAVED ARCHIVE
                 </span>
                 <span className="text-xs font-bold text-white block mt-0.5">
-                  Stored Security Database
+                  Company Security History
                 </span>
               </div>
 
               {/* Badges beneath core orb */}
               <div className="absolute bottom-6 flex items-center gap-1.5">
                 <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#151c28] border border-slate-700 text-slate-300">
-                  1,428 Records
+                  1,428 Records Saved
                 </span>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
               </div>
@@ -408,11 +408,11 @@ export const AnalyzerCanvas: React.FC<AnalyzerCanvasProps> = ({
             {/* Header tag */}
             <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1 flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <span>STORED ENTITIES FOR:</span>
+                <span>SAVED RECORDS FOR:</span>
                 <span className="text-white font-bold">{selectedCategory.title}</span>
               </div>
               <span className="text-[10px] text-sky-400 font-mono">
-                {filteredEntities.length} NODES
+                {filteredEntities.length} RECORDS
               </span>
             </div>
 

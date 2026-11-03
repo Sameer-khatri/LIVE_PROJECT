@@ -40,22 +40,22 @@ export const RadarWidget: React.FC<RadarWidgetProps> = ({ metrics }) => {
           <div className="flex items-center gap-2">
             <span className="flex items-center text-xs font-medium text-slate-300 hover:text-white cursor-pointer group">
               <ChevronLeft className="w-3.5 h-3.5 mr-0.5 group-hover:-translate-x-0.5 transition-transform" />
-              <span>Threat Report</span>
+              <span>Security Checkup</span>
             </span>
             <span className="text-xs text-rose-400 font-normal px-2 py-0.5 rounded-full bg-rose-950/40 border border-rose-900/50">
-              Suboptimal
+              Needs Attention
             </span>
           </div>
 
           <div className="flex items-center gap-1 text-[10px] text-slate-400 font-mono">
             <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-ping"></span>
-            <span>SCANNING</span>
+            <span>LIVE SCAN</span>
           </div>
         </div>
 
-        <h3 className="text-base font-bold text-white tracking-tight">Identity Attack Surface</h3>
+        <h3 className="text-base font-bold text-white tracking-tight">Account Vulnerability Map</h3>
         <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
-          Measures how credentials, geo-velocity, and MFA posture expose your organization to account takeover.
+          Shows where your team's accounts are most at risk of being hacked right now.
         </p>
       </div>
 
@@ -203,8 +203,8 @@ export const RadarWidget: React.FC<RadarWidgetProps> = ({ metrics }) => {
         {activeMetric && (
           <div className="absolute -bottom-2 z-40 bg-dark-card/95 border border-sky-500/50 rounded-xl px-3 py-1.5 shadow-2xl backdrop-blur-xl animate-toast-in text-center pointer-events-none">
             <div className="text-[11px] font-bold text-white flex items-center justify-center gap-1.5">
-              <span>{activeMetric.axis} Surface:</span>
-              <span className="text-sky-400">{activeMetric.value}% Exposure</span>
+              <span>{activeMetric.axis}:</span>
+              <span className="text-sky-400">{activeMetric.value}% Danger</span>
             </div>
             <div className="text-[9px] text-slate-400">{activeMetric.label}</div>
           </div>
@@ -213,10 +213,10 @@ export const RadarWidget: React.FC<RadarWidgetProps> = ({ metrics }) => {
 
       {/* Bottom Category Status */}
       <div className="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-dark-borderSubtle">
-        <span>Highest Vector:</span>
+        <span>Highest Risk Area:</span>
         <span className="font-semibold text-rose-400 flex items-center gap-1">
           <Crosshair className="w-3.5 h-3.5" />
-          <span>Credential Velocity (85%)</span>
+          <span>Password Guessing (85%)</span>
         </span>
       </div>
 

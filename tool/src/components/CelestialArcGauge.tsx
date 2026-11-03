@@ -243,23 +243,23 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
         })}
       </div>
 
-      {/* Central Metric Typography (Inside the Arc - Reference Match) */}
+      {/* Central Metric Typography (Inside the Arc - Simple & Clear) */}
       <div className="absolute bottom-5 flex flex-col items-center text-center">
         <div className="flex items-baseline justify-center">
           <span className="text-5xl font-extrabold tracking-tight text-white font-sans transition-all">
             {displayPercentile}
           </span>
-          <span className="text-lg text-slate-400 font-normal ml-1">
-            th
+          <span className="text-2xl text-slate-400 font-normal ml-0.5">
+            %
           </span>
         </div>
 
         <span className="text-xs text-slate-400 font-medium mt-0.5">
-          Percentile
+          Account Danger Level
         </span>
 
         <p className="text-xs text-slate-300 font-medium mt-1 flex items-center gap-1 justify-center">
-          <span>Your risk of attack</span>
+          <span>{displayPercentile >= 70 ? 'High risk of unauthorized access' : 'Everything looks safe and normal'}</span>
           {displayPercentile >= 70 && (
             <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
           )}
