@@ -2,20 +2,22 @@ import React from 'react';
 import { RadarWidget } from './RadarWidget';
 import { CelestialArcGauge } from './CelestialArcGauge';
 import { SessionTrendWidget } from './SessionTrendWidget';
-import { RadarMetric, SatelliteAttackNode, TrendPoint } from '../types/dashboard';
+import { RadarMetric, SatelliteAttackNode, TrendPoint, TelemetryState } from '../types/dashboard';
 
 interface HeroSectionProps {
-  percentile: number;
+  telemetry?: TelemetryState;
+  percentile?: number;
   radarMetrics: RadarMetric[];
   satelliteNodes: SatelliteAttackNode[];
-  tokenHours: number;
-  excessHours: number;
+  tokenHours?: number;
+  excessHours?: number;
   trendPoints: TrendPoint[];
   onViewReport: () => void;
-  onSelectNode: (node: SatelliteAttackNode) => void;
+  onSelectNode?: (node: SatelliteAttackNode) => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
+  telemetry,
   percentile,
   radarMetrics,
   satelliteNodes,
@@ -25,6 +27,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   onViewReport,
   onSelectNode
 }) => {
+  const actualPercentile = percentile ?? telemetry?.riskPercentile ?? 74;
+  const actualTokenHours = tokenHours ?? telemetry?.tokenLifetimeHours ?? 4.8;
+  const actualExcessHours = excessHours ?? telemetry?.policyExcessHours ?? 2.9;
+
   return (
     <div className="w-full bg-dark-card/90 border border-dark-border rounded-3xl p-5 backdrop-blur-xl mb-5 shadow-xl relative overflow-hidden">
       
@@ -38,7 +44,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Center Widget: Celestial Arc Gauge (4.5 cols on lg) */}
         <div className="lg:col-span-5 h-full flex items-center justify-center py-1">
           <CelestialArcGauge
-            percentile={percentile}
+            percentile={actualPercentile}
             satelliteNodes={satelliteNodes}
             onSelectNode={onSelectNode}
           />
@@ -47,8 +53,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Right Widget: Session Token & Trend Line (3.5 cols on lg) */}
         <div className="lg:col-span-3 h-full flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-dark-border pt-4 lg:pt-0 lg:pl-4">
           <SessionTrendWidget
-            tokenHours={tokenHours}
-            excessHours={excessHours}
+            tokenHours={actualTokenHours}
+            excessHours={actualExcessHours}
             trendPoints={trendPoints}
             onViewReport={onViewReport}
           />

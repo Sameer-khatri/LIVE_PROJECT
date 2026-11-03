@@ -100,7 +100,7 @@ export default function App() {
         { axis: 'Privilege', value: 60, label: 'Rapid reset post-failure' },
       ]);
       addToast(
-        '🚨 Vector Injected: Impossible Travel',
+        'Vector Injected: Impossible Travel',
         'Physical velocity computed at 8,820 km/h between SF and Frankfurt. DEFCON 1 triggered.',
         'danger'
       );
@@ -127,7 +127,7 @@ export default function App() {
         { axis: 'Privilege', value: 74, label: 'Rapid reset post-failure' },
       ]);
       addToast(
-        '🚨 Vector Injected: Credential Stuffing',
+        'Vector Injected: Credential Stuffing',
         '7 failed authentications within 36s across AS44050 cloud infrastructure. Risk score elevated to 88.',
         'danger'
       );
@@ -154,7 +154,7 @@ export default function App() {
         { axis: 'Privilege', value: 45, label: 'Rapid reset post-failure' },
       ]);
       addToast(
-        '⚠️ Vector Injected: MFA Push Fatigue',
+        'Vector Injected: MFA Push Fatigue',
         '4 push notifications dispatched within 18s. User fatigue exploitation in progress.',
         'warning'
       );
@@ -181,7 +181,7 @@ export default function App() {
         { axis: 'Privilege', value: 94, label: 'Rapid reset post-failure' },
       ]);
       addToast(
-        '🚨 Vector Injected: Tor Anonymizer Hijack',
+        'Vector Injected: Tor Anonymizer Hijack',
         'Password reset request initiated from known Tor exit node (185.220.101.5).',
         'danger'
       );
@@ -208,7 +208,7 @@ export default function App() {
         { axis: 'Privilege', value: 5, label: 'Rapid reset post-failure' },
       ]);
       addToast(
-        '✅ Baseline Posture Restored',
+        'Baseline Posture Restored',
         'Telemetry normalized within zero-trust parameters. All risk metrics safe.',
         'success'
       );
@@ -225,7 +225,7 @@ export default function App() {
       activeIncidentsCount: 0
     }));
     addToast(
-      '🛡️ Autonomous Containment Executed',
+      'Autonomous Containment Executed',
       'Stale OAuth session tokens revoked and actor IP quarantined. Threat surface mitigated.',
       'success'
     );
@@ -235,7 +235,7 @@ export default function App() {
     const nextState = !isLiveStream;
     setIsLiveStream(nextState);
     addToast(
-      nextState ? '📡 Live Stream Resumed' : '⏸️ Telemetry Stream Paused',
+      nextState ? 'Live Stream Resumed' : 'Telemetry Stream Paused',
       nextState ? 'In-memory engine polling security telemetry.' : 'Telemetry ingestion paused by operator.',
       'info'
     );
@@ -373,6 +373,9 @@ export default function App() {
             {/* TOP 55%: Concentric Living Arc + Radar + Token Entropy */}
             <HeroSection
               telemetry={telemetry}
+              percentile={telemetry.riskPercentile}
+              tokenHours={telemetry.tokenLifetimeHours}
+              excessHours={telemetry.policyExcessHours}
               radarMetrics={radarMetrics}
               satelliteNodes={satelliteNodes}
               trendPoints={INITIAL_TREND_POINTS}

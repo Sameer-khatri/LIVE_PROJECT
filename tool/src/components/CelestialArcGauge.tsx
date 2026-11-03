@@ -13,13 +13,14 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
   satelliteNodes,
   onSelectNode
 }) => {
+  const safePercentile = typeof percentile === 'number' && !isNaN(percentile) ? percentile : 74;
   const [activeNode, setActiveNode] = useState<SatelliteAttackNode | null>(null);
-  const [displayPercentile, setDisplayPercentile] = useState<number>(percentile);
+  const [displayPercentile, setDisplayPercentile] = useState<number>(safePercentile);
 
   // Animated smooth count-up when percentile changes
   useEffect(() => {
     let current = displayPercentile;
-    const target = percentile;
+    const target = safePercentile;
     if (current === target) return;
 
     const step = target > current ? 1 : -1;
@@ -32,7 +33,7 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
     }, 18);
 
     return () => clearInterval(timer);
-  }, [percentile]);
+  }, [safePercentile]);
 
   // SVG Geometry
   const width = 480;

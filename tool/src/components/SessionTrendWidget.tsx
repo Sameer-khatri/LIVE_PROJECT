@@ -3,8 +3,8 @@ import { ChevronRight, Key, ArrowUpRight, Clock, ShieldAlert } from 'lucide-reac
 import { TrendPoint } from '../types/dashboard';
 
 interface SessionTrendWidgetProps {
-  tokenHours: number;
-  excessHours: number;
+  tokenHours?: number;
+  excessHours?: number;
   trendPoints: TrendPoint[];
   onViewReport: () => void;
 }
@@ -15,6 +15,9 @@ export const SessionTrendWidget: React.FC<SessionTrendWidgetProps> = ({
   trendPoints,
   onViewReport
 }) => {
+  const safeTokenHours = typeof tokenHours === 'number' && !isNaN(tokenHours) ? tokenHours : 4.8;
+  const safeExcessHours = typeof excessHours === 'number' && !isNaN(excessHours) ? excessHours : 2.9;
+
   const [hoveredPoint, setHoveredPoint] = useState<TrendPoint | null>(null);
 
   const chartWidth = 260;
@@ -48,7 +51,7 @@ export const SessionTrendWidget: React.FC<SessionTrendWidgetProps> = ({
         <div className="flex items-center justify-between mb-1">
           <div className="flex items-baseline gap-1">
             <span className="text-2xl font-bold text-white tracking-tight font-sans">
-              {tokenHours} <span className="text-sm font-normal text-slate-400">hrs</span>
+              {safeTokenHours} <span className="text-sm font-normal text-slate-400">hrs</span>
             </span>
           </div>
 
@@ -65,7 +68,7 @@ export const SessionTrendWidget: React.FC<SessionTrendWidgetProps> = ({
 
         <h4 className="text-xs font-bold text-slate-200 mt-1">Session Token Lifetime</h4>
         <p className="text-[11px] text-slate-400 leading-relaxed mt-0.5">
-          OAuth refresh token age exceeds zero-trust policy by <span className="text-amber-300 font-semibold font-sans">+{excessHours} hours</span>.
+          OAuth refresh token age exceeds zero-trust policy by <span className="text-amber-300 font-semibold font-sans">+{safeExcessHours} hours</span>.
         </p>
       </div>
 
