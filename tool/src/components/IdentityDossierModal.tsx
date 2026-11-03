@@ -191,3 +191,4 @@ export const IdentityDossierModal: React.FC<IdentityDossierModalProps> = ({
     </div>
   );
 };
+

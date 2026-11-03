@@ -165,7 +165,7 @@ export const PolicyStudioTab: React.FC = () => {
       {/* ============================================================== */}
       {/* 1. TOP ENTERPRISE COMMAND HEADER & PRESET SWITCHER             */}
       {/* ============================================================== */}
-      <div className="p-5 rounded-3xl bg-gradient-to-r from-[#121722] via-[#161d2c] to-[#121722] border border-[#273244] shadow-2xl flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
+      <div className="p-5 rounded-3xl bg-gradient-to-r from-[#121722] via-[#161d2c] to-[#121722] border border-white/[0.06] shadow-2xl flex flex-col xl:flex-row items-start xl:items-center justify-between gap-4">
         
         {/* Title & SOC Posture Indicator */}
         <div className="flex items-center gap-3.5">
@@ -190,12 +190,12 @@ export const PolicyStudioTab: React.FC = () => {
         <div className="flex flex-wrap items-center gap-2.5 w-full xl:w-auto justify-between xl:justify-end">
           
           {/* Sensitivity Preset Segmented Control */}
-          <div className="flex items-center p-1 rounded-2xl bg-[#0b0e14] border border-[#273244]">
+          <div className="flex items-center p-1 rounded-2xl bg-white/[0.03]">
             <button
               onClick={() => handleSelectPreset('STRICT')}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 activePreset === 'STRICT'
-                  ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
+                  ? 'bg-rose-500/20 text-rose-300 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -205,7 +205,7 @@ export const PolicyStudioTab: React.FC = () => {
               onClick={() => handleSelectPreset('BALANCED')}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 activePreset === 'BALANCED'
-                  ? 'bg-sky-500/20 text-sky-300 border border-sky-500/40 shadow-sm'
+                  ? 'bg-sky-500/20 text-sky-300 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -215,7 +215,7 @@ export const PolicyStudioTab: React.FC = () => {
               onClick={() => handleSelectPreset('PERMISSIVE')}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                 activePreset === 'PERMISSIVE'
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                  ? 'bg-amber-500/20 text-amber-300 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200'
               }`}
             >
@@ -227,7 +227,7 @@ export const PolicyStudioTab: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={() => handleSelectPreset('BALANCED')}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#151c28] border border-[#273244] text-slate-300 hover:text-white hover:border-slate-600 text-xs font-semibold transition-all"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] text-xs font-semibold transition-all"
             >
               <RotateCcw className="w-3.5 h-3.5 text-slate-400" />
               <span>Reset</span>
@@ -264,9 +264,9 @@ export const PolicyStudioTab: React.FC = () => {
       {/* ============================================================== */}
       {/* 2. REAL-TIME POLICY IMPACT & TELEMETRY BAR                     */}
       {/* ============================================================== */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
-        <div className="p-3.5 rounded-2xl bg-[#121722]/90 border border-[#273244] flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="p-3.5 rounded-2xl bg-white/[0.03] flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400">
             <ShieldCheck className="w-4 h-4" />
           </div>
           <div>
@@ -275,8 +275,8 @@ export const PolicyStudioTab: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#121722]/90 border border-[#273244] flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400">
+        <div className="p-3.5 rounded-2xl bg-white/[0.03] flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-sky-500/10 text-sky-400">
             <Zap className="w-4 h-4" />
           </div>
           <div>
@@ -285,8 +285,8 @@ export const PolicyStudioTab: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#121722]/90 border border-[#273244] flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+        <div className="p-3.5 rounded-2xl bg-white/[0.03] flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400">
             <Activity className="w-4 h-4" />
           </div>
           <div>
@@ -295,8 +295,8 @@ export const PolicyStudioTab: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#121722]/90 border border-[#273244] flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400">
+        <div className="p-3.5 rounded-2xl bg-white/[0.03] flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-purple-500/10 text-purple-400">
             <Cpu className="w-4 h-4" />
           </div>
           <div>
@@ -316,9 +316,9 @@ export const PolicyStudioTab: React.FC = () => {
         {/* ============================================================ */}
         <div className="lg:col-span-7 flex flex-col gap-4">
           
-          <div className="p-5 rounded-3xl bg-[#121722]/95 border border-[#273244] shadow-xl space-y-5">
+          <div className="p-5 rounded-3xl bg-[#131924]/80 border border-white/[0.06] shadow-xl space-y-5">
             
-            <div className="flex items-center justify-between pb-3 border-b border-[#212a3a]">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-sky-400" />
                 <h4 className="text-sm font-bold text-white tracking-tight">
@@ -331,12 +331,12 @@ export const PolicyStudioTab: React.FC = () => {
             </div>
 
             {/* METER 1: Max Travel Speed (Impossible Travel) */}
-            <div className="p-4 rounded-2xl bg-[#0e131d] border border-[#1f2838] space-y-3 hover:border-slate-700 transition-all">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] space-y-3 transition-all">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white flex items-center gap-2">
                     <span>Physical Travel Velocity Limit</span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-sky-500/15 text-sky-300 border border-sky-500/30">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-sky-500/15 text-sky-300">
                       GEO-HOPPING
                     </span>
                   </div>
@@ -346,13 +346,13 @@ export const PolicyStudioTab: React.FC = () => {
                 </div>
 
                 {/* Digital Readout Pill with manual step controls */}
-                <div className="flex items-center gap-1.5 bg-[#161e2c] border border-[#273347] px-2.5 py-1 rounded-xl">
+                <div className="flex items-center gap-1.5 bg-white/[0.06] px-2.5 py-1 rounded-xl">
                   <button
                     onClick={() => {
                       setSpeedThreshold((v) => Math.max(400, v - 50));
                       setActivePreset('CUSTOM');
                     }}
-                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 text-xs font-bold"
+                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.1] text-xs font-bold"
                   >
                     -
                   </button>
@@ -364,7 +364,7 @@ export const PolicyStudioTab: React.FC = () => {
                       setSpeedThreshold((v) => Math.min(2000, v + 50));
                       setActivePreset('CUSTOM');
                     }}
-                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 text-xs font-bold"
+                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.1] text-xs font-bold"
                   >
                     +
                   </button>
@@ -373,7 +373,7 @@ export const PolicyStudioTab: React.FC = () => {
 
               {/* Enterprise Segmented Calibrated Meter */}
               <div className="space-y-1.5">
-                <div className="relative w-full h-2 rounded-full bg-[#161e2a] overflow-hidden">
+                <div className="relative w-full h-2 rounded-full bg-white/[0.06] overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-emerald-500 via-amber-400 to-rose-500 rounded-full transition-all duration-300"
                     style={{ width: `${((speedThreshold - 400) / 1600) * 100}%` }}
@@ -402,12 +402,12 @@ export const PolicyStudioTab: React.FC = () => {
             </div>
 
             {/* METER 2: Wrong Passwords Allowed */}
-            <div className="p-4 rounded-2xl bg-[#0e131d] border border-[#1f2838] space-y-3 hover:border-slate-700 transition-all">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] space-y-3 transition-all">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white flex items-center gap-2">
                     <span>Brute-Force Password Tolerance</span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-amber-500/15 text-amber-300">
                       CREDENTIAL STUFFING
                     </span>
                   </div>
@@ -416,13 +416,13 @@ export const PolicyStudioTab: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1.5 bg-[#161e2c] border border-[#273347] px-2.5 py-1 rounded-xl">
+                <div className="flex items-center gap-1.5 bg-white/[0.06] px-2.5 py-1 rounded-xl">
                   <button
                     onClick={() => {
                       setBruteForceFails((v) => Math.max(2, v - 1));
                       setActivePreset('CUSTOM');
                     }}
-                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 text-xs font-bold"
+                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.1] text-xs font-bold"
                   >
                     -
                   </button>
@@ -434,7 +434,7 @@ export const PolicyStudioTab: React.FC = () => {
                       setBruteForceFails((v) => Math.min(15, v + 1));
                       setActivePreset('CUSTOM');
                     }}
-                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 text-xs font-bold"
+                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.1] text-xs font-bold"
                   >
                     +
                   </button>
@@ -443,7 +443,7 @@ export const PolicyStudioTab: React.FC = () => {
 
               {/* Enterprise Segmented Calibrated Meter */}
               <div className="space-y-1.5">
-                <div className="relative w-full h-2 rounded-full bg-[#161e2a] overflow-hidden">
+                <div className="relative w-full h-2 rounded-full bg-white/[0.06] overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 rounded-full transition-all duration-300"
                     style={{ width: `${((bruteForceFails - 2) / 13) * 100}%` }}
@@ -471,12 +471,12 @@ export const PolicyStudioTab: React.FC = () => {
             </div>
 
             {/* METER 3: MFA Push Window */}
-            <div className="p-4 rounded-2xl bg-[#0e131d] border border-[#1f2838] space-y-3 hover:border-slate-700 transition-all">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] space-y-3 transition-all">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white flex items-center gap-2">
                     <span>MFA Push Fatigue Window</span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-purple-500/15 text-purple-300 border border-purple-500/30">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-purple-500/15 text-purple-300">
                       PROMPT SPAM
                     </span>
                   </div>
@@ -485,13 +485,13 @@ export const PolicyStudioTab: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1.5 bg-[#161e2c] border border-[#273347] px-2.5 py-1 rounded-xl">
+                <div className="flex items-center gap-1.5 bg-white/[0.06] px-2.5 py-1 rounded-xl">
                   <button
                     onClick={() => {
                       setMfaWindow((v) => Math.max(10, v - 5));
                       setActivePreset('CUSTOM');
                     }}
-                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 text-xs font-bold"
+                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.1] text-xs font-bold"
                   >
                     -
                   </button>
@@ -503,7 +503,7 @@ export const PolicyStudioTab: React.FC = () => {
                       setMfaWindow((v) => Math.min(120, v + 5));
                       setActivePreset('CUSTOM');
                     }}
-                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 text-xs font-bold"
+                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.1] text-xs font-bold"
                   >
                     +
                   </button>
@@ -511,7 +511,7 @@ export const PolicyStudioTab: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <div className="relative w-full h-2 rounded-full bg-[#161e2a] overflow-hidden">
+                <div className="relative w-full h-2 rounded-full bg-white/[0.06] overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-purple-500 via-indigo-400 to-sky-400 rounded-full transition-all duration-300"
                     style={{ width: `${((mfaWindow - 10) / 110) * 100}%` }}
@@ -539,12 +539,12 @@ export const PolicyStudioTab: React.FC = () => {
             </div>
 
             {/* METER 4: Session Inactivity & Token Expiry */}
-            <div className="p-4 rounded-2xl bg-[#0e131d] border border-[#1f2838] space-y-3 hover:border-slate-700 transition-all">
+            <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] space-y-3 transition-all">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white flex items-center gap-2">
                     <span>Maximum OAuth Session Lifetime</span>
-                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-emerald-500/15 text-emerald-300">
                       TOKEN REPLAY GUARD
                     </span>
                   </div>
@@ -553,13 +553,13 @@ export const PolicyStudioTab: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1.5 bg-[#161e2c] border border-[#273347] px-2.5 py-1 rounded-xl">
+                <div className="flex items-center gap-1.5 bg-white/[0.06] px-2.5 py-1 rounded-xl">
                   <button
                     onClick={() => {
                       setMaxSessionHours((v) => Math.max(1, v - 1));
                       setActivePreset('CUSTOM');
                     }}
-                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 text-xs font-bold"
+                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.1] text-xs font-bold"
                   >
                     -
                   </button>
@@ -571,7 +571,7 @@ export const PolicyStudioTab: React.FC = () => {
                       setMaxSessionHours((v) => Math.min(24, v + 1));
                       setActivePreset('CUSTOM');
                     }}
-                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-700 text-xs font-bold"
+                    className="w-5 h-5 rounded flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.1] text-xs font-bold"
                   >
                     +
                   </button>
@@ -579,7 +579,7 @@ export const PolicyStudioTab: React.FC = () => {
               </div>
 
               <div className="space-y-1.5">
-                <div className="relative w-full h-2 rounded-full bg-[#161e2a] overflow-hidden">
+                <div className="relative w-full h-2 rounded-full bg-white/[0.06] overflow-hidden">
                   <div 
                     className="h-full bg-gradient-to-r from-emerald-500 via-teal-400 to-sky-500 rounded-full transition-all duration-300"
                     style={{ width: `${((maxSessionHours - 1) / 23) * 100}%` }}
@@ -614,9 +614,9 @@ export const PolicyStudioTab: React.FC = () => {
         {/* ============================================================ */}
         <div className="lg:col-span-5 flex flex-col gap-4">
           
-          <div className="p-5 rounded-3xl bg-[#121722]/95 border border-[#273244] shadow-xl space-y-4">
+          <div className="p-5 rounded-3xl bg-[#131924]/80 border border-white/[0.06] shadow-xl space-y-4">
             
-            <div className="flex items-center justify-between pb-3 border-b border-[#212a3a]">
+            <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
               <div className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-emerald-400" />
                 <h4 className="text-sm font-bold text-white tracking-tight">
@@ -632,16 +632,16 @@ export const PolicyStudioTab: React.FC = () => {
               When breach conditions match, AuthSentry executes autonomous security countermeasures without human delay.
             </p>
 
-            {/* Enterprise Toggle Cards */}
-            <div className="space-y-3 pt-1">
+            {/* Enterprise Toggle Cards (Clean borderless) */}
+            <div className="space-y-2.5 pt-1">
               {rules.map((rule) => (
                 <div
                   key={rule.id}
                   onClick={() => handleToggleRule(rule.id)}
-                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer select-none ${
+                  className={`p-3.5 rounded-2xl transition-all cursor-pointer select-none ${
                     rule.armed
-                      ? 'bg-gradient-to-r from-[#141b27] to-[#171f2d] border-sky-500/40 shadow-sm hover:border-sky-500/60'
-                      : 'bg-[#0e131d]/90 border-[#1f2838] opacity-70 hover:opacity-100 hover:border-slate-700'
+                      ? 'bg-sky-500/10 shadow-sm hover:bg-sky-500/15'
+                      : 'bg-white/[0.02] opacity-70 hover:opacity-100 hover:bg-white/[0.04]'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
@@ -666,11 +666,11 @@ export const PolicyStudioTab: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Elite Glass Switch Toggle */}
+                    {/* Elite Switch Toggle */}
                     <div className="pt-0.5">
                       <div
                         className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors duration-200 ease-in-out ${
-                          rule.armed ? 'bg-sky-500' : 'bg-slate-800'
+                          rule.armed ? 'bg-sky-500' : 'bg-white/[0.1]'
                         }`}
                       >
                         <div
@@ -686,7 +686,7 @@ export const PolicyStudioTab: React.FC = () => {
             </div>
 
             {/* Quick Summary Pill */}
-            <div className="p-3 rounded-2xl bg-[#0b0e14] border border-[#1f2838] flex items-center justify-between text-xs text-slate-400">
+            <div className="p-3 rounded-2xl bg-white/[0.03] flex items-center justify-between text-xs text-slate-400">
               <span className="flex items-center gap-1.5 font-medium">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 Zero-Trust Autonomous Safeguards
@@ -703,7 +703,7 @@ export const PolicyStudioTab: React.FC = () => {
       {/* ============================================================== */}
       {/* 4. ENTERPRISE AUDIT TRAIL & REVISION STRIP                     */}
       {/* ============================================================== */}
-      <div className="p-4 rounded-2xl bg-[#121722]/80 border border-[#273244] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+      <div className="p-4 rounded-2xl bg-white/[0.02] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
         <div className="flex items-center gap-3">
           <FileText className="w-4 h-4 text-slate-400" />
           <span>

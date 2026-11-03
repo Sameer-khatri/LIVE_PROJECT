@@ -358,7 +358,7 @@ export default function App() {
         </div>
 
         {/* Master Rounded Glass Monolith Container */}
-        <div className="relative z-10 w-full max-w-[1440px] bg-[#121722]/95 border border-[#273244] rounded-[32px] p-5 sm:p-7 backdrop-blur-3xl shadow-panel flex flex-col transition-all duration-300">
+        <div className="relative z-10 w-full max-w-[1440px] bg-[#121722]/95 border border-white/[0.06] rounded-[32px] p-5 sm:p-7 backdrop-blur-3xl shadow-panel flex flex-col transition-all duration-300">
           
           {/* Top Header Bar */}
           <HeaderBar
@@ -372,14 +372,14 @@ export default function App() {
           {/* Real-Time Living Security Event Ticker Bar */}
           <LiveSecurityTicker isLiveStream={isLiveStream} />
 
-          {/* Master Navigation Tabs Switcher (5 Simple Tabs) */}
-          <div className="flex items-center gap-1.5 mb-5 p-1 rounded-2xl bg-dark-inset border border-dark-borderSubtle overflow-x-auto max-w-full select-none">
+          {/* Master Navigation Tabs Switcher (Borderless clean pills) */}
+          <div className="flex items-center gap-1 mb-4 p-1 rounded-2xl bg-white/[0.02] overflow-x-auto max-w-full select-none">
             <button
               onClick={() => setActiveTab('DASHBOARD')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
                 activeTab === 'DASHBOARD'
-                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-sky-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+                  ? 'bg-white/[0.08] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
               }`}
             >
               <LayoutDashboard className="w-3.5 h-3.5 text-sky-400" />
@@ -390,8 +390,8 @@ export default function App() {
               onClick={() => setActiveTab('ANALYZER')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
                 activeTab === 'ANALYZER'
-                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-amber-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+                  ? 'bg-white/[0.08] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
               }`}
             >
               <Network className="w-3.5 h-3.5 text-amber-400" />
@@ -402,8 +402,8 @@ export default function App() {
               onClick={() => setActiveTab('INCIDENTS')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
                 activeTab === 'INCIDENTS'
-                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-rose-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+                  ? 'bg-white/[0.08] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
               }`}
             >
               <Terminal className="w-3.5 h-3.5 text-rose-400" />
@@ -414,8 +414,8 @@ export default function App() {
               onClick={() => setActiveTab('MITIGATIONS')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
                 activeTab === 'MITIGATIONS'
-                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-emerald-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+                  ? 'bg-white/[0.08] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
               }`}
             >
               <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
@@ -426,8 +426,8 @@ export default function App() {
               onClick={() => setActiveTab('POLICIES')}
               className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
                 activeTab === 'POLICIES'
-                  ? 'bg-[#1b2332] text-white shadow-sm border border-slate-700/60 ring-1 ring-purple-500/30'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-dark-card/40'
+                  ? 'bg-white/[0.08] text-white shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
               }`}
             >
               <Sliders className="w-3.5 h-3.5 text-purple-400" />

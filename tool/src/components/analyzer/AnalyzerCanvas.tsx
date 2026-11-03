@@ -143,7 +143,7 @@ export const AnalyzerCanvas: React.FC<AnalyzerCanvasProps> = ({
           </div>
 
           {/* Zoom controls */}
-          <div className="flex items-center gap-0.5 p-1 rounded-xl bg-dark-card border border-dark-border">
+          <div className="flex items-center gap-0.5 p-1 rounded-xl bg-white/[0.04]">
             <button 
               onClick={() => setZoomLevel(prev => Math.min(1.3, Number((prev + 0.1).toFixed(1))))}
               className="p-1.5 rounded-lg text-slate-400 hover:text-white active:scale-95" 
@@ -164,14 +164,14 @@ export const AnalyzerCanvas: React.FC<AnalyzerCanvasProps> = ({
           </div>
 
           {/* Filter & Sort with badge counters */}
-          <button className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-dark-card border border-dark-border text-xs text-slate-300 hover:text-white hover:border-slate-600 transition-colors">
+          <button className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/[0.04] text-xs text-slate-300 hover:text-white transition-colors">
             <Filter className="w-3.5 h-3.5 text-sky-400" />
-            <span className="w-4 h-4 rounded-full bg-sky-950 text-sky-400 border border-sky-800 text-[10px] font-bold flex items-center justify-center">1</span>
+            <span className="w-4 h-4 rounded-full bg-sky-500/20 text-sky-400 text-[10px] font-bold flex items-center justify-center">1</span>
           </button>
 
-          <button className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-dark-card border border-dark-border text-xs text-slate-300 hover:text-white hover:border-slate-600 transition-colors">
+          <button className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/[0.04] text-xs text-slate-300 hover:text-white transition-colors">
             <ArrowUpDown className="w-3.5 h-3.5 text-amber-400" />
-            <span className="w-4 h-4 rounded-full bg-amber-950 text-amber-400 border border-amber-800 text-[10px] font-bold flex items-center justify-center">2</span>
+            <span className="w-4 h-4 rounded-full bg-amber-500/20 text-amber-400 text-[10px] font-bold flex items-center justify-center">2</span>
           </button>
         </div>
 
@@ -183,7 +183,7 @@ export const AnalyzerCanvas: React.FC<AnalyzerCanvasProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search people, devices, or locations..."
-            className="w-48 sm:w-64 bg-dark-card border border-dark-border rounded-full pl-8 pr-3 py-1 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-400 transition-colors"
+            className="w-48 sm:w-64 bg-white/[0.04] rounded-full pl-8 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-400 transition-all"
           />
           {searchQuery && (
             <button 

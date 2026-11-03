@@ -20,7 +20,7 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <div className="flex flex-col justify-between h-full bg-dark-card/90 border border-dark-border rounded-3xl p-5 backdrop-blur-xl shadow-lg select-none">
+    <div className="flex flex-col justify-between h-full bg-[#131924]/80 border border-white/[0.06] rounded-3xl p-5 backdrop-blur-xl shadow-lg select-none">
       
       {/* Table Header: Simple English */}
       <div>
@@ -34,7 +34,7 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
           <div className="text-3xl font-extrabold text-white tracking-tight font-sans">
             {legitimateRatio}<span className="text-xl font-normal text-slate-400 ml-0.5">%</span>
           </div>
-          <span className="text-xs text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded-full border border-rose-800/80 font-medium flex items-center gap-1">
+          <span className="text-xs text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"></span>
             <span>{100 - legitimateRatio}% Suspicious Traffic</span>
           </span>
@@ -49,7 +49,7 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
               <div
                 key={row.id}
                 onClick={() => setExpandedId(isExpanded ? null : row.id)}
-                className="flex flex-col px-3 py-1.5 rounded-xl bg-dark-inset/80 border border-dark-border hover:border-slate-600 transition-all cursor-pointer text-xs group"
+                className="flex flex-col px-3 py-1.5 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] transition-all cursor-pointer text-xs group"
               >
                 <div className="flex items-center justify-between">
                   <div className="text-slate-200 font-medium truncate max-w-[170px] group-hover:text-white transition-colors">
@@ -79,7 +79,7 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
       </div>
 
       {/* Bottom Numbered Indices */}
-      <div className="mt-3 pt-3 border-t border-dark-border space-y-2">
+      <div className="mt-3 pt-3 border-t border-white/[0.06] space-y-2">
         <div className="flex items-center justify-between text-xs hover:bg-dark-inset/40 p-1 rounded-lg transition-colors">
           <div className="flex items-center gap-2">
             <span className="w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold">

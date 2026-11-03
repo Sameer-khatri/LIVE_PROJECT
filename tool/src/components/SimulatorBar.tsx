@@ -57,35 +57,31 @@ export const SimulatorBar: React.FC<SimulatorBarProps> = ({
   ];
 
   return (
-    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-3 p-2.5 rounded-2xl bg-dark-inset/80 border border-dark-borderSubtle mb-5 select-none backdrop-blur-md">
+    <div className="w-full flex flex-col md:flex-row items-center justify-between gap-3 p-2 rounded-2xl bg-white/[0.02] mb-4 select-none">
       
       {/* Label */}
-      <div className="flex items-center gap-2 pl-1 flex-shrink-0">
-        <div className="w-7 h-7 rounded-lg bg-dark-card border border-dark-border flex items-center justify-center text-slate-300">
-          <Sparkles className="w-3.5 h-3.5 text-sky-400" />
-        </div>
-        <div>
-          <div className="flex items-center gap-2 text-xs font-semibold text-white">
-            <span>Test Real Threats</span>
-            <span className="text-[10px] font-normal px-1.5 py-0.2 rounded bg-dark-card text-slate-400 border border-dark-border">
-              Click to simulate
-            </span>
-          </div>
+      <div className="flex items-center gap-2 pl-2 flex-shrink-0">
+        <Sparkles className="w-3.5 h-3.5 text-sky-400" />
+        <div className="flex items-center gap-2 text-xs font-semibold text-white">
+          <span>Test Real Threats</span>
+          <span className="text-[10px] font-normal px-1.5 py-0.5 rounded bg-white/[0.06] text-slate-400">
+            Click to simulate
+          </span>
         </div>
       </div>
 
-      {/* Buttons */}
-      <div className="flex items-center gap-2 overflow-x-auto max-w-full py-0.5">
+      {/* Buttons (Borderless clean pills) */}
+      <div className="flex items-center gap-1.5 overflow-x-auto max-w-full py-0.5">
         {scenarios.map((s) => {
           const isActive = currentScenario === s.id;
           return (
             <button
               key={s.id}
               onClick={() => onSelectScenario(s.id)}
-              className={`flex flex-col items-start px-3 py-1.5 rounded-xl border text-left transition-all duration-200 flex-shrink-0 ${
+              className={`flex flex-col items-start px-3 py-1.5 rounded-xl text-left transition-all duration-200 flex-shrink-0 ${
                 isActive
-                  ? 'bg-dark-card border-sky-500/70 text-white shadow-sm ring-1 ring-sky-500/30'
-                  : 'bg-dark-card/60 border-dark-border text-slate-300 hover:border-slate-600 hover:text-white'
+                  ? 'bg-sky-500/15 text-white ring-1 ring-sky-400/50 shadow-sm'
+                  : 'bg-white/[0.03] text-slate-300 hover:bg-white/[0.07] hover:text-white'
               }`}
             >
               <div className="flex items-center gap-1.5 text-xs font-semibold">

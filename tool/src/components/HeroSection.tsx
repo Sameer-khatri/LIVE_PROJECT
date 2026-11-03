@@ -32,12 +32,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   const actualExcessHours = excessHours ?? telemetry?.policyExcessHours ?? 2.9;
 
   return (
-    <div className="w-full bg-dark-card/90 border border-dark-border rounded-3xl p-5 backdrop-blur-xl mb-5 shadow-xl relative overflow-hidden">
+    <div className="w-full bg-[#131924]/80 border border-white/[0.06] rounded-3xl p-5 backdrop-blur-xl mb-4 shadow-xl relative overflow-hidden">
       
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center">
         
         {/* Left Widget: Radar Chart (4 cols on lg) */}
-        <div className="lg:col-span-4 h-full flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-dark-border pb-4 lg:pb-0 lg:pr-4">
+        <div className="lg:col-span-4 h-full flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/[0.06] pb-4 lg:pb-0 lg:pr-4">
           <RadarWidget metrics={radarMetrics} />
         </div>
 
@@ -50,8 +50,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           />
         </div>
 
-        {/* Right Widget: Session Token & Trend Line (3.5 cols on lg) */}
-        <div className="lg:col-span-3 h-full flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-dark-border pt-4 lg:pt-0 lg:pl-4">
+        {/* Right Widget: Session Trend Line (3 cols on lg) */}
+        <div className="lg:col-span-3 h-full flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-white/[0.06] pt-4 lg:pt-0 lg:pl-4">
           <SessionTrendWidget
             tokenHours={actualTokenHours}
             excessHours={actualExcessHours}

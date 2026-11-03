@@ -233,14 +233,14 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
     <div className="flex flex-col gap-4 select-none animate-fadeIn text-slate-100 font-sans">
       
       {/* Top Header Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-3xl bg-[#121722]/95 border border-[#273244] shadow-xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-3xl bg-[#131924]/80 border border-white/[0.06] shadow-xl">
         <div>
           <div className="flex items-center gap-2">
             <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-2">
               <span>Incident Stream & Forensic Triage</span>
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             </h3>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-sky-500/15 text-sky-300 border border-sky-500/30">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-sky-500/15 text-sky-300">
               {filteredEvents.length} Records
             </span>
           </div>
@@ -252,8 +252,8 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
         {/* Action Controls & Ingest Simulation */}
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
           
-          {/* Quick Filter Segmented Pills */}
-          <div className="flex items-center p-1 rounded-2xl bg-[#0b0e14] border border-[#273244]">
+          {/* Quick Filter Segmented Pills (Borderless) */}
+          <div className="flex items-center p-1 rounded-2xl bg-white/[0.03]">
             {['ALL', 'HIGH_DANGER', 'WARNING', 'SAFE'].map((tier) => (
               <button
                 key={tier}
@@ -297,12 +297,12 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
           placeholder="Search by employee name, email, IP address, city, or event type..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-[#0f1420] border border-[#242f42] text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 transition-colors"
+          className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-white/[0.03] text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all"
         />
       </div>
 
       {/* Incident Records Feed */}
-      <div className="space-y-3">
+      <div className="space-y-2.5">
         {filteredEvents.map((evt) => {
           const isSelected = selectedEventId === evt.id;
           const isCritical = evt.evaluation.riskTier === 'HIGH_DANGER';
@@ -311,12 +311,12 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
           return (
             <div
               key={evt.id}
-              className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+              className={`rounded-2xl transition-all duration-200 overflow-hidden ${
                 isCritical
-                  ? 'bg-[#15121a]/95 border-rose-500/40 hover:border-rose-500/70 shadow-sm'
+                  ? 'bg-rose-500/[0.08] hover:bg-rose-500/[0.12]'
                   : isWarning
-                  ? 'bg-[#181512]/95 border-amber-500/40 hover:border-amber-500/70 shadow-sm'
-                  : 'bg-[#101520]/95 border-[#212b3c] hover:border-slate-700'
+                  ? 'bg-amber-500/[0.08] hover:bg-amber-500/[0.12]'
+                  : 'bg-white/[0.02] hover:bg-white/[0.05]'
               }`}
             >
               {/* Row Header */}

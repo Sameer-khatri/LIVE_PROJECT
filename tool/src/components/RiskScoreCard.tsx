@@ -21,7 +21,7 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({
   const baselinePoints = Math.round(baselineScore * 100);
 
   return (
-    <div className="flex flex-col justify-between h-full bg-dark-card/90 border border-dark-border rounded-3xl p-5 backdrop-blur-xl shadow-lg select-none relative">
+    <div className="flex flex-col justify-between h-full bg-[#131924]/80 border border-white/[0.06] rounded-3xl p-5 backdrop-blur-xl shadow-lg select-none relative">
       
       {/* Top Part: Risk Score Header & Metric Bar */}
       <div>
@@ -81,7 +81,7 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({
       </div>
 
       {/* Bottom Part: Active Anomaly Signatures */}
-      <div className="mt-3.5 p-3.5 rounded-2xl bg-dark-inset border border-dark-border">
+      <div className="mt-3.5 p-3.5 rounded-2xl bg-white/[0.03]">
         <h4 className="text-xs font-bold text-slate-200 mb-1">Warning Signs Found</h4>
         
         <div className="flex items-center gap-1.5 text-xs text-sky-400 font-semibold mb-2">

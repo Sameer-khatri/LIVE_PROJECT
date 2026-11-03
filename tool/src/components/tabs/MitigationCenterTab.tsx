@@ -27,10 +27,10 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
     <div className="flex flex-col gap-5 select-none animate-fadeIn">
       
       {/* Top Header Card */}
-      <div className="p-5 rounded-3xl bg-dark-card/90 border border-dark-border flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="p-5 rounded-3xl bg-[#131924]/80 border border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="p-1.5 rounded-lg bg-emerald-950/80 border border-emerald-800 text-emerald-400">
+            <span className="p-1.5 rounded-lg bg-emerald-500/15 text-emerald-400">
               <Zap className="w-4 h-4" />
             </span>
             <h3 className="text-base font-bold text-white tracking-tight">One-Click Security Actions</h3>
@@ -52,7 +52,7 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
 
       {/* Confirmation Banner */}
       {killAllNotice && (
-        <div className="p-3.5 rounded-2xl bg-emerald-950/90 border border-emerald-500 text-emerald-200 text-xs font-semibold flex items-center justify-between shadow-glow-green animate-fadeIn">
+        <div className="p-3.5 rounded-2xl bg-emerald-950/90 border border-emerald-500/60 text-emerald-200 text-xs font-semibold flex items-center justify-between shadow-glow-green animate-fadeIn">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-400" />
             <span>Emergency Action Complete: All team sessions have been logged out. Hackers with stolen cookies are locked out.</span>
@@ -62,7 +62,7 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
       )}
 
       {/* Quarantined IP List */}
-      <div className="p-5 rounded-3xl bg-dark-card/90 border border-dark-border">
+      <div className="p-5 rounded-3xl bg-[#131924]/80 border border-white/[0.06] shadow-xl">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h4 className="text-sm font-bold text-white tracking-tight flex items-center gap-2">
@@ -73,7 +73,7 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
               These internet addresses were automatically blocked after repeatedly attacking team accounts.
             </p>
           </div>
-          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-950/80 text-amber-300 border border-amber-800">
+          <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-500/15 text-amber-300">
             {quarantinedIps.length} Blocked
           </span>
         </div>
@@ -82,7 +82,7 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
           {quarantinedIps.map(item => (
             <div
               key={item.ip}
-              className="flex items-center justify-between p-3.5 rounded-2xl bg-dark-inset/80 border border-dark-border hover:border-slate-600 transition-all text-xs"
+              className="flex items-center justify-between p-3.5 rounded-2xl bg-white/[0.03] hover:bg-white/[0.06] transition-all text-xs"
             >
               <div>
                 <div className="flex items-center gap-2 font-mono font-bold text-white">

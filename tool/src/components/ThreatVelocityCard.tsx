@@ -25,7 +25,7 @@ export const ThreatVelocityCard: React.FC<ThreatVelocityCardProps> = ({
   };
 
   return (
-    <div className="flex flex-col justify-between h-full bg-dark-card/90 border border-dark-border rounded-3xl p-5 backdrop-blur-xl shadow-lg select-none relative overflow-hidden">
+    <div className="flex flex-col justify-between h-full bg-[#131924]/80 border border-white/[0.06] rounded-3xl p-5 backdrop-blur-xl shadow-lg select-none relative overflow-hidden">
       
       {/* Top Section: Simple English */}
       <div>
@@ -95,7 +95,7 @@ export const ThreatVelocityCard: React.FC<ThreatVelocityCardProps> = ({
       </div>
 
       {/* Autonomous Mitigation Action Button */}
-      <div className="mt-2 flex items-center justify-between pt-2 border-t border-dark-border">
+      <div className="mt-2 flex items-center justify-between pt-2 border-t border-white/[0.06]">
         <span className="text-[11px] font-medium text-slate-400">Instant One-Click Safety</span>
 
         <button
