@@ -142,7 +142,7 @@ export default function App() {
   // Handle scenario selection to test live telemetry reaction
   const handleSelectScenario = (scenario: ScenarioType) => {
     setCurrentScenario(scenario);
-    if (scenario === 'BASELINE') {
+    if (scenario === 'NORMAL' || scenario === 'BASELINE') {
       playCyberChime('success');
     } else {
       playCyberChime('danger');
@@ -170,9 +170,51 @@ export default function App() {
         { axis: 'Hidden Net', value: 80, label: 'Connections hiding identity or location' },
         { axis: 'Password Reset', value: 60, label: 'Immediate password resets after failed attempts' },
       ]);
+      setSatelliteNodes([
+        {
+          id: 'node-sso',
+          name: 'Verified SSO Logins',
+          percent: 62.4,
+          category: 'Verified Safe',
+          angleDeg: -160,
+          icon: 'ShieldCheck',
+          color: '#10b981',
+          description: '1,280 team logins authenticated successfully through SSO.'
+        },
+        {
+          id: 'node-biometric',
+          name: 'Hardware Security Keys',
+          percent: 19.8,
+          category: 'Biometric Safe',
+          angleDeg: -110,
+          icon: 'Key',
+          color: '#06b6d4',
+          description: 'Hardware WebAuthn confirmations verified.'
+        },
+        {
+          id: 'node-mobile',
+          name: 'Enrolled Phone Fleet',
+          percent: 7.2,
+          category: 'Device Trust',
+          angleDeg: -60,
+          icon: 'Smartphone',
+          color: '#6366f1',
+          description: 'Corporate mobile apps with FaceID.'
+        },
+        {
+          id: 'node-impossible-travel',
+          name: 'Impossible Travel Spike',
+          percent: 10.6,
+          category: 'Velocity Threat',
+          angleDeg: -15,
+          icon: 'Plane',
+          color: '#f43f5e',
+          description: '8,820 km/h login anomaly detected between San Francisco and Frankfurt.'
+        }
+      ]);
       addToast(
         'Fast Impossible Travel Detected',
-        'User logged in from Germany only 8 minutes after San Francisco. Someone may be using stolen login tokens.',
+        'User logged in from Germany only 8 minutes after San Francisco (8,820 km/h). Someone may be using stolen login tokens.',
         'danger'
       );
     } else if (scenario === 'BRUTE_FORCE') {
@@ -196,6 +238,48 @@ export default function App() {
         { axis: 'New Devices', value: 88, label: 'Unrecognized computers or smartphones' },
         { axis: 'Hidden Net', value: 92, label: 'Connections hiding identity or location' },
         { axis: 'Password Reset', value: 74, label: 'Immediate password resets after failed attempts' },
+      ]);
+      setSatelliteNodes([
+        {
+          id: 'node-sso',
+          name: 'Verified SSO Logins',
+          percent: 54.0,
+          category: 'Verified Safe',
+          angleDeg: -160,
+          icon: 'ShieldCheck',
+          color: '#10b981',
+          description: '1,120 team logins authenticated successfully.'
+        },
+        {
+          id: 'node-biometric',
+          name: 'Hardware Security Keys',
+          percent: 18.5,
+          category: 'Biometric Safe',
+          angleDeg: -110,
+          icon: 'Key',
+          color: '#06b6d4',
+          description: 'Hardware WebAuthn confirmations verified.'
+        },
+        {
+          id: 'node-mobile',
+          name: 'Enrolled Phone Fleet',
+          percent: 6.5,
+          category: 'Device Trust',
+          angleDeg: -60,
+          icon: 'Smartphone',
+          color: '#6366f1',
+          description: 'Corporate mobile apps with FaceID.'
+        },
+        {
+          id: 'node-spray',
+          name: 'Credential Spraying',
+          percent: 21.0,
+          category: 'Brute Force Bot',
+          angleDeg: -15,
+          icon: 'Zap',
+          color: '#f59e0b',
+          description: '7 wrong passwords in 28 seconds against executive accounts.'
+        }
       ]);
       addToast(
         'Rapid Password Guessing Detected',
@@ -224,6 +308,48 @@ export default function App() {
         { axis: 'Hidden Net', value: 65, label: 'Connections hiding identity or location' },
         { axis: 'Password Reset', value: 45, label: 'Immediate password resets after failed attempts' },
       ]);
+      setSatelliteNodes([
+        {
+          id: 'node-sso',
+          name: 'Verified SSO Logins',
+          percent: 60.5,
+          category: 'Verified Safe',
+          angleDeg: -160,
+          icon: 'ShieldCheck',
+          color: '#10b981',
+          description: 'Routine SSO logins active.'
+        },
+        {
+          id: 'node-biometric',
+          name: 'Hardware Security Keys',
+          percent: 20.0,
+          category: 'Biometric Safe',
+          angleDeg: -110,
+          icon: 'Key',
+          color: '#06b6d4',
+          description: 'Hardware WebAuthn confirmations verified.'
+        },
+        {
+          id: 'node-mobile',
+          name: 'Push Fatigue Spam',
+          percent: 14.5,
+          category: 'MFA Flood',
+          angleDeg: -60,
+          icon: 'Bomb',
+          color: '#f59e0b',
+          description: '4 rapid phone popups sent in 18 seconds to employee device.'
+        },
+        {
+          id: 'node-flag',
+          name: 'Anomalous Device',
+          percent: 5.0,
+          category: 'Device Anomaly',
+          angleDeg: -15,
+          icon: 'Smartphone',
+          color: '#ec4899',
+          description: 'Unrecognized iPhone client prompting approvals.'
+        }
+      ]);
       addToast(
         'Phone Approval Spam Detected',
         '4 verification popups sent to phone in 18 seconds to trick the employee into tapping Accept.',
@@ -251,33 +377,76 @@ export default function App() {
         { axis: 'Hidden Net', value: 99, label: 'Connections hiding identity or location' },
         { axis: 'Password Reset', value: 94, label: 'Immediate password resets after failed attempts' },
       ]);
+      setSatelliteNodes([
+        {
+          id: 'node-sso',
+          name: 'Verified SSO Logins',
+          percent: 58.0,
+          category: 'Verified Safe',
+          angleDeg: -160,
+          icon: 'ShieldCheck',
+          color: '#10b981',
+          description: 'Routine SSO logins active.'
+        },
+        {
+          id: 'node-biometric',
+          name: 'Hardware Security Keys',
+          percent: 19.5,
+          category: 'Biometric Safe',
+          angleDeg: -110,
+          icon: 'Key',
+          color: '#06b6d4',
+          description: 'Hardware WebAuthn confirmations verified.'
+        },
+        {
+          id: 'node-tor',
+          name: 'Tor Exit Node Proxy',
+          percent: 17.5,
+          category: 'Masked Identity',
+          angleDeg: -60,
+          icon: 'Globe',
+          color: '#a855f7',
+          description: 'Password reset initiated through anonymous darknet proxy 185.220.101.5.'
+        },
+        {
+          id: 'node-flag',
+          name: 'Account Reset Bypass',
+          percent: 5.0,
+          category: 'Credential Recovery',
+          angleDeg: -15,
+          icon: 'Lock',
+          color: '#f43f5e',
+          description: 'Unauthorized password recovery token generation blocked.'
+        }
+      ]);
       addToast(
         'Hidden Hacker Network Detected',
         'Password reset request initiated from an anonymous network known to conceal hacker locations.',
         'danger'
       );
-    } else if (scenario === 'BASELINE') {
+    } else if (scenario === 'NORMAL' || scenario === 'BASELINE') {
       setTelemetry({
-        riskPercentile: 15,
-        riskScoreNormalized: 0.15,
+        riskPercentile: 18,
+        riskScoreNormalized: 0.18,
         baselineScore: 0.15,
-        attackVelocityRatio: 0.9,
+        attackVelocityRatio: 1.0,
         travelVelocityKmH: 0,
-        tokenLifetimeHours: 1.1,
+        tokenLifetimeHours: 1.2,
         policyExcessHours: 0.0,
-        legitimateLoginRatio: 98,
+        legitimateLoginRatio: 98.4,
         velocityChange1h: -4.5,
         defconLevel: 5,
         activeIncidentsCount: 0
       });
       setRadarMetrics([
-        { axis: 'Passwords', value: 10, label: 'Password guessing & repeated attempts' },
+        { axis: 'Passwords', value: 12, label: 'Password guessing & repeated attempts' },
         { axis: 'Locations', value: 8, label: 'Logins from unexpected cities or countries' },
-        { axis: 'Phone Alert', value: 12, label: 'Repeated phone confirmation requests' },
-        { axis: 'New Devices', value: 15, label: 'Unrecognized computers or smartphones' },
-        { axis: 'Hidden Net', value: 10, label: 'Connections hiding identity or location' },
+        { axis: 'Phone Alert', value: 10, label: 'Repeated phone confirmation requests' },
+        { axis: 'New Devices', value: 14, label: 'Unrecognized computers or smartphones' },
+        { axis: 'Hidden Net', value: 8, label: 'Connections hiding identity or location' },
         { axis: 'Password Reset', value: 5, label: 'Immediate password resets after failed attempts' },
       ]);
+      setSatelliteNodes(INITIAL_SATELLITE_NODES);
       addToast(
         'Normal Safe Day Restored',
         'All team logins look safe and within regular employee habits.',
@@ -469,6 +638,7 @@ export default function App() {
               <SimulatorBar
                 currentScenario={currentScenario}
                 onSelectScenario={handleSelectScenario}
+                onNavigateTab={setActiveTab}
               />
 
               {/* TOP 55%: Concentric Living Arc + Radar + Token Entropy */}
