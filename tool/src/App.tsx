@@ -97,7 +97,7 @@ export default function App() {
   const [telemetry, setTelemetry] = useState<TelemetryState>(INITIAL_TELEMETRY);
   const [radarMetrics, setRadarMetrics] = useState<RadarMetric[]>(INITIAL_RADAR_METRICS);
   const [satelliteNodes, setSatelliteNodes] = useState<SatelliteAttackNode[]>(INITIAL_SATELLITE_NODES);
-  const [currentScenario, setCurrentScenario] = useState<ScenarioType>('IMPOSSIBLE_TRAVEL');
+  const [currentScenario, setCurrentScenario] = useState<ScenarioType>('NORMAL');
   const [isLiveStream, setIsLiveStream] = useState<boolean>(true);
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [isDossierOpen, setIsDossierOpen] = useState<boolean>(false);
@@ -116,21 +116,25 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Subtle living telemetry pulse ticker
+  // Active living telemetry heartbeat ticker (keeps data live and shifting within realistic safe bands)
   useEffect(() => {
     if (!isLiveStream) return;
 
     const interval = setInterval(() => {
       setTelemetry((prev) => {
         const jitterSpeed = prev.travelVelocityKmH > 0
-          ? prev.travelVelocityKmH + (Math.random() > 0.5 ? 6 : -6)
-          : 0;
+          ? Math.max(20, prev.travelVelocityKmH + (Math.random() > 0.5 ? 3 : -3))
+          : 45;
+        const jitterLegit = Number(
+          Math.max(95.5, Math.min(99.2, prev.legitimateLoginRatio + (Math.random() > 0.5 ? 0.2 : -0.2))).toFixed(1)
+        );
         return {
           ...prev,
-          travelVelocityKmH: jitterSpeed
+          travelVelocityKmH: jitterSpeed,
+          legitimateLoginRatio: jitterLegit
         };
       });
-    }, 2800);
+    }, 2500);
 
     return () => clearInterval(interval);
   }, [isLiveStream]);

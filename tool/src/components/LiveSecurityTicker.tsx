@@ -12,45 +12,59 @@ interface TickerItem {
 const DEFAULT_TICKER_ITEMS: TickerItem[] = [
   {
     id: 't-1',
-    timeAgo: '2s ago',
+    timeAgo: 'Just now',
     category: 'AUTH',
-    message: 'WebAuthn biometric login verified for sarah.chen@innovatech.io (Hardware Token)',
+    message: 'WebAuthn biometric login verified for priya.patel@innovatech.io (YubiKey 5C NFC)',
     severity: 'SUCCESS'
   },
   {
     id: 't-2',
-    timeAgo: '7s ago',
-    category: 'CONTAINMENT',
-    message: 'Edge Gateway auto-quarantined Tor exit IP 185.220.101.5 on border firewall',
-    severity: 'DANGER'
-  },
-  {
-    id: 't-3',
-    timeAgo: '14s ago',
+    timeAgo: '4s ago',
     category: 'SYNC',
     message: 'Synchronized 142 identity audit records from Okta, Azure AD & Google Workspace',
     severity: 'INFO'
   },
   {
+    id: 't-3',
+    timeAgo: '9s ago',
+    category: 'HEALTH',
+    message: '99.8% of 1,428 monitored employees verified within safe behavioral baseline',
+    severity: 'SUCCESS'
+  },
+  {
     id: 't-4',
-    timeAgo: '21s ago',
-    category: 'ANOMALY',
-    message: 'Velocity check triggered: marcus.vance@innovatech.io flagged for rapid password attempts',
-    severity: 'WARNING'
+    timeAgo: '16s ago',
+    category: 'CONTAINMENT',
+    message: 'Edge Gateway auto-quarantined Tor exit IP 185.220.101.5 on border firewall [Policy #2]',
+    severity: 'DANGER'
   },
   {
     id: 't-5',
-    timeAgo: '32s ago',
+    timeAgo: '24s ago',
     category: 'AUTH',
-    message: 'Active OAuth session auto-rotated for priya.patel@innovatech.io (Zero-Trust Policy)',
+    message: 'Active OAuth session auto-rotated for liam.oconnor@innovatech.io (Zero-Trust Policy)',
     severity: 'SUCCESS'
   },
   {
     id: 't-6',
-    timeAgo: '44s ago',
-    category: 'SYNC',
+    timeAgo: '32s ago',
+    category: 'HEALTH',
     message: 'AWS US-East VPC Gateway verified 18 healthy microservice identity certificates',
+    severity: 'SUCCESS'
+  },
+  {
+    id: 't-7',
+    timeAgo: '41s ago',
+    category: 'MONITOR',
+    message: 'Single sign-on verified for 124 engineering team members on Tokyo & Dublin VPNs',
     severity: 'INFO'
+  },
+  {
+    id: 't-8',
+    timeAgo: '50s ago',
+    category: 'ANOMALY',
+    message: 'Isolated travel velocity alert for Sarah Chen automatically contained in 45ms',
+    severity: 'WARNING'
   }
 ];
 

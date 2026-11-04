@@ -148,12 +148,78 @@ const INITIAL_EVENTS: EventRecord[] = [
     user: { name: 'Emma Watson', email: 'emma.watson@innovatech.io', role: 'HR & People Manager' },
     client: { ip: '198.51.100.99', city: 'Austin', country: 'United States', asn: 'AT&T Fiber', ipType: 'NORMAL' },
     evaluation: {
-      riskScore: 12,
+      riskScore: 10,
       riskTier: 'SAFE',
       verdict: 'NORMAL_USER',
       factors: [
         'Standard single sign-on from registered company laptop',
         'Home internet IP matches historical 90-day baseline'
+      ]
+    }
+  },
+  {
+    id: 'EVT-8782',
+    timestamp: new Date(Date.now() - 1000 * 60 * 115).toISOString(),
+    eventType: 'Corporate SSO Authentication Verified',
+    user: { name: 'Liam O’Connor', email: 'liam.oconnor@innovatech.io', role: 'Staff Infrastructure Lead' },
+    client: { ip: '193.120.44.8', city: 'Dublin', country: 'Ireland', asn: 'Vodafone Ireland Business', ipType: 'NORMAL' },
+    evaluation: {
+      riskScore: 6,
+      riskTier: 'SAFE',
+      verdict: 'NORMAL_USER',
+      factors: [
+        'Single Sign-On confirmed via corporate certificate',
+        'Known engineering office IP address',
+        'Zero velocity anomaly'
+      ]
+    }
+  },
+  {
+    id: 'EVT-8776',
+    timestamp: new Date(Date.now() - 1000 * 60 * 135).toISOString(),
+    eventType: 'WebAuthn Security Key Sign-in',
+    user: { name: 'Maya Lin', email: 'maya.lin@innovatech.io', role: 'Lead Data Engineer' },
+    client: { ip: '210.140.10.5', city: 'Tokyo', country: 'Japan', asn: 'NTT Communications', ipType: 'NORMAL' },
+    evaluation: {
+      riskScore: 4,
+      riskTier: 'SAFE',
+      verdict: 'NORMAL_USER',
+      factors: [
+        'FIDO2 YubiKey proof of physical presence',
+        'Enrolled MacBook Pro M3',
+        'Regular daytime Tokyo office hours'
+      ]
+    }
+  },
+  {
+    id: 'EVT-8770',
+    timestamp: new Date(Date.now() - 1000 * 60 * 155).toISOString(),
+    eventType: 'Mobile Biometric App Confirmation',
+    user: { name: 'Elena Rostova', email: 'elena.rostova@innovatech.io', role: 'Senior DevOps Engineer' },
+    client: { ip: '188.166.42.11', city: 'Amsterdam', country: 'Netherlands', asn: 'KPN Netherlands', ipType: 'NORMAL' },
+    evaluation: {
+      riskScore: 10,
+      riskTier: 'SAFE',
+      verdict: 'NORMAL_USER',
+      factors: [
+        'FaceID biometric approval verified on enrolled iPhone 16 Pro',
+        'Corporate device certificate validated'
+      ]
+    }
+  },
+  {
+    id: 'EVT-8764',
+    timestamp: new Date(Date.now() - 1000 * 60 * 180).toISOString(),
+    eventType: 'AWS Production Gateway VPC Heartbeat',
+    user: { name: 'Service: aws-east-runner', email: 'infra-runner@innovatech.io', role: 'Automated Microservice' },
+    client: { ip: '54.210.88.19', city: 'Ashburn', country: 'United States', asn: 'Amazon AWS VPC', ipType: 'DATA_CENTER' },
+    evaluation: {
+      riskScore: 2,
+      riskTier: 'SAFE',
+      verdict: 'SYSTEM_ROUTINE',
+      factors: [
+        'Automated mTLS cryptographic certificate handshake',
+        'Internal VPC subnet whitelisted on edge firewall'
       ]
     }
   }
@@ -169,6 +235,80 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
   const [search, setSearch] = useState<string>('');
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
   const [actionNotice, setActionNotice] = useState<string | null>(null);
+
+  // Live real-time ingestion stream: introduces healthy verified corporate logins periodically
+  React.useEffect(() => {
+    const routineEventsPool = [
+      {
+        name: 'Liam O’Connor',
+        email: 'liam.oconnor@innovatech.io',
+        role: 'Staff Infrastructure Lead',
+        city: 'Dublin',
+        country: 'Ireland',
+        asn: 'Vodafone Ireland Business',
+        eventType: 'Verified Okta SSO Login',
+        factors: ['Single Sign-On confirmed via corporate certificate', 'Known engineering office IP', 'Hardware biometric verified']
+      },
+      {
+        name: 'Maya Lin',
+        email: 'maya.lin@innovatech.io',
+        role: 'Lead Data Engineer',
+        city: 'Tokyo',
+        country: 'Japan',
+        asn: 'NTT Communications',
+        eventType: 'WebAuthn Security Key Sign-in',
+        factors: ['FIDO2 YubiKey proof of presence', 'Enrolled MacBook Pro M3', 'Normal daytime shift hours']
+      },
+      {
+        name: 'Priya Patel',
+        email: 'priya.patel@innovatech.io',
+        role: 'SecOps Threat Analyst',
+        city: 'London',
+        country: 'United Kingdom',
+        asn: 'BT Broadband UK',
+        eventType: 'Routine Session Token Refresh',
+        factors: ['Zero-Trust OAuth 2.0 re-authentication', 'Biometric validation completed in 40ms', 'Recognized residential WiFi']
+      },
+      {
+        name: 'Emma Watson',
+        email: 'emma.watson@innovatech.io',
+        role: 'HR & People Manager',
+        city: 'Austin',
+        country: 'United States',
+        asn: 'AT&T Business Fiber',
+        eventType: 'Normal Workday Login',
+        factors: ['Austin HQ office network verified', 'Corporate password policy compliant', 'Zero anomalous velocity']
+      }
+    ];
+
+    const interval = setInterval(() => {
+      const template = routineEventsPool[Math.floor(Math.random() * routineEventsPool.length)];
+      const id = `EVT-${Math.floor(8830 + Math.random() * 90)}`;
+      const liveEvt: EventRecord = {
+        id,
+        timestamp: new Date().toISOString(),
+        eventType: template.eventType,
+        user: { name: template.name, email: template.email, role: template.role },
+        client: {
+          ip: `198.51.${Math.floor(10 + Math.random() * 80)}.${Math.floor(10 + Math.random() * 200)}`,
+          city: template.city,
+          country: template.country,
+          asn: template.asn,
+          ipType: 'NORMAL'
+        },
+        evaluation: {
+          riskScore: Math.floor(4 + Math.random() * 8),
+          riskTier: 'SAFE',
+          verdict: 'NORMAL_USER',
+          factors: template.factors
+        }
+      };
+
+      setEvents((prev) => [liveEvt, ...prev.slice(0, 24)]);
+    }, 7000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Ingest a brand-new live simulated incident
   const handleIngestLiveEvent = () => {

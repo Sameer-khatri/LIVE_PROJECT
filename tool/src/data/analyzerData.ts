@@ -23,9 +23,9 @@ export const ANALYZER_CATEGORIES: AnalyzerCategory[] = [
       {
         id: 'usr-001',
         name: 'Sarah Chen',
-        subtitle: 'Lead Cloud Architect • USA to Germany in 8m',
+        subtitle: 'Lead Cloud Architect • Active Investigation Flag',
         category: 'USER RECORDS',
-        badge: 'CRITICAL 88%',
+        badge: 'ALERT 88%',
         severity: 'CRITICAL',
         riskScore: 88,
         status: 'UNDER_INVESTIGATION',
@@ -38,70 +38,70 @@ export const ANALYZER_CATEGORIES: AnalyzerCategory[] = [
           riskRateDelta: '+45% today',
           histogramBars: [20, 35, 45, 60, 40, 30, 25, 55, 70, 85, 95, 80, 65, 50, 45, 30, 40, 60, 75, 90, 85, 70, 50, 35],
           metricsGrid: { alertsCount: 4, devicesCount: 2, ipsCount: 3, sessionsCount: 12 },
-          aiSummary: 'Sarah logged in from San Francisco and Frankfurt only 8 minutes apart (calculated speed: 8,820 km/h). This is physically impossible by airplane, which strongly indicates a stolen session token.'
+          aiSummary: 'Sarah logged in from San Francisco and Frankfurt only 8 minutes apart (calculated speed: 8,820 km/h). Session token was automatically revoked within 45ms.'
         }
       },
       {
         id: 'usr-002',
         name: 'Marcus Vance',
-        subtitle: 'Chief Financial Officer • 7 Wrong Passwords',
+        subtitle: 'Chief Financial Officer • Protected by Auto-Lock',
         category: 'USER RECORDS',
-        badge: 'CRITICAL 94%',
-        severity: 'CRITICAL',
-        riskScore: 94,
-        status: 'UNDER_INVESTIGATION',
+        badge: 'CONTAINED',
+        severity: 'MEDIUM',
+        riskScore: 32,
+        status: 'ACTIVE',
         inspectorData: {
           title: 'Marcus Vance — Chief Financial Officer',
           roleOrType: 'Executive Account Target',
-          statusLabel: 'Active Attack Target',
+          statusLabel: 'Safe & Protected',
           lastUpdate: 'Saved today at 22:04 UTC',
-          riskContributionRate: 94,
-          riskRateDelta: '+62% this week',
-          histogramBars: [15, 20, 25, 30, 35, 40, 55, 70, 85, 95, 100, 95, 90, 85, 75, 65, 60, 70, 85, 95, 90, 80, 60, 45],
-          metricsGrid: { alertsCount: 7, devicesCount: 3, ipsCount: 5, sessionsCount: 6 },
-          aiSummary: 'A foreign server in Saint Petersburg tried 7 wrong passwords in 30 seconds against Marcus Vance. The account was temporarily protected by AuthSentry auto-lock.'
+          riskContributionRate: 32,
+          riskRateDelta: '-40% after mitigation',
+          histogramBars: [15, 20, 25, 30, 35, 40, 55, 70, 85, 95, 40, 20, 15, 10, 10, 12, 14, 15, 12, 10, 10, 12, 10, 8],
+          metricsGrid: { alertsCount: 1, devicesCount: 3, ipsCount: 2, sessionsCount: 6 },
+          aiSummary: 'A spray attempt was stopped by AuthSentry auto-lock. Marcus has successfully re-authenticated via hardware key and is fully secure.'
         }
       },
       {
         id: 'usr-003',
         name: 'Elena Rostova',
-        subtitle: 'Senior DevOps Engineer • 4 Phone Popups in 18s',
+        subtitle: 'Senior DevOps Engineer • WebAuthn Verified',
         category: 'USER RECORDS',
-        badge: 'WARNING 68%',
-        severity: 'MEDIUM',
-        riskScore: 68,
-        status: 'ACTIVE',
+        badge: 'SAFE 12%',
+        severity: 'LOW',
+        riskScore: 12,
+        status: 'NORMAL',
         inspectorData: {
           title: 'Elena Rostova — DevOps Engineer',
           roleOrType: 'Technical Administrator',
-          statusLabel: 'Phone Alert Spam',
+          statusLabel: 'Verified Healthy',
           lastUpdate: 'Saved today at 21:50 UTC',
-          riskContributionRate: 68,
-          riskRateDelta: '+12% this week',
-          histogramBars: [10, 15, 20, 25, 30, 40, 50, 60, 75, 65, 55, 45, 40, 35, 30, 25, 30, 45, 50, 60, 55, 40, 30, 20],
-          metricsGrid: { alertsCount: 3, devicesCount: 2, ipsCount: 4, sessionsCount: 9 },
-          aiSummary: 'Elena received 4 phone verification notifications in under 20 seconds. This is an MFA push fatigue attempt trying to force user approval.'
+          riskContributionRate: 12,
+          riskRateDelta: '-15% this week',
+          histogramBars: [10, 12, 10, 14, 15, 12, 10, 11, 13, 12, 10, 12, 14, 15, 12, 10, 11, 12, 14, 12, 10, 11, 12, 10],
+          metricsGrid: { alertsCount: 0, devicesCount: 2, ipsCount: 2, sessionsCount: 9 },
+          aiSummary: 'Elena confirmed all authentication sessions using registered YubiKey hardware tokens. Zero security warnings.'
         }
       },
       {
         id: 'usr-004',
         name: 'David Kim',
-        subtitle: 'Product Operations • Password Reset from Hidden IP',
+        subtitle: 'Product Operations • Trusted Office Baseline',
         category: 'USER RECORDS',
-        badge: 'WARNING 62%',
-        severity: 'MEDIUM',
-        riskScore: 62,
-        status: 'ACTIVE',
+        badge: 'SAFE 15%',
+        severity: 'LOW',
+        riskScore: 15,
+        status: 'NORMAL',
         inspectorData: {
           title: 'David Kim — Product Operations',
           roleOrType: 'Standard Employee',
-          statusLabel: 'Hidden Network Request',
+          statusLabel: 'Safe Habit Baseline',
           lastUpdate: 'Saved today at 21:30 UTC',
-          riskContributionRate: 62,
-          riskRateDelta: '+8% this month',
-          histogramBars: [10, 12, 14, 15, 12, 10, 14, 18, 20, 22, 18, 14, 12, 10, 14, 16, 18, 15, 12, 14, 16, 14, 12, 10],
-          metricsGrid: { alertsCount: 2, devicesCount: 2, ipsCount: 3, sessionsCount: 14 },
-          aiSummary: 'Someone tried to reset David’s password using a Tor exit node right after a failed login attempt.'
+          riskContributionRate: 15,
+          riskRateDelta: '-8% this month',
+          histogramBars: [10, 12, 14, 15, 12, 10, 14, 18, 15, 12, 10, 12, 14, 15, 12, 10, 11, 12, 14, 12, 10, 11, 12, 10],
+          metricsGrid: { alertsCount: 0, devicesCount: 2, ipsCount: 2, sessionsCount: 14 },
+          aiSummary: 'Standard daily logins from authorized company laptop on San Francisco corporate WiFi network.'
         }
       },
       {
@@ -122,28 +122,70 @@ export const ANALYZER_CATEGORIES: AnalyzerCategory[] = [
           riskRateDelta: '-12% this month',
           histogramBars: [8, 8, 10, 12, 10, 8, 9, 10, 8, 7, 9, 11, 10, 8, 9, 8, 10, 9, 8, 7, 8, 9, 8, 7],
           metricsGrid: { alertsCount: 0, devicesCount: 2, ipsCount: 2, sessionsCount: 24 },
-          aiSummary: 'All logins originate from enrolled hardware keys with biometric proof of presence. Zero anomalous indicators.'
+          aiSummary: 'All logins originate from enrolled hardware keys with biometric proof of presence. 100% compliant.'
         }
       },
       {
         id: 'usr-006',
         name: 'Alex Mercer',
-        subtitle: 'VP of Engineering • Stolen API Key Alert',
+        subtitle: 'VP of Engineering • Token Rotated & Safe',
         category: 'USER RECORDS',
-        badge: 'HIGH RISK 79%',
-        severity: 'HIGH',
-        riskScore: 79,
-        status: 'UNDER_INVESTIGATION',
+        badge: 'SECURED 18%',
+        severity: 'LOW',
+        riskScore: 18,
+        status: 'NORMAL',
         inspectorData: {
           title: 'Alex Mercer — VP Engineering',
           roleOrType: 'Executive Administrator',
-          statusLabel: 'Token Revoked',
+          statusLabel: 'Keys Fully Rotated',
           lastUpdate: 'Saved today at 20:55 UTC',
-          riskContributionRate: 79,
-          riskRateDelta: '+55% today',
-          histogramBars: [10, 14, 18, 20, 25, 30, 45, 60, 75, 90, 85, 75, 60, 50, 45, 40, 55, 70, 85, 80, 75, 60, 40, 25],
-          metricsGrid: { alertsCount: 3, devicesCount: 3, ipsCount: 4, sessionsCount: 16 },
-          aiSummary: 'An automated CI/CD personal access token belonging to Alex Mercer was observed being queried from an unrecognized residential proxy in Brazil.'
+          riskContributionRate: 18,
+          riskRateDelta: '-35% today',
+          histogramBars: [10, 14, 18, 20, 25, 20, 15, 12, 10, 12, 14, 15, 12, 10, 11, 12, 14, 12, 10, 11, 12, 10, 8, 6],
+          metricsGrid: { alertsCount: 0, devicesCount: 3, ipsCount: 2, sessionsCount: 16 },
+          aiSummary: 'CI/CD personal access token was successfully rotated. All active administrative sessions are verified and secure.'
+        }
+      },
+      {
+        id: 'usr-007',
+        name: 'Emma Watson',
+        subtitle: 'HR & People Manager • Austin HQ Verified',
+        category: 'USER RECORDS',
+        badge: 'SAFE 6%',
+        severity: 'LOW',
+        riskScore: 6,
+        status: 'NORMAL',
+        inspectorData: {
+          title: 'Emma Watson — People Operations',
+          roleOrType: 'Corporate Staff',
+          statusLabel: 'Safe Habit Baseline',
+          lastUpdate: 'Saved today at 20:30 UTC',
+          riskContributionRate: 6,
+          riskRateDelta: '-5%',
+          histogramBars: [6, 8, 7, 9, 10, 8, 6, 7, 8, 6, 5, 8, 10, 8, 6, 5, 8, 7, 8, 6, 5, 8, 10, 5],
+          metricsGrid: { alertsCount: 0, devicesCount: 2, ipsCount: 1, sessionsCount: 18 },
+          aiSummary: 'Emma logs in reliably from company MacBook Pro on residential fiber in Austin, Texas.'
+        }
+      },
+      {
+        id: 'usr-008',
+        name: 'Liam O’Connor',
+        subtitle: 'Staff Infrastructure Engineer • Dublin Office',
+        category: 'USER RECORDS',
+        badge: 'SAFE 10%',
+        severity: 'LOW',
+        riskScore: 10,
+        status: 'NORMAL',
+        inspectorData: {
+          title: 'Liam O’Connor — Infrastructure Lead',
+          roleOrType: 'Cloud Operations',
+          statusLabel: 'Safe Hardware Key',
+          lastUpdate: 'Saved today at 20:10 UTC',
+          riskContributionRate: 10,
+          riskRateDelta: '0%',
+          histogramBars: [10, 12, 10, 14, 15, 12, 10, 11, 13, 12, 10, 12, 14, 15, 12, 10, 11, 12, 14, 12, 10, 11, 12, 10],
+          metricsGrid: { alertsCount: 0, devicesCount: 2, ipsCount: 1, sessionsCount: 22 },
+          aiSummary: 'Authenticated via corporate VPN and FIDO2 token from Dublin, Ireland with trusted device certificate.'
         }
       }
     ]
