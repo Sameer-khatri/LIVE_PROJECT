@@ -376,67 +376,88 @@ export default function App() {
           {/* Real-Time Living Security Event Ticker Bar */}
           <LiveSecurityTicker isLiveStream={isLiveStream} />
 
-          {/* Master Navigation Tabs Switcher (Borderless clean pills) */}
-          <div className="flex items-center gap-1 mb-4 p-1 rounded-2xl bg-white/[0.02] overflow-x-auto max-w-full select-none">
-            <button
-              onClick={() => setActiveTab('DASHBOARD')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-                activeTab === 'DASHBOARD'
-                  ? 'bg-white/[0.08] text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-              }`}
-            >
-              <LayoutDashboard className="w-3.5 h-3.5 text-sky-400" />
-              <span>Security Dashboard</span>
-            </button>
+          {/* Master Navigation Tabs Switcher (Structured & Balanced with Telemetry Badge) */}
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5 mb-4 p-1.5 rounded-2xl bg-[#131924]/80 border border-white/[0.06] select-none">
+            
+            {/* Left Segmented Tab Switcher with Micro-Badges */}
+            <div className="flex items-center gap-1 overflow-x-auto max-w-full py-0.5">
+              <button
+                onClick={() => setActiveTab('DASHBOARD')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                  activeTab === 'DASHBOARD'
+                    ? 'bg-sky-500/15 text-white border border-sky-500/30 shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <LayoutDashboard className="w-3.5 h-3.5 text-sky-400" />
+                <span>Security Dashboard</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-sky-500/20 text-sky-300">HQ</span>
+              </button>
 
-            <button
-              onClick={() => setActiveTab('ANALYZER')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-                activeTab === 'ANALYZER'
-                  ? 'bg-white/[0.08] text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-              }`}
-            >
-              <Network className="w-3.5 h-3.5 text-amber-400" />
-              <span>History Tree</span>
-            </button>
+              <button
+                onClick={() => setActiveTab('ANALYZER')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                  activeTab === 'ANALYZER'
+                    ? 'bg-amber-500/15 text-white border border-amber-500/30 shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <Network className="w-3.5 h-3.5 text-amber-400" />
+                <span>History Tree</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-amber-500/20 text-amber-300">10 Hubs</span>
+              </button>
 
-            <button
-              onClick={() => setActiveTab('INCIDENTS')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-                activeTab === 'INCIDENTS'
-                  ? 'bg-white/[0.08] text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-              }`}
-            >
-              <Terminal className="w-3.5 h-3.5 text-rose-400" />
-              <span>Recent Activity</span>
-            </button>
+              <button
+                onClick={() => setActiveTab('INCIDENTS')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                  activeTab === 'INCIDENTS'
+                    ? 'bg-rose-500/15 text-white border border-rose-500/30 shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <Terminal className="w-3.5 h-3.5 text-rose-400" />
+                <span>Recent Activity</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-rose-500/20 text-rose-300 animate-pulse">Live Feed</span>
+              </button>
 
-            <button
-              onClick={() => setActiveTab('MITIGATIONS')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-                activeTab === 'MITIGATIONS'
-                  ? 'bg-white/[0.08] text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-              }`}
-            >
-              <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Block & Log Out</span>
-            </button>
+              <button
+                onClick={() => setActiveTab('MITIGATIONS')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                  activeTab === 'MITIGATIONS'
+                    ? 'bg-emerald-500/15 text-white border border-emerald-500/30 shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Block & Log Out</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-500/20 text-emerald-300">Mitigate</span>
+              </button>
 
-            <button
-              onClick={() => setActiveTab('POLICIES')}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
-                activeTab === 'POLICIES'
-                  ? 'bg-white/[0.08] text-white shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-white/[0.04]'
-              }`}
-            >
-              <Sliders className="w-3.5 h-3.5 text-purple-400" />
-              <span>Settings & Rules</span>
-            </button>
+              <button
+                onClick={() => setActiveTab('POLICIES')}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                  activeTab === 'POLICIES'
+                    ? 'bg-purple-500/15 text-white border border-purple-500/30 shadow-sm'
+                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
+                }`}
+              >
+                <Sliders className="w-3.5 h-3.5 text-purple-400" />
+                <span>Settings & Rules</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-purple-500/20 text-purple-300">v2.4</span>
+              </button>
+            </div>
+
+            {/* Right Telemetry Badge */}
+            <div className="hidden lg:flex items-center gap-2.5 px-3 py-1 rounded-xl bg-white/[0.03] text-[10px] font-mono text-slate-400 flex-shrink-0">
+              <span className="flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>PROTECTION:</span>
+                <strong className="text-emerald-300">1,428 IDENTITIES ACTIVE</strong>
+              </span>
+              <span>•</span>
+              <span>REGION: <strong className="text-slate-200">US-EAST-1</strong></span>
+            </div>
+
           </div>
 
           {/* ============================================================== */}
