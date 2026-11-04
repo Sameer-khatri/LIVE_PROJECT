@@ -17,6 +17,8 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   onOpenReport,
   onReScan
 }) => {
+  const isDanger = telemetry.riskPercentile > 25 || telemetry.attackVelocityRatio > 1.2;
+
   return (
     <header className="w-full flex flex-col md:flex-row items-center justify-between gap-4 py-2 px-1 mb-4">
       
@@ -46,41 +48,101 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </div>
       </div>
 
-      {/* Central Living Status Pill (Clean frameless luxury surface) */}
-      <div className="flex items-center gap-3 px-4 py-2 rounded-2xl bg-[#141b27]/80 backdrop-blur-xl">
-        {/* Left Segmented Icon & Tag */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/[0.06] text-[11px] font-semibold text-slate-300">
-          <div className="flex gap-0.5">
-            <span className="w-1 h-3 bg-sky-400 rounded-sm"></span>
-            <span className="w-1 h-3 bg-sky-400 rounded-sm"></span>
-            <span className="w-1 h-3 bg-sky-500 rounded-sm"></span>
+      {/* Central Living Status Pill (Structured Micro-Cards with Live Breathing Glow) */}
+      <div className="relative group">
+        {/* Ambient radial breathing background halo */}
+        <div
+          className={`absolute -inset-1 rounded-2xl blur-lg opacity-40 pointer-events-none transition-all duration-700 ${
+            isDanger
+              ? 'bg-gradient-to-r from-rose-500/30 via-amber-500/20 to-rose-500/30'
+              : 'bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-emerald-500/20'
+          }`}
+        />
+
+        {/* Central HUD Container with Animated Breathing Glow */}
+        <div
+          className={`relative flex items-center gap-3.5 px-4 py-2 rounded-2xl bg-[#0f1420]/90 backdrop-blur-2xl border transition-all duration-500 ${
+            isDanger ? 'animate-breathing-danger' : 'animate-breathing-safe'
+          }`}
+        >
+          {/* Section 1: Live Equalizer & Velocity Chip */}
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded-xl bg-white/[0.05] border border-white/[0.06] shadow-sm">
+            <div className="flex items-end gap-1 h-4">
+              <span className="w-1 bg-sky-400 rounded-full animate-eq-1"></span>
+              <span className="w-1 bg-sky-400 rounded-full animate-eq-2"></span>
+              <span className="w-1 bg-sky-300 rounded-full animate-eq-3"></span>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-mono text-xs font-bold text-sky-300 tracking-tight leading-none">
+                +{telemetry.attackVelocityRatio}x
+              </span>
+              <span className="text-[8px] font-mono text-slate-400 uppercase font-semibold leading-none mt-0.5">
+                Spike
+              </span>
+            </div>
           </div>
-          <span>+{telemetry.attackVelocityRatio}x Higher</span>
-        </div>
 
-        {/* Metric Segment 1: Active Risk */}
-        <div className="flex items-baseline gap-1 text-xs">
-          <span className="text-slate-400">Current Danger:</span>
-          <span className="text-sm font-bold text-rose-400 tracking-tight">{telemetry.riskPercentile}</span>
-          <span className="text-[11px] text-slate-500">/ 100</span>
-        </div>
+          {/* Section 2: Current Danger Score */}
+          <div className="flex flex-col">
+            <div className="flex items-center gap-1.5">
+              <span className={`w-1.5 h-1.5 rounded-full ${isDanger ? 'bg-rose-400 animate-ping' : 'bg-emerald-400'}`}></span>
+              <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+                Current Danger
+              </span>
+            </div>
+            <div className="flex items-baseline gap-1 mt-0.5">
+              <span className={`text-base font-extrabold font-mono tracking-tight ${
+                isDanger ? 'text-rose-400 drop-shadow-[0_0_8px_rgba(244,63,94,0.6)]' : 'text-emerald-400'
+              }`}>
+                {telemetry.riskPercentile}
+              </span>
+              <span className="text-[10px] font-mono text-slate-500">/ 100</span>
+              <span className={`ml-1 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase ${
+                isDanger ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+              }`}>
+                {isDanger ? 'Critical' : 'Safe'}
+              </span>
+            </div>
+          </div>
 
-        <span className="w-px h-3.5 bg-white/[0.08]"></span>
+          {/* Vertical Separator */}
+          <span className="w-px h-7 bg-gradient-to-b from-transparent via-white/15 to-transparent flex-shrink-0"></span>
 
-        {/* Metric Segment 2: Baseline */}
-        <div className="flex items-baseline gap-1 text-xs">
-          <span className="text-slate-400">Normal Safe Level:</span>
-          <span className="text-sm font-semibold text-emerald-400">{(telemetry.baselineScore * 100).toFixed(0)}</span>
-          <span className="text-[11px] text-slate-500">/ 100</span>
-        </div>
+          {/* Section 3: Safe Baseline Level */}
+          <div className="flex flex-col">
+            <div className="text-[9px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+              Safe Baseline
+            </div>
+            <div className="flex items-baseline gap-1 mt-0.5">
+              <span className="text-base font-bold font-mono text-emerald-400 tracking-tight">
+                {(telemetry.baselineScore * 100).toFixed(0)}
+              </span>
+              <span className="text-[10px] font-mono text-slate-500">/ 100</span>
+              <span className="ml-1 px-1.5 py-0.2 rounded text-[9px] font-mono font-bold uppercase bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                Target
+              </span>
+            </div>
+          </div>
 
-        <span className="hidden lg:inline-block w-px h-3.5 bg-white/[0.08]"></span>
+          {/* Vertical Separator */}
+          <span className="hidden lg:inline-block w-px h-7 bg-gradient-to-b from-transparent via-white/15 to-transparent flex-shrink-0"></span>
 
-        {/* Metric Segment 3: Assessment Text in Simple Words */}
-        <div className="hidden lg:flex items-center gap-1.5 text-xs text-slate-300 font-normal">
-          <span>Suspicious login activity is</span>
-          <span className="font-bold text-rose-400">{telemetry.attackVelocityRatio}x higher</span>
-          <span>than normal safe days</span>
+          {/* Section 4: Live Plain-English Verdict */}
+          <div className="hidden lg:flex flex-col justify-center">
+            <div className="text-[9px] font-mono uppercase tracking-wider text-slate-400 font-semibold">
+              Live Threat Verdict
+            </div>
+            <div className="flex items-center gap-1.5 text-xs text-slate-300 mt-0.5">
+              <span>Suspicious logins are</span>
+              <span className={`px-1.5 py-0.5 rounded font-mono font-bold text-xs ${
+                isDanger ? 'text-rose-300 bg-rose-500/20 border border-rose-500/40' : 'text-emerald-300 bg-emerald-500/20 border border-emerald-500/40'
+              }`}>
+                {telemetry.attackVelocityRatio}x higher
+              </span>
+              <span>than safe days</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
