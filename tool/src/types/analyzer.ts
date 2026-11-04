@@ -25,7 +25,7 @@ export interface AnalyzerEntityNode {
   badge?: string;
   severity?: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW' | 'NORMAL';
   riskScore?: number;
-  status: 'ACTIVE' | 'ARCHIVED' | 'RESOLVED' | 'UNDER_INVESTIGATION';
+  status: 'ACTIVE' | 'ARCHIVED' | 'RESOLVED' | 'UNDER_INVESTIGATION' | 'NORMAL' | 'BLOCKED' | 'TRUSTED' | 'SAFE' | 'CONTAINED' | 'REVOKED' | 'VERIFIED';
   subBranches?: AnalyzerSubBranch[];
   inspectorData: {
     title: string;

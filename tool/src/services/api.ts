@@ -3,7 +3,7 @@ export async function fetchHealth() {
     const res = await fetch('/api/v1/health');
     return await res.json();
   } catch (e) {
-    return { status: 'STANDALONE_CLIENT', error: e.message };
+    return { status: 'STANDALONE_CLIENT', error: e instanceof Error ? e.message : 'Unknown error' };
   }
 }
 

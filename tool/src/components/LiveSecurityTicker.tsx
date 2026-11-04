@@ -4,7 +4,7 @@ import { Activity, Shield, Zap, Globe, Clock, CheckCircle2, AlertTriangle, Radio
 interface TickerItem {
   id: string;
   timeAgo: string;
-  category: 'AUTH' | 'CONTAINMENT' | 'SYNC' | 'ANOMALY';
+  category: 'AUTH' | 'CONTAINMENT' | 'SYNC' | 'ANOMALY' | 'HEALTH' | 'MONITOR';
   message: string;
   severity: 'INFO' | 'SUCCESS' | 'WARNING' | 'DANGER';
 }

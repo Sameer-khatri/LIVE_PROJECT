@@ -142,7 +142,7 @@ export default function App() {
   // Handle scenario selection to test live telemetry reaction
   const handleSelectScenario = (scenario: ScenarioType) => {
     setCurrentScenario(scenario);
-    if (scenario === 'NORMAL' || scenario === 'BASELINE') {
+    if (scenario === 'NORMAL') {
       playCyberChime('success');
     } else {
       playCyberChime('danger');
@@ -424,7 +424,7 @@ export default function App() {
         'Password reset request initiated from an anonymous network known to conceal hacker locations.',
         'danger'
       );
-    } else if (scenario === 'NORMAL' || scenario === 'BASELINE') {
+    } else if (scenario === 'NORMAL') {
       setTelemetry({
         riskPercentile: 18,
         riskScoreNormalized: 0.18,

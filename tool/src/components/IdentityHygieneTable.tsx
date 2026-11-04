@@ -89,7 +89,9 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
           </div>
           <div className="flex items-center gap-1.5">
             <span className="text-amber-400 font-semibold">{deviceTrustIndex}</span>
-            <HelpCircle className="w-3.5 h-3.5 text-slate-500" title="Checks if computers have company security certificates installed" />
+            <span title="Checks if computers have company security certificates installed">
+              <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
+            </span>
           </div>
         </div>
 
@@ -102,7 +104,9 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
           </div>
           <div className="flex items-center gap-1.5">
             <span className="text-rose-400 font-semibold">{velocityRatio}x Normal Speed</span>
-            <HelpCircle className="w-3.5 h-3.5 text-slate-500" title="Measures how fast login attempts are arriving" />
+            <span title="Measures how fast login attempts are arriving">
+              <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
+            </span>
           </div>
         </div>
 

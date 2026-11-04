@@ -31,7 +31,9 @@ export const ThreatVelocityCard: React.FC<ThreatVelocityCardProps> = ({
       <div>
         <div className="flex items-center justify-between mb-0.5">
           <h3 className="text-sm font-bold text-white tracking-tight">Hacker Speed & Impossible Travel</h3>
-          <HelpCircle className="w-3.5 h-3.5 text-slate-500" title="Calculates how fast someone would have had to fly between two consecutive logins" />
+          <span title="Calculates how fast someone would have had to fly between two consecutive logins">
+            <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
+          </span>
         </div>
         <div className="text-[11px] text-slate-400">
           Detects when accounts are used from two distant cities too quickly

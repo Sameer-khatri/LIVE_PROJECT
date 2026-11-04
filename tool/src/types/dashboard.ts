@@ -42,9 +42,9 @@ export interface HygieneMetricRow {
 export interface AnomalySignature {
   id: string;
   title: string;
-  category: 'HEURISTIC' | 'THREAT_INTEL' | 'UEBA';
+  category: 'HEURISTIC' | 'THREAT_INTEL' | 'UEBA' | 'SUSPICIOUS_IP' | 'NORMAL' | 'AUTHENTICATION' | 'EDGE_POLICY';
   detail: string;
-  severity: 'HIGH' | 'CRITICAL';
+  severity: 'HIGH' | 'CRITICAL' | 'MEDIUM' | 'LOW';
 }
 
 export interface TrendPoint {
