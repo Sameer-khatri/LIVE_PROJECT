@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   ShieldCheck, Lock, Globe, Zap, CheckCircle2, AlertTriangle, 
   RefreshCw, Radio, ShieldAlert, UserX, Ban, History, 
   KeyRound, Smartphone, Laptop, Trash2, Plus, Clock, Terminal
 } from 'lucide-react';
+import { 
+  fetchSessionsApi, 
+  revokeSessionApi, 
+  killAllSessionsApi, 
+  fetchFirewallApi, 
+  banIpApi, 
+  unbanIpApi, 
+  fetchAuditLogsApi 
+} from '../../services/api';
 
 interface MitigationCenterTabProps {
   onKillAllSessions?: () => void;
@@ -112,11 +121,29 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
     }
   };
 
+  // Initial fetch from real backend
+  useEffect(() => {
+    fetchSessionsApi().then((data) => {
+      if (data && data.sessions) setThreatSessions(data.sessions);
+    });
+
+    fetchFirewallApi().then((data) => {
+      if (data && data.bannedIps) setQuarantinedIps(data.bannedIps);
+    });
+
+    fetchAuditLogsApi().then((data) => {
+      if (data && data.logs) setAuditLogs(data.logs);
+    });
+  }, []);
+
   // Revoke an individual user session
   const handleTerminateSession = (sessionId: string, userName: string, userEmail: string) => {
     playChime();
     setThreatSessions(prev => prev.map(s => s.id === sessionId ? { ...s, isTerminated: true } : s));
     
+    // Call backend API
+    revokeSessionApi(sessionId, 'SecOps Instant Killswitch');
+
     // Append to audit ledger
     const now = new Date().toISOString().substring(11, 19) + ' UTC';
     setAuditLogs(prev => [
@@ -132,13 +159,15 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
   const handleKillTargetedThreats = () => {
     playChime();
     setThreatSessions(prev => prev.map(s => ({ ...s, isTerminated: true })));
-    setKillAllNotice('Targeted Containment Complete: All 4 flagged attacker sessions revoked. Legitimate enterprise workforce undisturbed.');
+    threatSessions.forEach(s => revokeSessionApi(s.id, 'Targeted Threats Revocation'));
+    setKillAllNotice('Targeted Containment Complete: All flagged attacker sessions revoked. Legitimate enterprise workforce undisturbed.');
     setTimeout(() => setKillAllNotice(null), 4000);
   };
 
   // Global nuclear kill switch
   const handleKillAll = () => {
     playChime();
+    killAllSessionsApi();
     setKillAllNotice('EMERGENCY ENFORCED: All 1,428 team sessions logged out. OAuth keys rotated across all regional hubs.');
     setThreatSessions(prev => prev.map(s => ({ ...s, isTerminated: true })));
     if (onKillAllSessions) onKillAllSessions();
@@ -148,6 +177,7 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
   // Unblock IP
   const handleUnblock = (idToRemove: string) => {
     setQuarantinedIps(prev => prev.filter(item => item.id !== idToRemove));
+    unbanIpApi(idToRemove);
     playChime();
   };
 
@@ -156,16 +186,20 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
     e.preventDefault();
     if (!manualIpInput.trim()) return;
 
+    const ip = manualIpInput.trim();
+    const reason = manualReasonInput.trim() || 'Operator Security Override';
+
     const newBan = {
       id: String(Date.now()),
-      ip: manualIpInput.trim(),
+      ip,
       asn: 'Manual Operator Ban',
-      reason: manualReasonInput.trim() || 'Operator Security Override',
+      reason,
       time: 'Just now',
       duration: 'Permanent Ban'
     };
 
     setQuarantinedIps(prev => [newBan, ...prev]);
+    banIpApi(ip, reason);
     setManualIpInput('');
     setManualReasonInput('');
     playChime();

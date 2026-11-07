@@ -16,6 +16,7 @@ import { IdentityDossierModal, IdentityProfile } from './components/IdentityDoss
 import { GlobalAttackMapModal } from './components/GlobalAttackMapModal';
 import { AICopilotDrawer } from './components/AICopilotDrawer';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
+import { fetchHealth, triggerSimulationApi, killAllSessionsApi } from './services/api';
 import { 
   INITIAL_TELEMETRY, 
   INITIAL_RADAR_METRICS, 
@@ -72,6 +73,7 @@ export default function App() {
   const [currentScenario, setCurrentScenario] = useState<ScenarioType>('NORMAL');
   const [isLiveStream, setIsLiveStream] = useState<boolean>(true);
   const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
+  const [backendOnline, setBackendOnline] = useState<boolean>(false);
   
   // Tactical Modal & Drawer states
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
@@ -170,6 +172,15 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Check real backend status on mount
+  useEffect(() => {
+    fetchHealth().then((res) => {
+      if (res.status === 'ONLINE') {
+        setBackendOnline(true);
+      }
+    });
+  }, []);
+
   // Active living telemetry heartbeat ticker
   useEffect(() => {
     if (!isLiveStream) return;
@@ -196,6 +207,8 @@ export default function App() {
   // Handle scenario selection to test live telemetry reaction
   const handleSelectScenario = (scenario: ScenarioType) => {
     setCurrentScenario(scenario);
+    triggerSimulationApi(scenario);
+
     if (scenario === 'NORMAL') {
       playCyberSound('success');
     } else {
@@ -511,6 +524,7 @@ export default function App() {
 
   const handleMitigate = () => {
     playCyberSound('zap');
+    killAllSessionsApi();
     setTelemetry((prev) => ({
       ...prev,
       riskPercentile: 24,
@@ -679,12 +693,14 @@ export default function App() {
             {/* Right Telemetry Badge */}
             <div className="hidden lg:flex items-center gap-2.5 px-3 py-1 rounded-xl bg-white/[0.03] text-[10px] font-mono text-slate-400 flex-shrink-0">
               <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>PROTECTION:</span>
-                <strong className="text-emerald-300">1,428 IDENTITIES ACTIVE</strong>
+                <span className={`w-1.5 h-1.5 rounded-full ${backendOnline ? 'bg-emerald-400 animate-ping' : 'bg-amber-400'}`}></span>
+                <span>BACKEND:</span>
+                <strong className={backendOnline ? 'text-emerald-300' : 'text-amber-300'}>
+                  {backendOnline ? 'CONNECTED (PORT 3001 • REST & SSE)' : 'STANDALONE MODE'}
+                </strong>
               </span>
               <span>•</span>
-              <span>REGION: <strong className="text-slate-200">US-EAST-1</strong></span>
+              <span>PROTECTION: <strong className="text-slate-200">1,428 IDENTITIES</strong></span>
             </div>
 
           </div>

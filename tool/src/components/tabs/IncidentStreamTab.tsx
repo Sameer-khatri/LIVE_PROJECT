@@ -5,6 +5,7 @@ import {
   AlertTriangle, RefreshCw, PlusCircle, ShieldCheck, Wifi, 
   Activity, ArrowDown, Copy, Check, Radio, Play, Pause, Layers
 } from 'lucide-react';
+import { fetchEvents, ingestEvent, connectEventStream } from '../../services/api';
 
 export interface EventRecord {
   id: string;
@@ -307,6 +308,25 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
     }
   };
 
+  // Initial fetch from backend + real-time SSE listener
+  useEffect(() => {
+    fetchEvents(50).then((data) => {
+      if (data && data.events && data.events.length > 0) {
+        setEvents(data.events);
+      }
+    });
+
+    const sse = connectEventStream((newEvent) => {
+      setEvents((prev) => [{ ...newEvent, isNew: true }, ...prev.slice(0, 49)]);
+      playFeedChime('alert');
+      setLastFetchTime('Just now');
+    });
+
+    return () => {
+      sse?.close();
+    };
+  }, []);
+
   // Automated background streaming engine (every 6 seconds if auto-stream is enabled)
   useEffect(() => {
     if (!isAutoStream) return;
@@ -336,6 +356,7 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
       };
 
       setEvents((prev) => [liveEvt, ...prev.slice(0, 24)]);
+      ingestEvent(liveEvt);
       setLastFetchTime('Just now');
     }, 6500);
 
