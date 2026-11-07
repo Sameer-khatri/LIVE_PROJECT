@@ -1,6 +1,6 @@
 import React from 'react';
 import { 
-  Shield, Bell, Volume2, VolumeX, Globe, Sparkles, 
+  Shield, Volume2, VolumeX, Globe, Sparkles, 
   FileText, RotateCw, Keyboard 
 } from 'lucide-react';
 import { TelemetryState } from '../types/dashboard';
@@ -33,10 +33,10 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
   const isDanger = telemetry.riskPercentile > 25 || telemetry.attackVelocityRatio > 1.2;
 
   return (
-    <header className="w-full flex flex-col md:flex-row items-center justify-between gap-3 py-2 px-1 mb-4">
+    <header className="w-full flex flex-col lg:flex-row items-center justify-between gap-3 py-1.5 px-1 mb-2.5">
       
-      {/* Brand Logo with Iridescent Spiral Crest */}
-      <div className="flex items-center gap-3">
+      {/* 1. Brand Identity */}
+      <div className="flex items-center gap-3 flex-shrink-0">
         <div className="relative flex items-center justify-center">
           <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-sky-400 via-purple-400 to-rose-400 p-[2px] shadow-sm">
             <div className="w-full h-full bg-[#0d121c] rounded-full flex items-center justify-center">
@@ -54,14 +54,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             <h1 className="text-xl font-bold tracking-tight text-white font-sans">
               Auth<span className="font-semibold text-slate-300">Sentry</span>
             </h1>
-            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.06] text-slate-400">
+            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.06] text-slate-400 font-mono">
               ITDR v2.4
             </span>
           </div>
         </div>
       </div>
 
-      {/* Central Living Status Pill (Compact HUD with Refined Breathing Glow) */}
+      {/* 2. Central Living Status HUD */}
       <div className="relative flex-shrink-0">
         <div
           className={`absolute inset-0 rounded-2xl blur-sm opacity-25 pointer-events-none transition-all duration-700 ${
@@ -73,10 +73,10 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
 
         <div
           className={`relative flex items-center gap-3 px-3.5 py-1.5 rounded-2xl bg-[#0e131d]/95 backdrop-blur-xl border transition-all duration-500 select-none ${
-            isDanger ? 'animate-breathing-danger' : 'animate-breathing-safe'
+            isDanger ? 'animate-breathing-danger border-rose-500/30' : 'animate-breathing-safe border-white/[0.08]'
           }`}
         >
-          {/* Section 1: Live Equalizer & Velocity Chip */}
+          {/* Velocity Spike Chip */}
           <div className="flex items-center gap-2 px-2 py-1 rounded-xl bg-white/[0.05] border border-white/[0.06] shadow-sm flex-shrink-0">
             <div className="flex items-end gap-0.5 h-3.5">
               <span className="w-1 bg-sky-400 rounded-full animate-eq-1"></span>
@@ -93,7 +93,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             </div>
           </div>
 
-          {/* Section 2: Current Danger Score */}
+          {/* Current Danger Score */}
           <div className="flex flex-col whitespace-nowrap">
             <div className="flex items-center gap-1">
               <span className={`w-1.5 h-1.5 rounded-full ${isDanger ? 'bg-rose-400 animate-ping' : 'bg-emerald-400'}`}></span>
@@ -118,7 +118,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             </div>
           </div>
 
-          {/* Section 3: Safe Baseline Target */}
+          {/* Safe Baseline Target */}
           <div className="hidden sm:flex flex-col whitespace-nowrap pl-2 border-l border-white/[0.08]">
             <span className="text-[8.5px] font-mono uppercase tracking-wider text-slate-400 font-semibold leading-none">
               Safe Baseline
@@ -132,7 +132,7 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
             </div>
           </div>
 
-          {/* Section 4: Live Human-Readable Verdict */}
+          {/* Live Human-Readable Verdict */}
           <div className="hidden md:flex items-center pl-2 border-l border-white/[0.08] text-[11px] font-sans">
             <span className="text-slate-300">
               Suspicious logins are{' '}
@@ -145,72 +145,74 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
         </div>
       </div>
 
-      {/* Right Tactical Action Controls (Map, AI Copilot, Audio, Report, Shortcuts) */}
+      {/* 3. Organized Right Command Suite */}
       <div className="flex items-center gap-2 flex-wrap justify-end">
         
-        {/* Global Attack Map Button */}
-        <button
-          onClick={onOpenMap}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 text-xs font-semibold transition-all shadow-sm"
-          title="Open Global Attack & Velocity Map (Key: G)"
-        >
-          <Globe className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">Threat Map</span>
-        </button>
-
-        {/* Sentry AI Copilot Button */}
-        <button
-          onClick={onOpenCopilot}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 text-xs font-semibold transition-all shadow-sm group"
-          title="Open SentryCopilot AI Assistant (Key: C)"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:scale-110 transition-transform animate-pulse" />
-          <span>Sentry AI</span>
-        </button>
-
-        {/* Audio Mute/Unmute Toggle */}
-        <button
-          onClick={onToggleAudio}
-          className={`p-2 rounded-xl border transition-all ${
-            isAudioMuted
-              ? 'bg-white/[0.03] border-white/[0.06] text-slate-500 hover:text-slate-300'
-              : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300 shadow-sm'
-          }`}
-          title={isAudioMuted ? 'Sound FX Muted' : 'Acoustic Sound FX Active'}
-        >
-          {isAudioMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
-        </button>
-
-        {/* Re-Scan Simulator Pulse Button */}
-        {onReScan && (
+        {/* Core Tactical Actions (Pill Cluster) */}
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
           <button
-            onClick={onReScan}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-slate-300 text-xs font-medium transition-all"
-            title="Re-scan and refresh telemetry"
+            onClick={onOpenMap}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 text-xs font-semibold transition-all active:scale-95 shadow-sm"
+            title="Open Global Threat & Velocity Map (Key: G)"
           >
-            <RotateCw className="w-3.5 h-3.5 text-slate-400" />
-            <span className="hidden sm:inline">Re-Scan</span>
+            <Globe className="w-3.5 h-3.5" />
+            <span>Map</span>
           </button>
-        )}
 
-        {/* Forensic Report Modal Button */}
-        <button
-          onClick={onOpenReport}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-slate-300 text-xs font-medium transition-all"
-          title="View Forensic Audit Report"
-        >
-          <FileText className="w-3.5 h-3.5 text-slate-400" />
-          <span className="hidden sm:inline">Report</span>
-        </button>
+          <button
+            onClick={onOpenCopilot}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 text-xs font-semibold transition-all active:scale-95 shadow-sm group"
+            title="Open SentryCopilot AI Assistant (Key: C)"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:scale-110 transition-transform animate-pulse" />
+            <span>AI Copilot</span>
+          </button>
 
-        {/* Keyboard Shortcuts Trigger Button */}
-        <button
-          onClick={onOpenShortcuts}
-          className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-slate-400 hover:text-white transition-all hover:bg-white/[0.06]"
-          title="Keyboard Shortcuts (Key: ?)"
-        >
-          <Keyboard className="w-3.5 h-3.5" />
-        </button>
+          <button
+            onClick={onOpenReport}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-slate-300 text-xs font-semibold transition-all active:scale-95"
+            title="View Forensic Audit Report & Exports"
+          >
+            <FileText className="w-3.5 h-3.5 text-slate-400" />
+            <span>Report</span>
+          </button>
+        </div>
+
+        {/* Quick Utility Cluster */}
+        <div className="flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/[0.06]">
+          {/* Sound FX Toggle */}
+          <button
+            onClick={onToggleAudio}
+            className={`p-1.5 rounded-xl border transition-all ${
+              isAudioMuted
+                ? 'bg-transparent border-transparent text-slate-500 hover:text-slate-300'
+                : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300 shadow-sm'
+            }`}
+            title={isAudioMuted ? 'Sound FX Muted' : 'Acoustic Cyber Sound FX Active'}
+          >
+            {isAudioMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+          </button>
+
+          {/* Re-Scan Simulator Pulse Button */}
+          {onReScan && (
+            <button
+              onClick={onReScan}
+              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.05] transition-all"
+              title="Re-scan and refresh telemetry"
+            >
+              <RotateCw className="w-3.5 h-3.5" />
+            </button>
+          )}
+
+          {/* Keyboard Shortcuts Trigger Button */}
+          <button
+            onClick={onOpenShortcuts}
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.05] transition-all"
+            title="Keyboard Shortcuts (Key: ?)"
+          >
+            <Keyboard className="w-3.5 h-3.5" />
+          </button>
+        </div>
 
       </div>
 

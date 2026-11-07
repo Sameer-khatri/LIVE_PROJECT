@@ -542,7 +542,7 @@ export default function App() {
       {/* Sleek App Startup Loading Screen */}
       {isLoading && <AppLoader onComplete={() => setIsLoading(false)} />}
 
-      <div className="min-h-screen bg-[#0b0e14] text-slate-100 flex items-center justify-center p-3 sm:p-6 relative overflow-hidden font-sans">
+      <div className="min-h-screen bg-[#0b0e14] text-slate-100 flex items-center justify-center p-2.5 sm:p-5 relative overflow-hidden font-sans">
         
         {/* Sunset / Dusk Horizon Atmosphere */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#311f2f] via-[#161a26] to-[#0a0d14] pointer-events-none"></div>
@@ -586,7 +586,7 @@ export default function App() {
         </div>
 
         {/* Master Rounded Glass Monolith Container */}
-        <div className="relative z-10 w-full max-w-[1440px] bg-[#121722]/95 border border-white/[0.06] rounded-[32px] p-5 sm:p-7 backdrop-blur-3xl shadow-panel flex flex-col transition-all duration-300">
+        <div className="relative z-10 w-full max-w-[1440px] bg-[#121722]/95 border border-white/[0.06] rounded-[28px] p-4 sm:p-6 backdrop-blur-3xl shadow-panel flex flex-col transition-all duration-300">
           
           {/* Top Header Bar */}
           <HeaderBar
@@ -605,74 +605,74 @@ export default function App() {
           {/* Real-Time Living Security Event Ticker Bar */}
           <LiveSecurityTicker isLiveStream={isLiveStream} />
 
-          {/* Master Navigation Tabs Switcher */}
-          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5 mb-4 p-1.5 rounded-2xl bg-[#131924]/80 border border-white/[0.06] select-none">
+          {/* Master Segmented Command Navigation Bar */}
+          <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2 mb-3 p-1 rounded-2xl bg-[#131924]/80 border border-white/[0.06] select-none">
             
-            {/* Left Segmented Tab Switcher with Micro-Badges */}
+            {/* Left Segmented Tab Switcher with Micro-Badges & Keyboard Hints */}
             <div className="flex items-center gap-1 overflow-x-auto max-w-full py-0.5">
               <button
                 onClick={() => setActiveTab('DASHBOARD')}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-150 flex-shrink-0 ${
                   activeTab === 'DASHBOARD'
-                    ? 'bg-sky-500/15 text-white border border-sky-500/30 shadow-sm'
+                    ? 'bg-sky-500/20 text-white border border-sky-500/40 shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
                 <LayoutDashboard className="w-3.5 h-3.5 text-sky-400" />
                 <span>Security Dashboard</span>
-                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-sky-500/20 text-sky-300">HQ</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-sky-500/20 text-sky-300 font-bold">1 • HQ</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('ANALYZER')}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-150 flex-shrink-0 ${
                   activeTab === 'ANALYZER'
-                    ? 'bg-amber-500/15 text-white border border-amber-500/30 shadow-sm'
+                    ? 'bg-amber-500/20 text-white border border-amber-500/40 shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
                 <Network className="w-3.5 h-3.5 text-amber-400" />
                 <span>History Tree</span>
-                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-amber-500/20 text-amber-300">10 Hubs</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-amber-500/20 text-amber-300 font-bold">2 • 10 Hubs</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('INCIDENTS')}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-150 flex-shrink-0 ${
                   activeTab === 'INCIDENTS'
-                    ? 'bg-rose-500/15 text-white border border-rose-500/30 shadow-sm'
+                    ? 'bg-rose-500/20 text-white border border-rose-500/40 shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
                 <Terminal className="w-3.5 h-3.5 text-rose-400" />
                 <span>Recent Activity</span>
-                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-rose-500/20 text-rose-300 animate-pulse">Live Feed</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-rose-500/20 text-rose-300 font-bold animate-pulse">3 • Feed</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('MITIGATIONS')}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-150 flex-shrink-0 ${
                   activeTab === 'MITIGATIONS'
-                    ? 'bg-emerald-500/15 text-white border border-emerald-500/30 shadow-sm'
+                    ? 'bg-emerald-500/20 text-white border border-emerald-500/40 shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
                 <ShieldAlert className="w-3.5 h-3.5 text-emerald-400" />
                 <span>Block & Log Out</span>
-                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-500/20 text-emerald-300">Mitigate</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-emerald-500/20 text-emerald-300 font-bold">4 • Mitigate</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('POLICIES')}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 flex-shrink-0 ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-150 flex-shrink-0 ${
                   activeTab === 'POLICIES'
-                    ? 'bg-purple-500/15 text-white border border-purple-500/30 shadow-sm'
+                    ? 'bg-purple-500/20 text-white border border-purple-500/40 shadow-sm'
                     : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
                 <Sliders className="w-3.5 h-3.5 text-purple-400" />
                 <span>Settings & Rules</span>
-                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-purple-500/20 text-purple-300">v2.4</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] font-mono bg-purple-500/20 text-purple-300 font-bold">5 • Rules</span>
               </button>
             </div>
 
@@ -693,7 +693,7 @@ export default function App() {
           {/* TAB 1: SECURITY DASHBOARD                                      */}
           {/* ============================================================== */}
           {activeTab === 'DASHBOARD' && (
-            <div className="space-y-4 animate-toast-in">
+            <div className="space-y-3 animate-toast-in">
               {/* Test Threats Simulator Bar */}
               <SimulatorBar
                 currentScenario={currentScenario}
@@ -714,7 +714,7 @@ export default function App() {
               />
 
               {/* BOTTOM 45%: 3 Rounded Analytics Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 min-h-[300px]">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 min-h-[300px]">
                 
                 {/* CARD 01: Account Danger Score */}
                 <RiskScoreCard
