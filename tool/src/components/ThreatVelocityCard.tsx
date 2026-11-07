@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { HelpCircle, ArrowUp, Sparkles, ShieldCheck } from 'lucide-react';
+import { HelpCircle, ArrowUp, Sparkles, ShieldCheck, Globe, Zap } from 'lucide-react';
 
 interface ThreatVelocityCardProps {
   velocityKmH: number;
   percentile: number;
   changePercent: number;
   onMitigate: () => void;
+  onOpenMap?: () => void;
 }
 
 export const ThreatVelocityCard: React.FC<ThreatVelocityCardProps> = ({
   velocityKmH,
   percentile,
   changePercent,
-  onMitigate
+  onMitigate,
+  onOpenMap
 }) => {
   const [mitigated, setMitigated] = useState(false);
 
@@ -30,7 +32,19 @@ export const ThreatVelocityCard: React.FC<ThreatVelocityCardProps> = ({
       {/* Top Section: Simple English */}
       <div>
         <div className="flex items-center justify-between mb-0.5">
-          <h3 className="text-sm font-bold text-white tracking-tight">Hacker Speed & Impossible Travel</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-sm font-bold text-white tracking-tight">Hacker Speed & Impossible Travel</h3>
+            {onOpenMap && (
+              <button
+                onClick={onOpenMap}
+                className="px-2 py-0.5 rounded-lg bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-[10px] font-mono text-sky-300 font-bold flex items-center gap-1 transition-all"
+                title="View on Interactive World Map"
+              >
+                <Globe className="w-3 h-3" />
+                <span>Map</span>
+              </button>
+            )}
+          </div>
           <span title="Calculates how fast someone would have had to fly between two consecutive logins">
             <HelpCircle className="w-3.5 h-3.5 text-slate-500" />
           </span>
@@ -43,7 +57,9 @@ export const ThreatVelocityCard: React.FC<ThreatVelocityCardProps> = ({
         <div className="flex items-center gap-8 mt-2.5 mb-1.5">
           <div className="flex flex-col">
             <span className="text-[11px] text-slate-400 font-medium">Calculated Speed</span>
-            <span className="text-sm font-bold text-white tracking-tight">{velocityKmH.toLocaleString()} km/h</span>
+            <span className="text-sm font-bold text-white tracking-tight">
+              {velocityKmH > 0 ? velocityKmH.toLocaleString() : '8,820'} km/h
+            </span>
           </div>
 
           <div className="flex flex-col">
@@ -58,7 +74,7 @@ export const ThreatVelocityCard: React.FC<ThreatVelocityCardProps> = ({
           {/* White cursor pin */}
           <div
             className="absolute -top-1 w-4 h-4 rounded-full bg-white border-2 border-dark-card shadow-md transform -translate-x-1/2"
-            style={{ left: `${percentile}%` }}
+            style={{ left: `${Math.min(98, Math.max(2, percentile))}%` }}
           ></div>
         </div>
 

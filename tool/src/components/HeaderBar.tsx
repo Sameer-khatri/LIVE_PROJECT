@@ -1,26 +1,39 @@
 import React from 'react';
-import { Shield, Bell, Moon, Sun, User, FileText, RotateCw } from 'lucide-react';
+import { 
+  Shield, Bell, Volume2, VolumeX, Globe, Sparkles, 
+  FileText, RotateCw, Keyboard 
+} from 'lucide-react';
 import { TelemetryState } from '../types/dashboard';
 
 interface HeaderBarProps {
   telemetry: TelemetryState;
   isLiveStream: boolean;
+  isAudioMuted: boolean;
+  onToggleAudio: () => void;
   onToggleStream: () => void;
   onOpenReport: () => void;
+  onOpenMap: () => void;
+  onOpenCopilot: () => void;
+  onOpenShortcuts: () => void;
   onReScan?: () => void;
 }
 
 export const HeaderBar: React.FC<HeaderBarProps> = ({
   telemetry,
   isLiveStream,
+  isAudioMuted,
+  onToggleAudio,
   onToggleStream,
   onOpenReport,
+  onOpenMap,
+  onOpenCopilot,
+  onOpenShortcuts,
   onReScan
 }) => {
   const isDanger = telemetry.riskPercentile > 25 || telemetry.attackVelocityRatio > 1.2;
 
   return (
-    <header className="w-full flex flex-col md:flex-row items-center justify-between gap-4 py-2 px-1 mb-4">
+    <header className="w-full flex flex-col md:flex-row items-center justify-between gap-3 py-2 px-1 mb-4">
       
       {/* Brand Logo with Iridescent Spiral Crest */}
       <div className="flex items-center gap-3">
@@ -42,15 +55,14 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
               Auth<span className="font-semibold text-slate-300">Sentry</span>
             </h1>
             <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-white/[0.06] text-slate-400">
-              Account Protection
+              ITDR v2.4
             </span>
           </div>
         </div>
       </div>
 
-      {/* Central Living Status Pill (Adjusted, Compact & Structured with Refined Breathing Glow) */}
+      {/* Central Living Status Pill (Compact HUD with Refined Breathing Glow) */}
       <div className="relative flex-shrink-0">
-        {/* Soft tight ambient breathing halo */}
         <div
           className={`absolute inset-0 rounded-2xl blur-sm opacity-25 pointer-events-none transition-all duration-700 ${
             isDanger
@@ -59,7 +71,6 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
           }`}
         />
 
-        {/* Central HUD Container */}
         <div
           className={`relative flex items-center gap-3 px-3.5 py-1.5 rounded-2xl bg-[#0e131d]/95 backdrop-blur-xl border transition-all duration-500 select-none ${
             isDanger ? 'animate-breathing-danger' : 'animate-breathing-safe'
@@ -99,112 +110,107 @@ export const HeaderBar: React.FC<HeaderBarProps> = ({
                 </span>
                 <span className="text-[9.5px] font-mono text-slate-500 ml-0.5">/ 100</span>
               </div>
-              <span className={`px-1.5 py-0.5 rounded text-[8px] font-mono font-bold uppercase leading-none ${
-                isDanger ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30' : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
+              <span className={`text-[8.5px] font-mono px-1 py-0.2 rounded font-bold uppercase tracking-tight ${
+                isDanger ? 'bg-rose-500/20 text-rose-300' : 'bg-emerald-500/20 text-emerald-300'
               }`}>
                 {isDanger ? 'Critical' : 'Safe'}
               </span>
             </div>
           </div>
 
-          {/* Vertical Separator */}
-          <span className="w-px h-6 bg-gradient-to-b from-transparent via-white/15 to-transparent flex-shrink-0"></span>
-
-          {/* Section 3: Safe Baseline Level */}
-          <div className="flex flex-col whitespace-nowrap">
-            <div className="text-[8.5px] font-mono uppercase tracking-wider text-slate-400 font-semibold leading-none">
+          {/* Section 3: Safe Baseline Target */}
+          <div className="hidden sm:flex flex-col whitespace-nowrap pl-2 border-l border-white/[0.08]">
+            <span className="text-[8.5px] font-mono uppercase tracking-wider text-slate-400 font-semibold leading-none">
               Safe Baseline
-            </div>
+            </span>
             <div className="flex items-center gap-1.5 mt-1 leading-none">
-              <div className="flex items-baseline">
-                <span className="text-sm font-bold font-mono text-emerald-400 tracking-tight">
-                  {(telemetry.baselineScore * 100).toFixed(0)}
-                </span>
-                <span className="text-[9.5px] font-mono text-slate-500 ml-0.5">/ 100</span>
-              </div>
-              <span className="px-1.5 py-0.5 rounded text-[8px] font-mono font-bold uppercase leading-none bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+              <span className="text-xs font-mono font-bold text-slate-300">15</span>
+              <span className="text-[8.5px] font-mono text-slate-500">/ 100</span>
+              <span className="text-[8px] font-mono px-1 py-0.2 rounded bg-emerald-500/10 text-emerald-400 font-bold uppercase">
                 Target
               </span>
             </div>
           </div>
 
-          {/* Vertical Separator */}
-          <span className="hidden xl:inline-block w-px h-6 bg-gradient-to-b from-transparent via-white/15 to-transparent flex-shrink-0"></span>
-
-          {/* Section 4: Live Verdict */}
-          <div className="hidden xl:flex items-center gap-1.5 text-xs text-slate-300 whitespace-nowrap pl-0.5">
-            <span className="text-slate-400 text-[11px]">Suspicious logins are</span>
-            <span className={`px-1.5 py-0.5 rounded font-mono font-bold text-[11px] leading-tight ${
-              isDanger ? 'text-rose-300 bg-rose-500/20 border border-rose-500/40' : 'text-emerald-300 bg-emerald-500/20 border border-emerald-500/40'
-            }`}>
-              {telemetry.attackVelocityRatio}x higher
+          {/* Section 4: Live Human-Readable Verdict */}
+          <div className="hidden md:flex items-center pl-2 border-l border-white/[0.08] text-[11px] font-sans">
+            <span className="text-slate-300">
+              Suspicious logins are{' '}
+              <strong className={isDanger ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
+                {telemetry.attackVelocityRatio}x higher
+              </strong>{' '}
+              than safe days
             </span>
-            <span className="text-slate-400 text-[11px]">than safe days</span>
           </div>
-
         </div>
       </div>
 
-      {/* Right Controls (Borderless soft glass pills) */}
-      <div className="flex items-center gap-2">
+      {/* Right Tactical Action Controls (Map, AI Copilot, Audio, Report, Shortcuts) */}
+      <div className="flex items-center gap-2 flex-wrap justify-end">
         
-        {/* Re-Scan Button */}
+        {/* Global Attack Map Button */}
+        <button
+          onClick={onOpenMap}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-500/15 hover:bg-sky-500/25 border border-sky-500/30 text-sky-300 text-xs font-semibold transition-all shadow-sm"
+          title="Open Global Attack & Velocity Map (Key: G)"
+        >
+          <Globe className="w-3.5 h-3.5" />
+          <span className="hidden sm:inline">Threat Map</span>
+        </button>
+
+        {/* Sentry AI Copilot Button */}
+        <button
+          onClick={onOpenCopilot}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-200 text-xs font-semibold transition-all shadow-sm group"
+          title="Open SentryCopilot AI Assistant (Key: C)"
+        >
+          <Sparkles className="w-3.5 h-3.5 text-purple-400 group-hover:scale-110 transition-transform animate-pulse" />
+          <span>Sentry AI</span>
+        </button>
+
+        {/* Audio Mute/Unmute Toggle */}
+        <button
+          onClick={onToggleAudio}
+          className={`p-2 rounded-xl border transition-all ${
+            isAudioMuted
+              ? 'bg-white/[0.03] border-white/[0.06] text-slate-500 hover:text-slate-300'
+              : 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300 shadow-sm'
+          }`}
+          title={isAudioMuted ? 'Sound FX Muted' : 'Acoustic Sound FX Active'}
+        >
+          {isAudioMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
+        </button>
+
+        {/* Re-Scan Simulator Pulse Button */}
         {onReScan && (
           <button
             onClick={onReScan}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-xs font-semibold text-slate-300 hover:text-white transition-all group"
-            title="Re-run security scan across all accounts"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-slate-300 text-xs font-medium transition-all"
+            title="Re-scan and refresh telemetry"
           >
-            <RotateCw className="w-3.5 h-3.5 text-sky-400 group-hover:rotate-180 transition-transform duration-500" />
-            <span>Re-Scan</span>
+            <RotateCw className="w-3.5 h-3.5 text-slate-400" />
+            <span className="hidden sm:inline">Re-Scan</span>
           </button>
         )}
 
-        {/* Stream Toggle Switch */}
-        <button
-          onClick={onToggleStream}
-          className={`flex items-center gap-2 w-13 h-7 p-1 rounded-full transition-all duration-300 ${
-            isLiveStream ? 'bg-sky-500 justify-end' : 'bg-white/[0.08] justify-start'
-          }`}
-          title="Turn live monitoring on or off"
-        >
-          <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center text-slate-900 shadow-sm">
-            {isLiveStream ? <Moon className="w-3 h-3 text-sky-600" /> : <Sun className="w-3 h-3 text-slate-600" />}
-          </div>
-        </button>
-
-        {/* Notification Bell */}
-        <div className="relative">
-          <button 
-            className="w-8 h-8 rounded-full bg-white/[0.05] hover:bg-white/[0.1] flex items-center justify-center text-slate-300 hover:text-white transition-all"
-            title="Active security alerts"
-          >
-            <Bell className="w-4 h-4" />
-          </button>
-          <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-rose-500 text-white text-[9px] font-bold flex items-center justify-center">
-            {telemetry.activeIncidentsCount}
-          </span>
-        </div>
-
-        {/* Incident Summary Button */}
+        {/* Forensic Report Modal Button */}
         <button
           onClick={onOpenReport}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.1] text-xs font-semibold text-slate-300 hover:text-white transition-all active:scale-95"
-          title="View and download printable security summary"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.06] text-slate-300 text-xs font-medium transition-all"
+          title="View Forensic Audit Report"
         >
           <FileText className="w-3.5 h-3.5 text-slate-400" />
-          <span>Security Report</span>
+          <span className="hidden sm:inline">Report</span>
         </button>
 
-        {/* User Profile Avatar */}
-        <div 
-          className="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-500 p-[1.5px] cursor-pointer"
-          title="Signed in as Security Admin"
+        {/* Keyboard Shortcuts Trigger Button */}
+        <button
+          onClick={onOpenShortcuts}
+          className="p-2 rounded-xl bg-white/[0.03] border border-white/[0.06] text-slate-400 hover:text-white transition-all hover:bg-white/[0.06]"
+          title="Keyboard Shortcuts (Key: ?)"
         >
-          <div className="w-full h-full bg-[#121722] rounded-full flex items-center justify-center text-white">
-            <User className="w-3.5 h-3.5" />
-          </div>
-        </div>
+          <Keyboard className="w-3.5 h-3.5" />
+        </button>
 
       </div>
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { HeaderBar } from './components/HeaderBar';
 import { SimulatorBar, ScenarioType } from './components/SimulatorBar';
 import { HeroSection } from './components/HeroSection';
@@ -13,6 +13,9 @@ import { PolicyStudioTab } from './components/tabs/PolicyStudioTab';
 import { AppLoader } from './components/AppLoader';
 import { LiveSecurityTicker } from './components/LiveSecurityTicker';
 import { IdentityDossierModal, IdentityProfile } from './components/IdentityDossierModal';
+import { GlobalAttackMapModal } from './components/GlobalAttackMapModal';
+import { AICopilotDrawer } from './components/AICopilotDrawer';
+import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
 import { 
   INITIAL_TELEMETRY, 
   INITIAL_RADAR_METRICS, 
@@ -40,7 +43,7 @@ const SARAH_CHEN_DOSSIER: IdentityProfile = {
   email: 'sarah.chen@innovatech.io',
   role: 'Lead Cloud Architect',
   department: 'Cloud Infrastructure',
-  riskScore: 88,
+  riskScore: 96,
   status: 'FLAGGED',
   activeDevicesCount: 2,
   activeSessionsCount: 3,
@@ -49,46 +52,15 @@ const SARAH_CHEN_DOSSIER: IdentityProfile = {
   ipAddress: '185.220.101.5',
   mfaMethod: 'FIDO2 YubiKey 5C NFC',
   recentIncidents: [
-    'Impossible Travel: San Francisco to Frankfurt in 8m (Speed: 8,820 km/h)',
-    'Session Token Replay attempted on /admin/iam from foreign cloud host'
+    'Impossible Travel: San Francisco to Frankfurt in 8.2m (Speed: 8,820 km/h)',
+    'Session Token Replay attempted on /admin/iam from foreign cloud host',
+    'Tor Exit Node IP connection 185.220.101.5'
   ],
   anomaliesDetected: [
-    'Consecutive logins physically impossible by air transport',
+    'Consecutive logins physically impossible by air transport (Mach 7.1)',
     'TCP Fingerprint matches Linux server while browser claims macOS Safari',
     'Active session token age exceeds zero-trust 2.0-hour limit by +1.9 hours'
   ]
-};
-
-// Pure native Web Audio API high-tech sound synthesizer (zero external dependencies)
-const playCyberChime = (tone: 'danger' | 'success') => {
-  try {
-    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-    if (!AudioCtx) return;
-    const ctx = new AudioCtx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    
-    if (tone === 'danger') {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(440, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.06, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-    } else {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15);
-      gain.gain.setValueAtTime(0.05, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
-    }
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 0.35);
-  } catch (e) {
-    // Graceful no-op if blocked by browser autoplay policy
-  }
 };
 
 export default function App() {
@@ -99,9 +71,61 @@ export default function App() {
   const [satelliteNodes, setSatelliteNodes] = useState<SatelliteAttackNode[]>(INITIAL_SATELLITE_NODES);
   const [currentScenario, setCurrentScenario] = useState<ScenarioType>('NORMAL');
   const [isLiveStream, setIsLiveStream] = useState<boolean>(true);
+  const [isAudioMuted, setIsAudioMuted] = useState<boolean>(false);
+  
+  // Tactical Modal & Drawer states
   const [isReportOpen, setIsReportOpen] = useState<boolean>(false);
   const [isDossierOpen, setIsDossierOpen] = useState<boolean>(false);
+  const [isMapOpen, setIsMapOpen] = useState<boolean>(false);
+  const [isCopilotOpen, setIsCopilotOpen] = useState<boolean>(false);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState<boolean>(false);
+
   const [toasts, setToasts] = useState<ToastItem[]>([]);
+
+  // High-fidelity acoustic cyber sound synthesizer
+  const playCyberSound = useCallback((type: 'danger' | 'success' | 'zap' | 'radar') => {
+    if (isAudioMuted) return;
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      if (type === 'danger') {
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      } else if (type === 'zap') {
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(900, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.18);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+      } else if (type === 'radar') {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(700, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(950, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.03, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+      } else {
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(659.25, ctx.currentTime + 0.15);
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+      }
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.35);
+    } catch {
+      // Graceful fallback
+    }
+  }, [isAudioMuted]);
 
   const addToast = (title: string, message: string, type: 'danger' | 'warning' | 'success' | 'info' = 'info') => {
     const id = Math.random().toString(36).substring(2, 9);
@@ -116,15 +140,45 @@ export default function App() {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  // Active living telemetry heartbeat ticker (keeps data live and shifting within realistic safe bands)
+  // Keyboard Shortcuts System (1-5, C, G, M, Space, ?, Escape)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement)?.tagName)) return;
+
+      if (e.key === '1') setActiveTab('DASHBOARD');
+      else if (e.key === '2') setActiveTab('ANALYZER');
+      else if (e.key === '3') setActiveTab('INCIDENTS');
+      else if (e.key === '4') setActiveTab('MITIGATIONS');
+      else if (e.key === '5') setActiveTab('POLICIES');
+      else if (e.key === 'c' || e.key === 'C') setIsCopilotOpen((prev) => !prev);
+      else if (e.key === 'g' || e.key === 'G') setIsMapOpen((prev) => !prev);
+      else if (e.key === 'm' || e.key === 'M') handleMitigate();
+      else if (e.key === '?') setIsShortcutsOpen((prev) => !prev);
+      else if (e.key === ' ') {
+        e.preventDefault();
+        setIsLiveStream((prev) => !prev);
+      } else if (e.key === 'Escape') {
+        setIsMapOpen(false);
+        setIsCopilotOpen(false);
+        setIsShortcutsOpen(false);
+        setIsReportOpen(false);
+        setIsDossierOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Active living telemetry heartbeat ticker
   useEffect(() => {
     if (!isLiveStream) return;
 
     const interval = setInterval(() => {
       setTelemetry((prev) => {
         const jitterSpeed = prev.travelVelocityKmH > 0
-          ? Math.max(20, prev.travelVelocityKmH + (Math.random() > 0.5 ? 3 : -3))
-          : 45;
+          ? Math.max(20, prev.travelVelocityKmH + (Math.random() > 0.5 ? 4 : -4))
+          : 0;
         const jitterLegit = Number(
           Math.max(95.5, Math.min(99.2, prev.legitimateLoginRatio + (Math.random() > 0.5 ? 0.2 : -0.2))).toFixed(1)
         );
@@ -143,9 +197,9 @@ export default function App() {
   const handleSelectScenario = (scenario: ScenarioType) => {
     setCurrentScenario(scenario);
     if (scenario === 'NORMAL') {
-      playCyberChime('success');
+      playCyberSound('success');
     } else {
-      playCyberChime('danger');
+      playCyberSound('danger');
     }
 
     if (scenario === 'IMPOSSIBLE_TRAVEL') {
@@ -214,7 +268,7 @@ export default function App() {
       ]);
       addToast(
         'Fast Impossible Travel Detected',
-        'User logged in from Germany only 8 minutes after San Francisco (8,820 km/h). Someone may be using stolen login tokens.',
+        'User logged in from Germany only 8 minutes after San Francisco (8,820 km/h). Token replay exfiltration suspected.',
         'danger'
       );
     } else if (scenario === 'BRUTE_FORCE') {
@@ -456,7 +510,7 @@ export default function App() {
   };
 
   const handleMitigate = () => {
-    playCyberChime('success');
+    playCyberSound('zap');
     setTelemetry((prev) => ({
       ...prev,
       riskPercentile: 24,
@@ -467,7 +521,7 @@ export default function App() {
     }));
     addToast(
       'Hacker Logged Out Successfully',
-      'Suspicious user session has been terminated and the attacker IP address was blocked.',
+      'Suspicious user session has been terminated and the attacker IP address was blocked at edge.',
       'success'
     );
   };
@@ -475,6 +529,7 @@ export default function App() {
   const handleToggleStream = () => {
     const nextState = !isLiveStream;
     setIsLiveStream(nextState);
+    playCyberSound('radar');
     addToast(
       nextState ? 'Live Monitoring Active' : 'Live Monitoring Paused',
       nextState ? 'Real-time protection is watching for attacks.' : 'Monitoring paused by operator.',
@@ -537,15 +592,20 @@ export default function App() {
           <HeaderBar
             telemetry={telemetry}
             isLiveStream={isLiveStream}
+            isAudioMuted={isAudioMuted}
+            onToggleAudio={() => setIsAudioMuted((prev) => !prev)}
             onToggleStream={handleToggleStream}
             onOpenReport={() => setIsReportOpen(true)}
+            onOpenMap={() => setIsMapOpen(true)}
+            onOpenCopilot={() => setIsCopilotOpen(true)}
+            onOpenShortcuts={() => setIsShortcutsOpen(true)}
             onReScan={() => setIsLoading(true)}
           />
 
           {/* Real-Time Living Security Event Ticker Bar */}
           <LiveSecurityTicker isLiveStream={isLiveStream} />
 
-          {/* Master Navigation Tabs Switcher (Structured & Balanced with Telemetry Badge) */}
+          {/* Master Navigation Tabs Switcher */}
           <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-2.5 mb-4 p-1.5 rounded-2xl bg-[#131924]/80 border border-white/[0.06] select-none">
             
             {/* Left Segmented Tab Switcher with Micro-Badges */}
@@ -679,6 +739,7 @@ export default function App() {
                   percentile={telemetry.riskPercentile}
                   changePercent={telemetry.velocityChange1h}
                   onMitigate={handleMitigate}
+                  onOpenMap={() => setIsMapOpen(true)}
                 />
 
               </div>
@@ -723,7 +784,33 @@ export default function App() {
 
         </div>
 
-        {/* Printable Forensic Audit Report Modal */}
+        {/* Global Identity Threat & Velocity Topology Map Modal */}
+        <GlobalAttackMapModal
+          isOpen={isMapOpen}
+          onClose={() => setIsMapOpen(false)}
+          currentScenario={currentScenario}
+          travelVelocityKmH={telemetry.travelVelocityKmH}
+        />
+
+        {/* SentryCopilot Autonomous AI Assistant Drawer */}
+        <AICopilotDrawer
+          isOpen={isCopilotOpen}
+          onClose={() => setIsCopilotOpen(false)}
+          telemetry={telemetry}
+          currentScenario={currentScenario}
+          onExecuteRemediation={(actionName, payload) => {
+            handleMitigate();
+            addToast('SentryCopilot Action Executed', `${actionName} dispatched for ${payload}`, 'success');
+          }}
+        />
+
+        {/* Tactical SOC Operator Keyboard Shortcuts Modal */}
+        <KeyboardShortcutsModal
+          isOpen={isShortcutsOpen}
+          onClose={() => setIsShortcutsOpen(false)}
+        />
+
+        {/* Printable Forensic Audit Report Modal with Real CSV & JSON Exports */}
         <ReportModal
           isOpen={isReportOpen}
           onClose={() => setIsReportOpen(false)}
