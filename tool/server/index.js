@@ -63,7 +63,18 @@ app.get('/api/v1/events/stream', (req, res) => {
   // Send initial handshake
   res.write(`event: connected\ndata: ${JSON.stringify({ message: 'Connected to AuthSentry Edge Stream' })}\n\n`);
 
+  // Periodic heartbeat keepalive to prevent proxy socket timeout
+  const keepAliveTimer = setInterval(() => {
+    try {
+      res.write(': keepalive\n\n');
+    } catch {
+      clearInterval(keepAliveTimer);
+      sseClients.delete(res);
+    }
+  }, 15000);
+
   req.on('close', () => {
+    clearInterval(keepAliveTimer);
     sseClients.delete(res);
   });
 });
@@ -155,6 +166,22 @@ app.post('/api/v1/simulate/:scenarioId', (req, res) => {
   db.addEvent(evaluated);
   broadcastSSE('incident', evaluated);
 
+  // Sync threat session active state for mitigation drills
+  if (scenarioId === 'IMPOSSIBLE_TRAVEL') {
+    db.threatSessions = db.threatSessions.map(s => s.user.email === 'sarah.chen@innovatech.io' ? { ...s, isTerminated: false } : s);
+    db.save();
+  } else if (scenarioId === 'BRUTE_FORCE') {
+    db.threatSessions = db.threatSessions.map(s => s.user.email === 'marcus.vance@innovatech.io' ? { ...s, isTerminated: false } : s);
+    db.save();
+  } else if (scenarioId === 'MFA_BOMBING') {
+    db.threatSessions = db.threatSessions.map(s => s.user.email === 'elena.rostova@innovatech.io' ? { ...s, isTerminated: false } : s);
+    db.save();
+  } else if (scenarioId === 'TOR_RESET') {
+    db.threatSessions = db.threatSessions.map(s => s.user.email === 'david.kim@innovatech.io' ? { ...s, isTerminated: false } : s);
+    db.save();
+  }
+  broadcastSSE('sessions_updated', { sessions: db.getSessions() });
+
   res.json({ success: true, scenario: scenarioId, event: evaluated });
 });
 
@@ -168,12 +195,14 @@ app.post('/api/v1/sessions/:id/revoke', (req, res) => {
   const { reason } = req.body || {};
   const revoked = db.revokeSession(id, reason || 'Operator Manual Termination');
   broadcastSSE('session_revoked', { sessionId: id, session: revoked });
+  broadcastSSE('sessions_updated', { sessions: db.getSessions() });
   res.json({ success: true, session: revoked });
 });
 
 app.post('/api/v1/sessions/kill-all', (req, res) => {
   const result = db.killAllSessions();
   broadcastSSE('kill_all', result);
+  broadcastSSE('sessions_updated', { sessions: db.getSessions() });
   res.json({ success: true, message: 'All active sessions terminated across regional hubs.' });
 });
 
@@ -187,6 +216,7 @@ app.post('/api/v1/firewall/ban', (req, res) => {
   if (!ip) return res.status(400).json({ error: 'Requires IP address' });
   const entry = db.addQuarantineIp(ip, reason, asn);
   broadcastSSE('ip_banned', entry);
+  broadcastSSE('firewall_updated', { bannedIps: db.getQuarantinedIps() });
   res.json({ success: true, entry });
 });
 
@@ -194,6 +224,7 @@ app.delete('/api/v1/firewall/:id', (req, res) => {
   const { id } = req.params;
   db.removeQuarantineIp(id);
   broadcastSSE('ip_unbanned', { id });
+  broadcastSSE('firewall_updated', { bannedIps: db.getQuarantinedIps() });
   res.json({ success: true, id });
 });
 

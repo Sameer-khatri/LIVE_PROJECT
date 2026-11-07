@@ -16,7 +16,7 @@ import { IdentityDossierModal, IdentityProfile } from './components/IdentityDoss
 import { GlobalAttackMapModal } from './components/GlobalAttackMapModal';
 import { AICopilotDrawer } from './components/AICopilotDrawer';
 import { KeyboardShortcutsModal } from './components/KeyboardShortcutsModal';
-import { fetchHealth, triggerSimulationApi, killAllSessionsApi } from './services/api';
+import { fetchHealth, triggerSimulationApi, killAllSessionsApi, revokeSessionApi } from './services/api';
 import { 
   INITIAL_TELEMETRY, 
   INITIAL_RADAR_METRICS, 
@@ -527,9 +527,11 @@ export default function App() {
     killAllSessionsApi();
     setTelemetry((prev) => ({
       ...prev,
-      riskPercentile: 24,
-      riskScoreNormalized: 0.24,
-      attackVelocityRatio: 1.1,
+      riskPercentile: 22,
+      riskScoreNormalized: 0.22,
+      attackVelocityRatio: 1.0,
+      travelVelocityKmH: 0,
+      legitimateLoginRatio: 98.4,
       defconLevel: 4,
       activeIncidentsCount: 0
     }));
@@ -776,7 +778,12 @@ export default function App() {
           {/* ============================================================== */}
           {activeTab === 'INCIDENTS' && (
             <div className="animate-toast-in">
-              <IncidentStreamTab />
+              <IncidentStreamTab
+                onRevokeSession={(email) => {
+                  revokeSessionApi(email, 'SecOps Rapid Revocation via Incident Feed');
+                  addToast('Session Revoked', `Active token revoked for ${email}`, 'success');
+                }}
+              />
             </div>
           )}
 

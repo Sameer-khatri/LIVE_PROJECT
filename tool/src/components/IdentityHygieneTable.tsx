@@ -36,7 +36,7 @@ export const IdentityHygieneTable: React.FC<IdentityHygieneTableProps> = ({
           </div>
           <span className="text-xs text-rose-400 bg-rose-950/60 px-2 py-0.5 rounded-full font-medium flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse"></span>
-            <span>{100 - legitimateRatio}% Suspicious Traffic</span>
+            <span>{Number((100 - legitimateRatio).toFixed(1))}% Suspicious Traffic</span>
           </span>
         </div>
 

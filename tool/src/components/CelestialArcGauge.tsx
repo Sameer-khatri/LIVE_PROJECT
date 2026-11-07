@@ -273,9 +273,19 @@ export const CelestialArcGauge: React.FC<CelestialArcGaugeProps> = ({
         </span>
 
         <p className="text-xs text-slate-300 font-medium mt-1 flex items-center gap-1 justify-center">
-          <span>{displayPercentile >= 70 ? 'High risk of unauthorized access' : 'Everything looks safe and normal'}</span>
-          {displayPercentile >= 70 && (
+          <span>
+            {displayPercentile >= 70
+              ? 'High risk of unauthorized access'
+              : displayPercentile > 35
+              ? 'Elevated identity activity observed'
+              : 'Everything looks safe and normal'}
+          </span>
+          {displayPercentile >= 70 ? (
             <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
+          ) : displayPercentile > 35 ? (
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+          ) : (
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
           )}
         </p>
       </div>

@@ -39,7 +39,7 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({
         </div>
 
         <p className="text-xs text-slate-400 leading-relaxed">
-          Current score is <span className="text-rose-400 font-semibold">{displayPoints} / 100</span>. Any score over 50 means suspicious logins need immediate review.
+          Current score is <span className={`font-semibold ${displayPoints > 50 ? 'text-rose-400' : 'text-emerald-400'}`}>{displayPoints} / 100</span>. {displayPoints > 50 ? 'Scores over 50 indicate active identity anomalies requiring containment.' : 'Scores under 30 indicate all logins conform to corporate behavioral baselines.'}
         </p>
 
         {/* Big Number Metrics */}
@@ -57,9 +57,9 @@ export const RiskScoreCard: React.FC<RiskScoreCardProps> = ({
             <span className="text-xs text-slate-300 font-medium">
               Usual Safe Score: <span className="text-emerald-400 font-bold">{baselinePoints}</span>
             </span>
-            <span className="flex items-center gap-1 text-[11px] text-rose-400 font-semibold uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span>
-              <span>{displayPoints >= 70 ? 'High Risk' : 'Elevated'}</span>
+            <span className={`flex items-center gap-1 text-[11px] font-semibold uppercase ${displayPoints >= 70 ? 'text-rose-400' : displayPoints > 40 ? 'text-amber-400' : 'text-emerald-400'}`}>
+              <span className={`w-1.5 h-1.5 rounded-full ${displayPoints >= 70 ? 'bg-rose-500 animate-pulse' : displayPoints > 40 ? 'bg-amber-400' : 'bg-emerald-400'}`}></span>
+              <span>{displayPoints >= 70 ? 'High Risk' : displayPoints > 40 ? 'Elevated' : 'Safe Fleet'}</span>
             </span>
           </div>
         </div>

@@ -11,7 +11,8 @@ import {
   fetchFirewallApi, 
   banIpApi, 
   unbanIpApi, 
-  fetchAuditLogsApi 
+  fetchAuditLogsApi,
+  connectEventStream
 } from '../../services/api';
 
 interface MitigationCenterTabProps {
@@ -123,7 +124,7 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
     }
   };
 
-  // Initial fetch from real backend
+  // Initial fetch from real backend & real-time SSE stream hookup
   useEffect(() => {
     fetchSessionsApi().then((data) => {
       if (data && data.sessions) setThreatSessions(data.sessions);
@@ -136,6 +137,24 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
     fetchAuditLogsApi().then((data) => {
       if (data && data.logs) setAuditLogs(data.logs);
     });
+
+    // Real-time synchronization with SSE broadcast events
+    const sse = connectEventStream({
+      onSessionsUpdate: (payload) => {
+        if (payload && payload.sessions) {
+          setThreatSessions(payload.sessions);
+        }
+      },
+      onFirewallUpdate: (payload) => {
+        if (payload && payload.bannedIps) {
+          setQuarantinedIps(payload.bannedIps);
+        }
+      }
+    });
+
+    return () => {
+      sse?.close();
+    };
   }, []);
 
   // Autonomous Self-Healing SLA Engine

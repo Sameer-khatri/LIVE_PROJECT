@@ -191,20 +191,62 @@ export async function aiTriageApi(prompt: string) {
 }
 
 // 11. Real-Time SSE Stream Hookup
-export function connectEventStream(onEvent: (event: any) => void, onError?: () => void) {
+export interface StreamHandlers {
+  onIncident?: (event: any) => void;
+  onSessionsUpdate?: (data: { sessions: any[] }) => void;
+  onFirewallUpdate?: (data: { bannedIps: any[] }) => void;
+  onError?: () => void;
+}
+
+export function connectEventStream(
+  onEventOrHandlers?: ((event: any) => void) | StreamHandlers,
+  onError?: () => void
+) {
   try {
     const eventSource = new EventSource('/api/v1/events/stream');
-    eventSource.addEventListener('incident', (e) => {
-      try {
-        const parsed = JSON.parse(e.data);
-        onEvent(parsed);
-      } catch (err) {
-        console.warn('Failed to parse SSE payload', err);
-      }
-    });
+
+    const handlers: StreamHandlers = 
+      typeof onEventOrHandlers === 'function' 
+        ? { onIncident: onEventOrHandlers, onError } 
+        : (onEventOrHandlers || {});
+
+    if (handlers.onIncident) {
+      eventSource.addEventListener('incident', (e) => {
+        try {
+          const parsed = JSON.parse(e.data);
+          handlers.onIncident!(parsed);
+        } catch (err) {
+          console.warn('Failed to parse SSE incident payload', err);
+        }
+      });
+    }
+
+    if (handlers.onSessionsUpdate) {
+      eventSource.addEventListener('sessions_updated', (e) => {
+        try {
+          const parsed = JSON.parse(e.data);
+          handlers.onSessionsUpdate!(parsed);
+        } catch (err) {
+          console.warn('Failed to parse SSE sessions payload', err);
+        }
+      });
+    }
+
+    if (handlers.onFirewallUpdate) {
+      eventSource.addEventListener('firewall_updated', (e) => {
+        try {
+          const parsed = JSON.parse(e.data);
+          handlers.onFirewallUpdate!(parsed);
+        } catch (err) {
+          console.warn('Failed to parse SSE firewall payload', err);
+        }
+      });
+    }
+
     eventSource.onerror = () => {
-      if (onError) onError();
+      if (handlers.onError) handlers.onError();
     };
+
     return eventSource;
   } catch {
     return null;

@@ -5,7 +5,7 @@ import {
   AlertTriangle, RefreshCw, PlusCircle, ShieldCheck, Wifi, 
   Activity, ArrowDown, Copy, Check, Radio, Play, Pause, Layers
 } from 'lucide-react';
-import { fetchEvents, ingestEvent, connectEventStream } from '../../services/api';
+import { fetchEvents, ingestEvent, connectEventStream, revokeSessionApi } from '../../services/api';
 
 export interface EventRecord {
   id: string;
@@ -15,7 +15,7 @@ export interface EventRecord {
   client: { ip: string; city: string; country: string; asn: string; ipType: string };
   evaluation: { 
     riskScore: number; 
-    riskTier: 'HIGH_DANGER' | 'WARNING' | 'SAFE'; 
+    riskTier: 'HIGH_DANGER' | 'WARNING' | 'SAFE' | 'CRITICAL' | 'MEDIUM' | 'LOW' | string; 
     verdict: string; 
     factors: string[]; 
     autonomousActionTaken?: string 
@@ -457,6 +457,7 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
   };
 
   const handleRemediate = (eventId: string, userEmail: string) => {
+    revokeSessionApi(userEmail, `Incident Stream Containment (#${eventId})`);
     if (onRevokeSession) {
       onRevokeSession(userEmail);
     }
@@ -482,7 +483,13 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
   };
 
   const filteredEvents = events.filter((e) => {
-    const matchesTier = filterTier === 'ALL' || e.evaluation.riskTier === filterTier;
+    const tier = e.evaluation.riskTier;
+    const matchesTier =
+      filterTier === 'ALL' ||
+      tier === filterTier ||
+      (filterTier === 'HIGH_DANGER' && (tier === 'CRITICAL' || tier === 'HIGH_DANGER')) ||
+      (filterTier === 'WARNING' && (tier === 'MEDIUM' || tier === 'WARNING')) ||
+      (filterTier === 'SAFE' && (tier === 'LOW' || tier === 'SAFE'));
     const matchesSearch =
       e.user.name.toLowerCase().includes(search.toLowerCase()) ||
       e.user.email.toLowerCase().includes(search.toLowerCase()) ||
@@ -618,8 +625,8 @@ export const IncidentStreamTab: React.FC<IncidentStreamTabProps> = ({ onRevokeSe
       <div className="space-y-2.5">
         {filteredEvents.map((evt) => {
           const isSelected = selectedEventId === evt.id;
-          const isCritical = evt.evaluation.riskTier === 'HIGH_DANGER';
-          const isWarning = evt.evaluation.riskTier === 'WARNING';
+          const isCritical = evt.evaluation.riskTier === 'HIGH_DANGER' || evt.evaluation.riskTier === 'CRITICAL';
+          const isWarning = evt.evaluation.riskTier === 'WARNING' || evt.evaluation.riskTier === 'MEDIUM';
           const timeAgo = getTimeAgo(evt.timestamp);
 
           return (

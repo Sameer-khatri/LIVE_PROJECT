@@ -74,14 +74,14 @@ export function evaluateEvent(rawEvent, policy) {
 
   // Calculate final score clamped 0 - 100
   const finalScore = Math.min(100, Math.max(8, points));
-  let riskTier = 'LOW';
+  let riskTier = 'SAFE';
   let verdict = 'AUTHORIZED';
 
   if (finalScore >= 70) {
-    riskTier = 'CRITICAL';
+    riskTier = 'HIGH_DANGER';
     verdict = 'ATTACK_DETECTED';
   } else if (finalScore >= 40) {
-    riskTier = 'MEDIUM';
+    riskTier = 'WARNING';
     verdict = 'SUSPICIOUS';
   }
 
