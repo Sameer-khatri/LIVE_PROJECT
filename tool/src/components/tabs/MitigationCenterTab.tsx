@@ -34,6 +34,8 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
   const [killAllNotice, setKillAllNotice] = useState<string | null>(null);
   const [manualIpInput, setManualIpInput] = useState<string>('');
   const [manualReasonInput, setManualReasonInput] = useState<string>('');
+  const [isSelfHealing, setIsSelfHealing] = useState<boolean>(true);
+  const [healingCountdown, setHealingCountdown] = useState<number>(3.0);
 
   // Active targeted high-risk sessions
   const [threatSessions, setThreatSessions] = useState<ActiveThreatSession[]>([
@@ -135,6 +137,39 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
       if (data && data.logs) setAuditLogs(data.logs);
     });
   }, []);
+
+  // Autonomous Self-Healing SLA Engine
+  useEffect(() => {
+    if (!isSelfHealing) return;
+    const targetSession = threatSessions.find(s => !s.isTerminated);
+    if (!targetSession) {
+      setHealingCountdown(3.0);
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setHealingCountdown(prev => {
+        if (prev <= 0.2) {
+          playChime();
+          setThreatSessions(current => current.map(s => s.id === targetSession.id ? { ...s, isTerminated: true } : s));
+          revokeSessionApi(targetSession.id, 'Autonomous Self-Healing Engine (3s SLA)');
+
+          const now = new Date().toISOString().substring(11, 19) + ' UTC';
+          setAuditLogs(current => [
+            { id: `log-${Date.now()}`, time: now, identity: targetSession.user.email, action: 'Autonomous Token Revocation', trigger: 'Zero-Trust SLA Auto-Neutralization', speed: '24ms' },
+            ...current
+          ]);
+
+          setKillAllNotice(`Autonomous Self-Healing: Revoked attacker token for ${targetSession.user.name} in 24ms.`);
+          setTimeout(() => setKillAllNotice(null), 3500);
+          return 3.0;
+        }
+        return Number((prev - 0.2).toFixed(1));
+      });
+    }, 200);
+
+    return () => clearInterval(timer);
+  }, [isSelfHealing, threatSessions]);
 
   // Revoke an individual user session
   const handleTerminateSession = (sessionId: string, userName: string, userEmail: string) => {
@@ -303,6 +338,19 @@ export const MitigationCenterTab: React.FC<MitigationCenterTabProps> = ({ onKill
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto">
+          {/* Autonomous Self-Healing Defense Switch */}
+          <button
+            onClick={() => setIsSelfHealing(!isSelfHealing)}
+            className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all border ${
+              isSelfHealing
+                ? 'bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 border-emerald-500/40 shadow-sm'
+                : 'bg-white/[0.04] text-slate-400 border-white/[0.08] hover:text-white'
+            }`}
+          >
+            <span className={`w-2 h-2 rounded-full ${isSelfHealing ? 'bg-emerald-400 animate-pulse ring-2 ring-emerald-500/40' : 'bg-slate-500'}`}></span>
+            <span>Self-Healing: {isSelfHealing ? (activeThreatsCount > 0 ? `Neutralizing in ${healingCountdown}s` : 'ARMED (3s SLA)') : 'STANDBY'}</span>
+          </button>
+
           {/* Targeted Action */}
           <button
             onClick={handleKillTargetedThreats}

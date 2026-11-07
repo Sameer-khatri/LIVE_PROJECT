@@ -34,3 +34,4 @@ const handleExit = () => {
 
 process.on('SIGINT', handleExit);
 process.on('SIGTERM', handleExit);
+

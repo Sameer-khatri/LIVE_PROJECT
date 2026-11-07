@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Sliders, Save, CheckCircle2, RotateCcw, ShieldCheck, ShieldAlert, 
   Zap, Clock, Globe, Key, Smartphone, Lock, AlertTriangle, 
   Layers, ChevronRight, Activity, Cpu, Sparkles, RefreshCw, FileText
 } from 'lucide-react';
+import { fetchPolicyApi, updatePolicyApi } from '../../services/api';
 
 type PolicyPreset = 'STRICT' | 'BALANCED' | 'PERMISSIVE' | 'CUSTOM';
 
@@ -91,6 +92,38 @@ export const PolicyStudioTab: React.FC = () => {
   const [savedNotice, setSavedNotice] = useState<boolean>(false);
   const [isSimulating, setIsSimulating] = useState<boolean>(false);
 
+  // Sync with AuthSentry Real Backend Database
+  useEffect(() => {
+    let isMounted = true;
+    fetchPolicyApi().then((data) => {
+      if (data && isMounted) {
+        if (typeof data.impossibleTravelSpeedKmH === 'number') setSpeedThreshold(data.impossibleTravelSpeedKmH);
+        if (typeof data.bruteForceThreshold === 'number') setBruteForceFails(data.bruteForceThreshold);
+        if (typeof data.mfaBombingWindowSec === 'number') setMfaWindow(data.mfaBombingWindowSec);
+        if (typeof data.maxSessionHours === 'number') setMaxSessionHours(data.maxSessionHours);
+        if (data.autoRevokeOnCritical !== undefined || data.autoQuarantineIp !== undefined) {
+          setRules((prev) =>
+            prev.map((r) => {
+              if (r.id === 'auto_revoke' && data.autoRevokeOnCritical !== undefined) {
+                return { ...r, armed: !!data.autoRevokeOnCritical };
+              }
+              if (r.id === 'auto_quarantine_ip' && data.autoQuarantineIp !== undefined) {
+                return { ...r, armed: !!data.autoQuarantineIp };
+              }
+              if (r.id === 'step_up_mfa' && data.stepUpMfaOnHigh !== undefined) {
+                return { ...r, armed: !!data.stepUpMfaOnHigh };
+              }
+              return r;
+            })
+          );
+        }
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Toggle rule state
   const handleToggleRule = (id: string) => {
     setRules((prev) =>
@@ -130,7 +163,21 @@ export const PolicyStudioTab: React.FC = () => {
     }
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
+    const isRevokeArmed = rules.find((r) => r.id === 'auto_revoke')?.armed ?? true;
+    const isQuarantineArmed = rules.find((r) => r.id === 'auto_quarantine_ip')?.armed ?? true;
+    const isStepUpArmed = rules.find((r) => r.id === 'step_up_mfa')?.armed ?? true;
+
+    await updatePolicyApi({
+      impossibleTravelSpeedKmH: speedThreshold,
+      bruteForceThreshold: bruteForceFails,
+      mfaBombingWindowSec: mfaWindow,
+      maxSessionHours: maxSessionHours,
+      autoRevokeOnCritical: isRevokeArmed,
+      autoQuarantineIp: isQuarantineArmed,
+      stepUpMfaOnHigh: isStepUpArmed
+    });
+
     setSavedNotice(true);
     setTimeout(() => setSavedNotice(false), 3500);
   };
